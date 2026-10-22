@@ -13,7 +13,7 @@
 | Đoàn Phương Thiên Ân | 079306092350 | *(Module)* | *(Module)* |
 | Nguyễn Phương Huy | 054206004278 | *(Module)* | *(Module)* |
 | Huỳnh Nhật Toàn | 051206007163 | *(Module)* | *(Module)* |
-| Trương Tấn Dũng | 079206042161 | *(Module)* | *(Module)* |
+| Trương Tuấn Dũng | 079206042161 | *(Module)* | *(Module)* |
 
 ---
 ##  Tổng quan đề tài
