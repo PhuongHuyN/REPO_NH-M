@@ -1,12 +1,11 @@
-# 🍊 FreshVend — Hệ thống máy bán trái cây tự động
+#  FreshVend — Hệ thống máy bán trái cây tự động
 
 > **Môn học:** Hệ quản trị Cơ sở dữ liệu (T-SQL / SQL Server)  
-> **Phiên bản:** 1.0.0  
 > **Ngày khởi tạo:** 2026-10-21  
 
 ---
 
-## 📌 Tổng quan đề tài
+##  Tổng quan đề tài
 
 **FreshVend** là hệ thống cơ sở dữ liệu cho máy bán trái cây tươi tự động (vending machine). Hệ thống quản lý toàn bộ vòng đời sản phẩm — từ nhập kho, bán hàng, thanh toán, cho đến giám sát thiết bị IoT (ESP32) và báo cáo kinh doanh.
 
@@ -23,7 +22,7 @@
 
 ---
 
-## 🗂️ Cấu trúc thư mục
+##  Cấu trúc thư mục
 
 ```
 FreshVend/
@@ -62,7 +61,7 @@ FreshVend/
 
 ---
 
-## ⚙️ Hướng dẫn cài đặt nhanh
+##  Hướng dẫn cài đặt nhanh
 
 ### Yêu cầu
 
@@ -105,11 +104,11 @@ Bước 6 — Kiểm thử (tuỳ chọn)
   tests/test_reports.sql
 ```
 
-> ⚠️ **Lưu ý:** File `03_foreign_keys.sql` **phải chạy sau tất cả** các file `02_tables_*.sql` vì các FK tham chiếu chéo giữa nhiều schema.
+>  **Lưu ý:** File `03_foreign_keys.sql` **phải chạy sau tất cả** các file `02_tables_*.sql` vì các FK tham chiếu chéo giữa nhiều schema.
 
 ---
 
-## 📐 Quy tắc đặt tên (Naming Convention)
+##  Quy tắc đặt tên (Naming Convention)
 
 ### Bảng & Schema
 
@@ -152,7 +151,7 @@ Bước 6 — Kiểm thử (tuỳ chọn)
 
 ---
 
-## 🏷️ Sơ đồ quan hệ (tóm tắt)
+##  Sơ đồ quan hệ (tóm tắt)
 
 ```
 auth.User ──────────────┐
@@ -170,7 +169,7 @@ audit.AuditLog (ghi nhận mọi thay đổi)
 
 ---
 
-## 👥 Nhóm thực hiện
+##  Nhóm thực hiện
 
 | Thành viên | Mã SV | Phụ trách |
 |------------|-------|-----------|
@@ -178,5 +177,3 @@ audit.AuditLog (ghi nhận mọi thay đổi)
 | *(Điền tên)* | *(Điền MSSV)* | *(Module)* |
 
 ---
-
-
