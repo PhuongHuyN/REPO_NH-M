@@ -5,6 +5,17 @@
 
 ---
 
+##  Nhóm thực hiện
+
+| Thành viên | MSSV | Phụ trách | Mức độ hoàn thành |
+|------------|-------|-----------|------------------|
+| Nguyễn Phạm Xuân Anh | 089306017838 | *(Module)* | *(Module)* |
+| Đoàn Phương Thiên Ân | 079306092350 | *(Module)* | *(Module)* |
+| Nguyễn Phương Huy | 054206004278 | *(Module)* | *(Module)* |
+| Huỳnh Nhật Toàn | 051206007163 | *(Module)* | *(Module)* |
+| Trương Tấn Dũng | 079206042161 | *(Module)* | *(Module)* |
+
+---
 ##  Tổng quan đề tài
 
 **FreshVend** là hệ thống cơ sở dữ liệu cho máy bán trái cây tươi tự động (vending machine). Hệ thống quản lý toàn bộ vòng đời sản phẩm — từ nhập kho, bán hàng, thanh toán, cho đến giám sát thiết bị IoT (ESP32) và báo cáo kinh doanh.
@@ -169,14 +180,4 @@ audit.AuditLog (ghi nhận mọi thay đổi)
 
 ---
 
-##  Nhóm thực hiện
 
-| Thành viên | MSSV | Phụ trách | Mức độ hoàn thành |
-|------------|-------|-----------|------------------|
-| Nguyễn Phạm Xuân Anh | 089306017838 | *(Module)* | *(Module)* |
-| Đoàn Phương Thiên Ân | 079306092350 | *(Module)* | *(Module)* |
-| Nguyễn Phương Huy | 054206004278 | *(Module)* | *(Module)* |
-| Huỳnh Nhật Toàn | 051206007163 | *(Module)* | *(Module)* |
-| Trương Tấn Dũng | 079206042161 | *(Module)* | *(Module)* |
-
----
