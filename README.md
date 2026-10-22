@@ -171,9 +171,12 @@ audit.AuditLog (ghi nhận mọi thay đổi)
 
 ##  Nhóm thực hiện
 
-| Thành viên | Mã SV | Phụ trách |
-|------------|-------|-----------|
-| *(Điền tên)* | *(Điền MSSV)* | *(Module)* |
-| *(Điền tên)* | *(Điền MSSV)* | *(Module)* |
+| Thành viên | MSSV | Phụ trách | Mức độ hoàn thành |
+|------------|-------|-----------|------------------|
+| Nguyễn Phạm Xuân Anh | 089306017838 | *(Module)* | *(Module)* |
+| Đoàn Phương Thiên Ân | 079306092350 | *(Module)* | *(Module)* |
+| Nguyễn Phương Huy | 054206004278 | *(Module)* | *(Module)* |
+| Huỳnh Nhật Toàn | 051206007163 | *(Module)* | *(Module)* |
+| Trương Tấn Dũng | 079206042161 | *(Module)* | *(Module)* |
 
 ---
