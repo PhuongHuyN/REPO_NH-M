@@ -179,6 +179,4 @@ audit.AuditLog (ghi nhận mọi thay đổi)
 
 ---
 
-## 📄 Giấy phép
 
-Dự án phục vụ mục đích học thuật — môn Hệ quản trị CSDL.
