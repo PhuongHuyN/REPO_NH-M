@@ -1,0 +1,19 @@
+{
+  "name": "freshvend-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FreshVend – hệ thống quản lý máy bán trái cây tươi tự động (API + web + bộ điều khiển máy)",
+  "scripts": {
+    "postinstall": "npm install --prefix api",
+    "setup": "node tools/setup.js",
+    "check": "node tools/check-sync.js",
+    "start": "npm start --prefix api",
+    "demo": "node tools/demo.js",
+    "dev": "npm run dev --prefix api",
+    "test": "node tools/check-sync.js && npm test --prefix api",
+    "simulator": "node simulator/esp32.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "freshvend-api",
+  "version": "1.0.0",
+  "description": "FreshVend – REST API (Node.js) gọi Stored Procedure SQL Server, JWT, RBAC, Swagger",
+  "main": "src/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test test/api.test.js test/db.test.js",
+    "simulator": "node ../simulator/esp32.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "mssql": "^11.0.1"
+  }
+}

@@ -1,0 +1,16 @@
+# Thư viện cài bằng npm (cài lại bằng: npm install)
+node_modules/
+# Cấu hình chứa mật khẩu – KHÔNG đưa lên Git
+.env
+*.env.local
+# Log, file tạm
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+# Ảnh sản phẩm do người dùng tải lên (lưu trên máy chủ, không đưa lên Git)
+web/uploads/
+# File CSDL / sao lưu
+*.bak
+*.mdf
+*.ldf
