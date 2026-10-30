@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>FreshVend – Máy bán trái cây tự động thông minh</title>
+  <link rel="icon" href="img/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/kiosk.css">
+</head>
+<body class="kiosk">
+  <!-- Kích hoạt thiết bị: kỹ thuật viên làm một lần khi lắp máy -->
+  <section id="setup" class="screen setup hidden">
+    <form id="setupForm" class="setup-card" autocomplete="off" novalidate>
+      <div class="setup-head"><img src="img/logo.svg" alt="" width="38" height="38"><span class="logo-word">Fresh<b>Vend</b></span></div>
+      <h1>Kích hoạt màn hình bán hàng</h1>
+      <p class="muted small">Dành cho kỹ thuật viên. Nhập tài khoản thiết bị do quản trị viên cấp cho máy này.</p>
+      <div class="field"><label for="kUser">Mã thiết bị</label><input id="kUser" name="username" autocomplete="off" autocapitalize="off" spellcheck="false" required></div>
+      <div class="field"><label for="kPass">Mã kích hoạt</label><input id="kPass" name="password" type="password" autocomplete="off" required></div>
+      <div id="setupErr" class="form-error" role="alert"></div>
+      <div id="setupDemo" class="demo-hint hidden"><b>Chế độ demo</b> – chưa kết nối SQL Server. <button type="button" class="btn sm" id="fillKiosk">Điền kiosk01 / Kiosk@2026</button></div>
+      <button class="btn primary lg block" type="submit">Kích hoạt</button>
+    </form>
+  </section>
+
+  <!-- Màn hình bán hàng -->
+  <section id="shop" class="screen hidden">
+    <header class="k-header">
+      <div class="k-left">
+        <div class="brand" id="brand"><img src="img/logo.svg" alt="" width="38" height="38"><span class="logo-word">Fresh<b>Vend</b></span></div>
+        <span class="k-sep"></span>
+        <div class="k-machine"><span id="mState" class="stat"></span><div><b id="mSerial"></b><span id="mName"></span></div></div>
+      </div>
+      <div class="k-status">
+        <span id="mTemp" class="stat temp"></span>
+        <span id="clock" class="stat clock"></span>
+      </div>
+    </header>
+    <main class="k-main">
+      <div class="k-products">
+        <section class="k-hero">
+          <div class="k-hero-text">
+            <div class="eyebrow line">Tươi mỗi ngày · Mát chuẩn 2–8°C</div>
+            <h1>Trái cây tươi.<br><em>Chạm là có.</em></h1>
+            <p>Đóng hộp trong ngày, giữ lạnh liên tục và sẵn sàng phục vụ bạn chỉ trong 30 giây.</p>
+            <ul class="ticks"><li><span data-ico="check" data-size="16"></span>Nguồn gốc rõ ràng</li><li><span data-ico="check" data-size="16"></span>Không chất bảo quản</li></ul>
+          </div>
+          <div class="k-hero-media">
+            <img src="img/hero-bowl.jpg" alt="Hộp trái cây tươi">
+            <span class="hero-badge fresh"><b>Tươi</b><small>100%</small></span>
+          </div>
+        </section>
+        <div class="k-section-head">
+          <div class="eyebrow">Chọn món yêu thích</div>
+          <h2>Hôm nay bạn muốn ăn gì?</h2>
+        </div>
+        <nav id="tabs" class="k-tabs" aria-label="Nhóm sản phẩm"></nav>
+        <div id="grid" class="k-grid"></div>
+      </div>
+      <aside class="k-cart">
+        <div class="cart-head"><h2><span data-ico="cart" data-size="22"></span> Giỏ hàng</h2><span id="cartCount" class="muted"></span></div>
+        <div id="cartList" class="cart-list"></div>
+        <div class="cart-foot">
+          <div class="cart-total"><span>Tổng tiền</span><b id="cartTotal">0 đ</b></div>
+          <button id="checkout" class="btn accent lg block" disabled>Thanh toán</button>
+          <p class="small muted center pay-note">Thanh toán bằng chuyển khoản – quét mã QR với ứng dụng ngân hàng bất kỳ</p>
+        </div>
+      </aside>
+    </main>
+  </section>
+
+  <!-- Thanh toán chuyển khoản VietQR -->
+  <section id="payment" class="screen overlay hidden">
+    <div class="pay-card">
+      <div class="pay-top"><h2>Quét mã để thanh toán</h2><span class="muted" id="payOrder"></span></div>
+      <div class="pay-body">
+        <div class="qr-col">
+          <div id="qr" class="qr"></div>
+          <div class="qr-caption"><span>VietQR · NAPAS 247</span></div>
+        </div>
+        <div class="pay-info">
+          <dl>
+            <dt>Số tiền</dt><dd class="amount" id="payAmount"></dd>
+            <dt>Ngân hàng</dt><dd id="payBank"></dd>
+            <dt>Số tài khoản</dt><dd id="payAcc"></dd>
+            <dt>Chủ tài khoản</dt><dd id="payName"></dd>
+            <dt>Nội dung</dt><dd><b id="payContent" class="content-code"></b></dd>
+          </dl>
+          <ol class="steps">
+            <li>Mở ứng dụng ngân hàng, chọn <b>Quét mã QR</b></li>
+            <li>Quét mã bên cạnh, giữ nguyên số tiền và nội dung</li>
+            <li>Xác nhận chuyển khoản – máy tự nhả hàng khi nhận được tiền</li>
+          </ol>
+        </div>
+      </div>
+      <div class="pay-bottom">
+        <div class="waiting"><span class="spinner sm"></span> Đang chờ thanh toán · còn <b id="countdown">05:00</b></div>
+        <div class="row">
+          <button id="demoPay" class="btn primary lg hidden" title="Chỉ hiện ở chế độ demo (DB_MODE=demo)">Giả lập: đã chuyển khoản</button>
+          <button id="cancelPay" class="btn lg">Hủy đơn</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nhả hàng / kết quả -->
+  <section id="dispense" class="screen overlay hidden">
+    <div class="pay-card center narrow">
+      <div id="dispIcon" class="big-icon"><span class="spinner"></span></div>
+      <h2 id="dispTitle"></h2>
+      <p id="dispMsg" class="muted"></p>
+      <div id="receipt" class="receipt"></div>
+      <button id="doneBtn" class="btn primary lg hidden">Hoàn tất</button>
+    </div>
+  </section>
+
+  <!-- Máy ngưng phục vụ / mất kết nối -->
+  <section id="outOfOrder" class="screen overlay hidden">
+    <div class="pay-card center narrow">
+      <div class="big-icon warn" id="oooIcon"></div>
+      <h2 id="oooTitle">Máy tạm ngưng phục vụ</h2>
+      <p id="oooMsg" class="muted"></p>
+      <p class="small muted" id="oooSupport"></p>
+    </div>
+  </section>
+
+  <!-- Bảng kỹ thuật: chạm logo 5 lần liên tiếp để mở -->
+  <div id="techPanel" class="tech-panel hidden">
+    <div class="row between"><h3 style="margin:0">Thông tin thiết bị</h3><button class="icon-btn" id="closeTech" aria-label="Đóng"><span data-ico="x" data-size="16"></span></button></div>
+    <dl class="tech-info" id="techInfo"></dl>
+    <div class="row"><button id="refreshMenu" class="btn sm">Tải lại thực đơn</button><button id="logoutKiosk" class="btn danger sm">Hủy kích hoạt</button></div>
+  </div>
+
+  <script type="module" src="js/kiosk.js"></script>
+</body>
+</html>
