@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FreshVend – Quản lý</title>
+  <link rel="icon" href="img/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- Đăng nhập -->
+  <section id="loginView" class="auth hidden">
+    <div class="auth-art" aria-hidden="true">
+      <img src="img/hero-bowl.jpg" alt="">
+      <div class="auth-art-text">
+        <div class="logo-text light"><img src="img/logo-light.svg" alt="" width="40" height="40"><span>Fresh<b>Vend</b></span></div>
+        <h2>Vận hành đội máy bán trái cây<br><em>tươi — lạnh — minh bạch.</em></h2>
+        <ul>
+          <li><span data-ico="thermo"></span>Giám sát chuỗi lạnh 2–8°C theo thời gian thực</li>
+          <li><span data-ico="package"></span>Tồn kho FIFO theo lô, cảnh báo hết hạn</li>
+          <li><span data-ico="shield"></span>Phân quyền RBAC + Row-Level Security</li>
+        </ul>
+      </div>
+    </div>
+    <div class="auth-box">
+      <div class="auth-head">
+        <img src="img/logo.svg" alt="" width="40" height="40">
+        <div><b>Fresh<i>Vend</i></b><span>Hệ thống quản lý máy bán hàng</span></div>
+      </div>
+      <form id="loginForm" class="auth-form" autocomplete="on" novalidate>
+        <h2>Đăng nhập</h2>
+        <div class="field">
+          <label for="lu">Tên đăng nhập</label>
+          <input id="lu" name="username" autocomplete="username" autocapitalize="off" spellcheck="false" required>
+        </div>
+        <div class="field">
+          <label for="lp">Mật khẩu</label>
+          <div class="pw-wrap"><input id="lp" name="password" type="password" autocomplete="current-password" required>
+            <button type="button" class="pw-toggle" id="pwToggle" aria-label="Hiện mật khẩu"><span data-ico="eye"></span></button></div>
+        </div>
+        <div id="loginErr" class="form-error" role="alert"></div>
+        <div id="loginDemo" class="demo-hint hidden"><b>Chế độ demo</b> – dữ liệu giả lập, chưa kết nối SQL Server.
+          <span class="row" style="margin-top:8px"><button type="button" class="btn sm" data-demo="admin|Admin@2026">admin</button><button type="button" class="btn sm" data-demo="operator01|Operator@2026">operator01</button></span></div>
+        <button class="btn primary block" type="submit" id="loginBtn">Đăng nhập</button>
+      </form>
+      <p class="auth-help">Quên mật khẩu hoặc tài khoản bị khóa? Liên hệ quản trị viên hệ thống.</p>
+    </div>
+    <p class="auth-foot">© 2026 FreshVend</p>
+  </section>
+
+  <!-- Khung ứng dụng -->
+  <div id="appView" class="app hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-brand"><img src="img/logo-light.svg" alt="" width="34" height="34"><div><b>Fresh<i>Vend</i></b><span>Quản lý máy bán hàng</span></div></div>
+      <nav id="nav"></nav>
+      <div class="side-foot"><span class="dot gray" id="liveDot"></span><span id="liveText">Đang kết nối…</span></div>
+    </aside>
+    <div class="sidebar-backdrop" id="backdrop"></div>
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Mở menu"><span data-ico="menu"></span></button>
+        <div class="title-wrap"><span class="crumb" id="crumb"></span><h1 id="pageTitle">Tổng quan</h1></div>
+        <span id="demoBadge" class="demo-badge hidden" title="DB_MODE=demo – dữ liệu giả lập trong bộ nhớ">DEMO DATA</span>
+        <div class="user-menu">
+          <button class="user-btn" id="userBtn" aria-haspopup="true" aria-expanded="false">
+            <span class="avatar" id="avatar"></span>
+            <span class="user-meta"><b id="userName"></b><span id="userRole"></span></span>
+            <span data-ico="chevronDown"></span>
+          </button>
+          <div class="dropdown hidden" id="userDrop" role="menu">
+            <button role="menuitem" id="pwBtn"><span data-ico="key"></span>Đổi mật khẩu</button>
+            <button role="menuitem" id="logoutBtn"><span data-ico="logout"></span>Đăng xuất</button>
+          </div>
+        </div>
+      </header>
+      <main id="page" class="page"></main>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

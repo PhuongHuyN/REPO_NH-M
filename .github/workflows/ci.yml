@@ -1,0 +1,26 @@
+# Mỗi lần push / Pull Request: kiểm tra đồng bộ FE ⇄ BE + kiểm thử API của ứng dụng trong thư mục app/.
+# Không cần SQL Server: bộ test dùng CSDL mô phỏng trong bộ nhớ (app/api/test/fakeDb.js). Đỏ = không được merge.
+name: CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  app-check-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: app/.nvmrc
+      - name: Cài thư viện
+        working-directory: app/api
+        run: if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
+      - name: Kiểm tra đồng bộ FE ⇄ BE (route, vai trò, .env.example)
+        run: node tools/check-sync.js
+      - name: Kiểm thử API
+        working-directory: app/api
+        run: npm test

@@ -1,0 +1,8 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "FreshVend – chạy demo (chưa cần SQL Server)", "type": "node", "request": "launch", "cwd": "${workspaceFolder}/app", "program": "${workspaceFolder}/app/tools/demo.js" },
+    { "name": "FreshVend API (SQL Server thật)", "type": "node", "request": "launch", "cwd": "${workspaceFolder}/app/api", "program": "${workspaceFolder}/app/api/src/server.js" },
+    { "name": "Bộ điều khiển máy (mô phỏng ESP32, 5 máy)", "type": "node", "request": "launch", "cwd": "${workspaceFolder}/app", "program": "${workspaceFolder}/app/simulator/esp32.js" }
+  ]
+}
