@@ -1,4 +1,4 @@
-#  FreshVend — Hệ thống máy bán trái cây tự động
+﻿#  FreshVend — Hệ thống máy bán trái cây tự động
 
 > **Môn học:** Hệ quản trị Cơ sở dữ liệu (T-SQL / SQL Server)  
 > **Ngày khởi tạo:** 2026-10-21  
@@ -36,38 +36,33 @@
 ##  Cấu trúc thư mục
 
 ```
-FreshVend/
-├── README.md                     ← File này
+REPO_NH-M/
+├── README.md                       ← File này
 ├── sql/
-│   ├── 00_database.sql           ← Tạo DB + 6 schema
-│   ├── 01_schemas.sql            ← Cấu hình schema (quyền, collation…)
-│   ├── 02_tables_auth.sql        ← Bảng module auth (TV1)
-│   ├── 02_tables_inventory.sql   ← Bảng module inventory (TV2)
-│   ├── 02_tables_sales.sql       ← Bảng module sales (TV3)
-│   ├── 02_tables_iot.sql         ← Bảng module iot (TV4)
-│   ├── 02_tables_audit.sql       ← Bảng module audit + report (TV5)
-│   ├── 03_foreign_keys.sql       ← Gom toàn bộ FK liên schema
-│   ├── 04_indexes.sql            ← Index bổ sung
-│   ├── 05_views.sql              ← View & report schema
-│   ├── 06_functions.sql          ← Scalar / Table-valued functions
-│   ├── 07_stored_procedures.sql  ← Stored procedures
-│   ├── 08_triggers.sql           ← Trigger audit & business rules
-│   └── 09_seed_data.sql          ← Dữ liệu mẫu
+│   ├── 00_database.sql             ← Tạo DB FreshVendDB + 6 schema (TV1)
+│   ├── 01_schemas.sql              ← Cấu hình schema (quyền, collation…) (TV1)
+│   ├── 02_tables_auth.sql          ← Bảng module auth (TV1)
+│   ├── 02_tables_inventory.sql     ← Bảng module inventory (TV2)
+│   ├── 02_tables_sales.sql         ← Bảng module sales (TV3)
+│   ├── 02_tables_iot.sql           ← Bảng module iot (TV4)
+│   ├── 02_tables_report.sql        ← Bảng module audit + report (TV5)
+│   ├── 03_foreign_keys.sql         ← Gom toàn bộ FK liên schema (TV1)
+│   ├── 05_views_report.sql         ← Views module report (TV5)
+│   ├── 06_functions_report.sql     ← Functions module report (TV5)
+│   ├── 07_procs_report.sql         ← Stored procedures module report (TV5)
+│   ├── 09_seed_small.sql           ← Dữ liệu mẫu nhỏ (~50 dòng/bảng)
+│   └── 09_seed_large.sql           ← Dữ liệu mẫu lớn (kiểm thử hiệu năng)
 ├── docs/
-│   ├── SRS.md                    ← Đặc tả yêu cầu phần mềm
-│   ├── TestPlan.md               ← Kế hoạch kiểm thử
-│   ├── TestReport.md             ← Báo cáo kết quả kiểm thử
-│   ├── UserManual.md             ← Hướng dẫn sử dụng
-│   └── InstallGuide.md           ← Hướng dẫn cài đặt chi tiết
-├── tests/
-│   ├── test_auth.sql             ← Kiểm thử module auth
-│   ├── test_inventory.sql        ← Kiểm thử module inventory
-│   ├── test_sales.sql            ← Kiểm thử module sales
-│   ├── test_iot.sql              ← Kiểm thử module iot
-│   └── test_reports.sql          ← Kiểm thử báo cáo
-└── tools/
-    ├── esp32_simulator.sql       ← Giả lập dữ liệu ESP32
-    └── generate_test_data.sql    ← Sinh dữ liệu kiểm thử ngẫu nhiên
+│   ├── SRS.md                      ← Đặc tả yêu cầu phần mềm
+│   ├── TestPlan.md                 ← Kế hoạch kiểm thử (TV5)
+│   ├── TestReport.md               ← Báo cáo kết quả kiểm thử (TV5)
+│   ├── UserManual.md               ← Hướng dẫn sử dụng — Admin báo cáo (TV5)
+│   └── InstallGuide.md             ← Hướng dẫn cài đặt chi tiết
+└── app/                            ← Ứng dụng Node.js (API + Web + Simulator)
+    ├── api/                        ← REST API (Express)
+    ├── web/                        ← Giao diện quản trị & kiosk
+    ├── simulator/                  ← Mô phỏng thiết bị ESP32
+    └── README.md                   ← Hướng dẫn chạy ứng dụng
 ```
 
 ---
@@ -82,37 +77,36 @@ FreshVend/
 
 ### Thứ tự chạy script (bắt buộc theo thứ tự)
 
+> **Quy tắc merge:** TV1 & TV2 (bảng nền) → TV4 → TV3 → TV5
+
 ```
-Bước 1 — Khởi tạo nền tảng
-  sql/00_database.sql        → Tạo database FreshVendDB và 6 schema
-  sql/01_schemas.sql         → Cấu hình thêm cho các schema
+Bước 1 — Khởi tạo nền tảng (TV1)
+  sql/00_database.sql            → Tạo database FreshVendDB và 6 schema
+  sql/01_schemas.sql             → Cấu hình thêm cho các schema
 
-Bước 2 — Tạo bảng (TV1–TV5, chạy theo thứ tự sau)
-  sql/02_tables_auth.sql     → TV1: auth schema
-  sql/02_tables_inventory.sql→ TV2: inventory schema
-  sql/02_tables_sales.sql    → TV3: sales schema
-  sql/02_tables_iot.sql      → TV4: iot schema
-  sql/02_tables_audit.sql    → TV5: audit + report schema
+Bước 2 — Tạo bảng (chạy theo thứ tự merge: TV1 → TV2 → TV4 → TV3 → TV5)
+  sql/02_tables_auth.sql         → TV1: auth schema
+  sql/02_tables_inventory.sql    → TV2: inventory schema
+  sql/02_tables_iot.sql          → TV4: iot schema
+  sql/02_tables_sales.sql        → TV3: sales schema
+  sql/02_tables_report.sql       → TV5: audit + report schema
 
-Bước 3 — Ràng buộc & tối ưu
-  sql/03_foreign_keys.sql    → Thêm toàn bộ FK (sau khi tất cả bảng đã tồn tại)
-  sql/04_indexes.sql         → Index bổ sung
+Bước 3 — Ràng buộc & tối ưu (TV1)
+  sql/03_foreign_keys.sql        → Thêm toàn bộ FK (sau khi tất cả bảng đã tồn tại)
 
-Bước 4 — Logic nghiệp vụ
-  sql/05_views.sql
-  sql/06_functions.sql
-  sql/07_stored_procedures.sql
-  sql/08_triggers.sql
+Bước 4 — Logic nghiệp vụ (TV5)
+  sql/05_views_report.sql        → 3 views: vw_ProductRanking, vw_ColdChainCompliance, vw_LatestTestRun
+  sql/06_functions_report.sql    → fn_RevenueByLocation(@From, @To)
+  sql/07_procs_report.sql        → 6 procs: sp_DashboardKpi, sp_RevenueGrowth, sp_PeakHours,
+                                             sp_ExportSales, sp_RefreshDailySummary, sp_RunAllTests
 
-Bước 5 — Dữ liệu mẫu
-  sql/09_seed_data.sql
+Bước 5 — Dữ liệu mẫu (chọn một)
+  sql/09_seed_small.sql          → Dữ liệu mẫu nhỏ (phát triển & demo)
+  sql/09_seed_large.sql          → Dữ liệu mẫu lớn (kiểm thử hiệu năng ≤ 500 ms)
 
-Bước 6 — Kiểm thử (tuỳ chọn)
-  tests/test_auth.sql
-  tests/test_inventory.sql
-  tests/test_sales.sql
-  tests/test_iot.sql
-  tests/test_reports.sql
+Bước 6 — Kiểm thử tích hợp (TV5)
+  EXEC report.sp_RunAllTests;    → Chạy 12 test cases, ghi kết quả vào report.TestResults
+  SELECT * FROM report.vw_LatestTestRun ORDER BY TestId;
 ```
 
 >  **Lưu ý:** File `03_foreign_keys.sql` **phải chạy sau tất cả** các file `02_tables_*.sql` vì các FK tham chiếu chéo giữa nhiều schema.
