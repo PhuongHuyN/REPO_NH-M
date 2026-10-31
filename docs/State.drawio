@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" agent="FreshVend" version="24.7.17">
+<mxfile host="app.diagrams.net" agent="Codebuff" version="24.7.17">
   <diagram id="freshvend-order-state" name="TV3 - Order State">
     <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
       <root>
@@ -9,35 +9,35 @@
           <mxGeometry x="520" y="40" width="40" height="40" as="geometry" />
         </mxCell>
 
-        <mxCell id="PENDING" value="&lt;b&gt;PENDING&lt;/b&gt;&lt;br&gt;Chờ thanh toán&lt;br&gt;(giữ hàng, hiện VietQR)" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="1">
-          <mxGeometry x="440" y="120" width="200" height="80" as="geometry" />
+        <mxCell id="PENDING" value="&lt;b&gt;PENDING&lt;/b&gt;&lt;br&gt;Đơn mới tạo, hàng đã giữ theo FIFO" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="1">
+          <mxGeometry x="440" y="130" width="200" height="70" as="geometry" />
         </mxCell>
 
-        <mxCell id="PAID" value="&lt;b&gt;PAID&lt;/b&gt;&lt;br&gt;Đã nhận đủ tiền&lt;br&gt;(chờ máy nhả hàng)" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" vertex="1" parent="1">
-          <mxGeometry x="440" y="270" width="200" height="80" as="geometry" />
+        <mxCell id="PAID" value="&lt;b&gt;PAID&lt;/b&gt;&lt;br&gt;Đã nhận đủ tiền thanh toán" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" vertex="1" parent="1">
+          <mxGeometry x="440" y="270" width="200" height="70" as="geometry" />
         </mxCell>
 
-        <mxCell id="DISPENSED" value="&lt;b&gt;DISPENSED&lt;/b&gt;&lt;br&gt;Nhả hàng thành công&lt;br&gt;(trạng thái cuối)" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="1">
-          <mxGeometry x="440" y="440" width="200" height="80" as="geometry" />
+        <mxCell id="DISPENSED" value="&lt;b&gt;DISPENSED&lt;/b&gt;&lt;br&gt;Máy đã nhả hàng thành công" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="430" width="200" height="70" as="geometry" />
         </mxCell>
 
-        <mxCell id="EXPIRED" value="&lt;b&gt;EXPIRED&lt;/b&gt;&lt;br&gt;Quá 5 phút chưa thanh toán&lt;br&gt;(trả hàng về kho)" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;" vertex="1" parent="1">
-          <mxGeometry x="80" y="120" width="220" height="80" as="geometry" />
+        <mxCell id="EXPIRED" value="&lt;b&gt;EXPIRED&lt;/b&gt;&lt;br&gt;Quá 5 phút chưa thanh toán&lt;br&gt;(đã trả hàng về kho)" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="100" y="130" width="200" height="70" as="geometry" />
         </mxCell>
 
-        <mxCell id="DISPENSE_FAILED" value="&lt;b&gt;DISPENSE_FAILED&lt;/b&gt;&lt;br&gt;Kẹt / nhả hàng thất bại" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;" vertex="1" parent="1">
-          <mxGeometry x="820" y="270" width="220" height="80" as="geometry" />
+        <mxCell id="DISPENSE_FAILED" value="&lt;b&gt;DISPENSE_FAILED&lt;/b&gt;&lt;br&gt;Nhả hàng thất bại (đã thử 1–2 lần)" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;" vertex="1" parent="1">
+          <mxGeometry x="820" y="270" width="200" height="70" as="geometry" />
         </mxCell>
 
-        <mxCell id="REFUNDED" value="&lt;b&gt;REFUNDED&lt;/b&gt;&lt;br&gt;Đã hoàn tiền cho khách&lt;br&gt;(trạng thái cuối)" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;" vertex="1" parent="1">
-          <mxGeometry x="820" y="440" width="220" height="80" as="geometry" />
+        <mxCell id="REFUNDED" value="&lt;b&gt;REFUNDED&lt;/b&gt;&lt;br&gt;Đã hoàn tiền cho khách" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;" vertex="1" parent="1">
+          <mxGeometry x="820" y="430" width="200" height="70" as="geometry" />
         </mxCell>
 
-        <mxCell id="e_start" value="Khách chọn hàng + thanh toán&lt;br&gt;sp_CreateOrder" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="start" target="PENDING">
+        <mxCell id="e_start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="start" target="PENDING">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <mxCell id="e_pay" value="Webhook / xác nhận tiền khớp&lt;br&gt;sp_ConfirmPayment (&lt; 30s)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="PENDING" target="PAID">
+        <mxCell id="e_create" value="Khách chọn hàng trên Kiosk&lt;br&gt;sales.sp_CreateOrder" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="PENDING" target="PAID">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
@@ -45,20 +45,24 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <mxCell id="e_dispense" value="Nhả hàng thành công&lt;br&gt;sp_RecordDispense" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="PAID" target="DISPENSED">
+        <mxCell id="e_pay" value="Tiền khớp + GatewayTxnId chưa tồn tại&lt;br&gt;sp_ConfirmPayment (idempotent)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="PAID" target="DISPENSED">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <mxCell id="e_jam" value="Nhả hàng lỗi / kẹt&lt;br&gt;sp_RecordDispense" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="PAID" target="DISPENSE_FAILED">
+        <mxCell id="e_jam" value="Nhả hàng lỗi (AttemptNo 1–2)&lt;br&gt;sp_RecordDispense" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="PAID" target="DISPENSE_FAILED">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <mxCell id="e_refund" value="Hoàn tiền tự động / thủ công&lt;br&gt;sp_Refund" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="DISPENSE_FAILED" target="REFUNDED">
+        <mxCell id="e_retry" value="Thử lại thành công&lt;br&gt;(AttemptNo ≤ 3)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="DISPENSE_FAILED" target="DISPENSED">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <mxCell id="legend" value="&lt;b&gt;FreshVend — State Diagram đơn hàng (TV3 Sales)&lt;/b&gt;&lt;br&gt;Luồng chính: PENDING → PAID → DISPENSED&lt;br&gt;Lỗi nhả hàng: PAID → DISPENSE_FAILED → REFUNDED&lt;br&gt;Hết hạn: PENDING (quá 5 phút) → EXPIRED&lt;br&gt;Trạng thái cuối: DISPENSED, EXPIRED, REFUNDED — không quay lại PAID." style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#FFFFFF;strokeColor=#999999;spacing=8;" vertex="1" parent="1">
-          <mxGeometry x="80" y="580" width="960" height="120" as="geometry" />
+        <mxCell id="e_refund" value="Thất bại lần 3&lt;br&gt;sp_Refund + cảnh báo DISPENSE_JAM" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="DISPENSE_FAILED" target="REFUNDED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend" value="&lt;b&gt;Quy tắc trạng thái (trg_Orders_StatusGuard)&lt;/b&gt;&lt;br&gt;• Chỉ đi theo các mũi tên ở trên; mọi chuyển trạng thái khác bị chặn (ROLLBACK).&lt;br&gt;• DISPENSED, EXPIRED, REFUNDED là trạng thái cuối — không quay lại PAID.&lt;br&gt;• PENDING → PAID chỉ khi số tiền khớp và GatewayTxnId chưa được dùng (UNIQUE).&lt;br&gt;• PAID → DISPENSED/REFUNDED chỉ qua sp_RecordDispense; AttemptNo tối đa 3 (DispenseEvents)." style="rounded=1;whiteSpace=wrap;html=1;align=left;fillColor=#FFFFFF;strokeColor=#999999;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="570" width="920" height="120" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
