@@ -1,177 +1,68 @@
-﻿#  FreshVend — Hệ thống máy bán trái cây tự động
+﻿# FreshVend — SQL Server 2022
 
-> **Môn học:** Hệ quản trị Cơ sở dữ liệu (T-SQL / SQL Server)  
-> **Ngày khởi tạo:** 2026-10-21  
+Hệ thống máy bán trái cây tự động: auth, inventory, sales, iot, audit và report.
 
----
+| Thành viên | MSSV |
+|---|---|
+| Nguyễn Phạm Xuân Anh | 089306017838 |
+| Đoàn Phương Thiên Ân | 079306092350 |
+| Nguyễn Phương Huy | 054206004278 |
+| Huỳnh Nhật Toàn | 051206007163 |
+| Trương Tuấn Dũng (TV5) | 079206042161 |
 
-##  Nhóm thực hiện
+## TV5 — SCRUM 34, 35, 37
 
-| Thành viên | MSSV | Phụ trách | Mức độ hoàn thành |
-|------------|-------|-----------|------------------|
-| Nguyễn Phạm Xuân Anh | 089306017838 | *(Module)* | *(Module)* |
-| Đoàn Phương Thiên Ân | 079306092350 | *(Module)* | *(Module)* |
-| Nguyễn Phương Huy | 054206004278 | *(Module)* | *(Module)* |
-| Huỳnh Nhật Toàn | 051206007163 | *(Module)* | *(Module)* |
-| Trương Tuấn Dũng | 079206042161 | *(Module)* | *(Module)* |
+| Sản phẩm | File |
+|---|---|
+| User Story Admin và khung kiểm thử | docs/TestPlan.docx (nguồn docs/TestPlan.md) |
+| Ba bảng report | sql/02_tables_report.sql |
+| Seed nhỏ | sql/05_seed_small.sql |
+| Seed lớn | sql/06_seed_large.sql |
+| Hai function và hai view | sql/24_objects_report.sql |
+| Hợp đồng dữ liệu phụ thuộc | sql/04_report_dependencies.sql |
+| Procedure báo cáo và runner | sql/07_procs_report.sql |
+| Kiểm thử SQL và hiệu năng | tests/run-tv5.ps1, tests/sql/ |
+| Kết quả chạy thực tế | docs/TestReport.md |
 
----
-##  Tổng quan đề tài
+## Thứ tự chạy
 
-**FreshVend** là hệ thống cơ sở dữ liệu cho máy bán trái cây tươi tự động (vending machine). Hệ thống quản lý toàn bộ vòng đời sản phẩm — từ nhập kho, bán hàng, thanh toán, cho đến giám sát thiết bị IoT (ESP32) và báo cáo kinh doanh.
+SQL Server 2022, compatibility level 160, Vietnamese_CI_AS. SSMS dùng QUOTED_IDENTIFIER ON; sqlcmd dùng -I -b để bật thiết lập này và dừng khi lỗi.
 
-### Các chức năng chính
+1. sql/00_database.sql, sql/01_schemas.sql.
+2. sql/02_tables_auth.sql, sql/02_tables_inventory.sql, sql/02_tables_sales.sql, sql/02_tables_iot.sql, sql/02_tables_report.sql.
+3. sql/03_foreign_keys.sql, sql/04_report_dependencies.sql.
+4. sql/24_objects_report.sql, sql/07_procs_report.sql.
+5. sql/05_seed_small.sql; sau khi chốt cấu trúc và cần đo hiệu năng, chạy sql/06_seed_large.sql sau cùng.
 
-| Module | Mô tả |
-|--------|-------|
-| **auth** | Quản lý người dùng, vai trò, phân quyền |
-| **inventory** | Quản lý kho, sản phẩm, nhà cung cấp, lô hàng |
-| **sales** | Đơn hàng, giao dịch, thanh toán, khuyến mãi |
-| **iot** | Thiết bị ESP32, cảm biến, cảnh báo, telemetry |
-| **audit** | Nhật ký thay đổi dữ liệu, lịch sử thao tác |
-| **report** | View tổng hợp, dữ liệu báo cáo định kỳ |
+Không chạy theo thứ tự tên file toàn thư mục: số 05/06 là tên sản phẩm được giao, các phụ thuộc 24 và 07 phải tạo trước khi gọi logic. File 05_views_report/06_functions_report là thông báo chuyển vị trí; 09_seed_small/large dừng bằng lỗi hướng dẫn để ngăn chạy nhầm seed cũ.
 
----
+Small có 3 địa điểm, 5 máy, 10 sản phẩm, 50 đơn. Large độc lập có 20 máy, 15 sản phẩm, 5.000 đơn, 200.000 telemetry trong cửa sổ cố định 06/08/2026–03/11/2026. Hai profile chung mã TV5-; small→large vẫn đạt tổng large, không cộng thêm 50 đơn. Chạy lại không tăng dữ liệu hoặc doanh thu. Người dùng mẫu bị vô hiệu hóa, không dùng đăng nhập thật; owner auth cấp tài khoản demo khi tích hợp ứng dụng.
 
-##  Cấu trúc thư mục
+## Kiểm thử
 
-```
-REPO_NH-M/
-├── README.md                       ← File này
-├── sql/
-│   ├── 00_database.sql             ← Tạo DB FreshVendDB + 6 schema (TV1)
-│   ├── 01_schemas.sql              ← Cấu hình schema (quyền, collation…) (TV1)
-│   ├── 02_tables_auth.sql          ← Bảng module auth (TV1)
-│   ├── 02_tables_inventory.sql     ← Bảng module inventory (TV2)
-│   ├── 02_tables_sales.sql         ← Bảng module sales (TV3)
-│   ├── 02_tables_iot.sql           ← Bảng module iot (TV4)
-│   ├── 02_tables_report.sql        ← Bảng module audit + report (TV5)
-│   ├── 03_foreign_keys.sql         ← Gom toàn bộ FK liên schema (TV1)
-│   ├── 05_views_report.sql         ← Views module report (TV5)
-│   ├── 06_functions_report.sql     ← Functions module report (TV5)
-│   ├── 07_procs_report.sql         ← Stored procedures module report (TV5)
-│   ├── 09_seed_small.sql           ← Dữ liệu mẫu nhỏ (~50 dòng/bảng)
-│   └── 09_seed_large.sql           ← Dữ liệu mẫu lớn (kiểm thử hiệu năng)
-├── docs/
-│   ├── SRS.md                      ← Đặc tả yêu cầu phần mềm
-│   ├── TestPlan.md                 ← Kế hoạch kiểm thử (TV5)
-│   ├── TestReport.md               ← Báo cáo kết quả kiểm thử (TV5)
-│   ├── UserManual.md               ← Hướng dẫn sử dụng — Admin báo cáo (TV5)
-│   └── InstallGuide.md             ← Hướng dẫn cài đặt chi tiết
-└── app/                            ← Ứng dụng Node.js (API + Web + Simulator)
-    ├── api/                        ← REST API (Express)
-    ├── web/                        ← Giao diện quản trị & kiosk
-    ├── simulator/                  ← Mô phỏng thiết bị ESP32
-    └── README.md                   ← Hướng dẫn chạy ứng dụng
+```powershell
+powershell -NoProfile -File tests/run-tv5.ps1
 ```
 
----
+Tạo CSDL FreshVendTV5_Test_timestamp riêng, giữ lại để review; log tại .local-test/tv5 (không commit). Kết nối mặc định .\SQLEXPRESS, có thể truyền -Server. Bộ test chạy seed hai lần, đối chiếu dữ liệu và biên function/view, kiểm tra unit procedure, đo hiệu năng warm-up + 5 lượt với ngưỡng nghiêm ngặt <500 ms. Không chạy runner ghi dữ liệu trên production.
 
-##  Hướng dẫn cài đặt nhanh
-
-### Yêu cầu
-
-- **SQL Server** 2019 trở lên (hoặc SQL Server 2022)
-- **SQL Server Management Studio (SSMS)** 18+ hoặc Azure Data Studio
-- Quyền `sysadmin` hoặc `dbcreator` trên SQL Server instance
-
-### Thứ tự chạy script (bắt buộc theo thứ tự)
-
-> **Quy tắc merge:** TV1 & TV2 (bảng nền) → TV4 → TV3 → TV5
-
-```
-Bước 1 — Khởi tạo nền tảng (TV1)
-  sql/00_database.sql            → Tạo database FreshVendDB và 6 schema
-  sql/01_schemas.sql             → Cấu hình thêm cho các schema
-
-Bước 2 — Tạo bảng (chạy theo thứ tự merge: TV1 → TV2 → TV4 → TV3 → TV5)
-  sql/02_tables_auth.sql         → TV1: auth schema
-  sql/02_tables_inventory.sql    → TV2: inventory schema
-  sql/02_tables_iot.sql          → TV4: iot schema
-  sql/02_tables_sales.sql        → TV3: sales schema
-  sql/02_tables_report.sql       → TV5: audit + report schema
-
-Bước 3 — Ràng buộc & tối ưu (TV1)
-  sql/03_foreign_keys.sql        → Thêm toàn bộ FK (sau khi tất cả bảng đã tồn tại)
-
-Bước 4 — Logic nghiệp vụ (TV5)
-  sql/05_views_report.sql        → 3 views: vw_ProductRanking, vw_ColdChainCompliance, vw_LatestTestRun
-  sql/06_functions_report.sql    → fn_RevenueByLocation(@From, @To)
-  sql/07_procs_report.sql        → 6 procs: sp_DashboardKpi, sp_RevenueGrowth, sp_PeakHours,
-                                             sp_ExportSales, sp_RefreshDailySummary, sp_RunAllTests
-
-Bước 5 — Dữ liệu mẫu (chọn một)
-  sql/09_seed_small.sql          → Dữ liệu mẫu nhỏ (phát triển & demo)
-  sql/09_seed_large.sql          → Dữ liệu mẫu lớn (kiểm thử hiệu năng ≤ 500 ms)
-
-Bước 6 — Kiểm thử tích hợp (TV5)
-  EXEC report.sp_RunAllTests;    → Chạy 12 test cases, ghi kết quả vào report.TestResults
-  SELECT * FROM report.vw_LatestTestRun ORDER BY TestId;
+```sql
+EXEC report.sp_RunAllTests;
+SELECT * FROM report.vw_LatestTestRun ORDER BY TestId;
+SELECT * FROM report.fn_RevenueByLocation('20260806','20261103');
+SELECT report.fn_DispenseFailureRate(1); -- tỷ lệ 0..1, NULL khi không có lần nhả
 ```
 
->  **Lưu ý:** File `03_foreign_keys.sql` **phải chạy sau tất cả** các file `02_tables_*.sql` vì các FK tham chiếu chéo giữa nhiều schema.
+Tạo lại tài liệu Word: python tools/build_testplan_docx.py. Sinh lại hai seed từ cùng nguồn: python tools/complete_tv5.py. Không tạo file FULL.
 
----
+## Hợp đồng với các module khác
 
-##  Quy tắc đặt tên (Naming Convention)
+Giữ nguyên tên bảng số ít đã có của TV1–TV4. Script 04 bổ sung inventory.Locations, Machine.LocationId, sales.DispenseAttempts và iot.TelemetryHourly để report có nguồn chuẩn. TelemetryHourly là bảng tiền tổng hợp theo giờ, cập nhật bằng report.sp_RefreshTelemetryHourly theo ngày UTC sau ingest; seed tự refresh. Nhiệt độ và thời lượng được phân tích một lần bằng computed columns persisted; 2–8°C bao gồm hai biên, không tự coi mất dữ liệu là tuân thủ. Gói tin cần t và durationSeconds; thời lượng 1..300 giây, các khoảng cùng thiết bị không chồng nhau. Đọc coverage cùng compliance khi đánh giá.
 
-### Bảng & Schema
+Revenue là tổng giá dòng đơn paid, chưa trừ chiết khấu; NetRevenue ở summary có trừ chiết khấu phân bổ. FailureRate tính JAM/tổng lần nhả vật lý, kể cả retry. SQL export chuẩn bị dữ liệu, log PENDING; việc tạo file CSV/PDF và cập nhật SUCCESS/FAILED thuộc ứng dụng.
 
-| Đối tượng | Quy tắc | Ví dụ |
-|-----------|---------|-------|
-| Schema | `snake_case` viết thường | `auth`, `inventory`, `iot` |
-| Bảng | `[schema].[PascalCase]` | `auth.User`, `inventory.Product` |
-| Cột khóa chính | `Id` (INT IDENTITY) hoặc `<Tên>Id` | `UserId`, `ProductId` |
-| Cột khóa ngoại | `<TênBảngTham chiếu>Id` | `UserId`, `MachineId` |
-| Cột ngày tạo | `CreatedAt` (DATETIME2) | `CreatedAt` |
-| Cột ngày cập nhật | `UpdatedAt` (DATETIME2) | `UpdatedAt` |
-| Cột trạng thái | `IsActive` / `IsDeleted` (BIT) | `IsActive` |
+03_foreign_keys bỏ qua audit.AuditLog/ChangeLog và MachineStockSnapshot khi các bảng này chưa được module chủ cung cấp. Không giả tạo các bảng ngoài phạm vi TV5. Các ca login/quyền, nghiệp vụ TV1–TV4 và PDF ứng dụng được ghi riêng trong TestPlan; kết quả mock không thay kiểm thử SQL thật.
 
-### Constraint
+## Quy ước nhóm
 
-| Loại | Tiền tố | Ví dụ |
-|------|---------|-------|
-| Primary Key | `PK_` | `PK_auth_User` |
-| Foreign Key | `FK_` | `FK_sales_Order_auth_User` |
-| Unique | `UQ_` | `UQ_auth_User_Email` |
-| Check | `CK_` | `CK_inventory_Product_Price` |
-| Index | `IX_` | `IX_sales_Order_CreatedAt` |
-| Default | `DF_` | `DF_auth_User_IsActive` |
-
-### Stored Procedure & Function
-
-| Đối tượng | Quy tắc | Ví dụ |
-|-----------|---------|-------|
-| Stored Procedure | `usp_<Schema>_<Verb><Noun>` | `usp_sales_CreateOrder` |
-| Scalar Function | `ufn_<Schema>_<Verb><Noun>` | `ufn_inventory_GetStock` |
-| Table Function | `uft_<Schema>_<Verb><Noun>` | `uft_report_DailySales` |
-| Trigger | `tr_<Schema>_<Table>_<Event>` | `tr_audit_User_AfterUpdate` |
-| View | `v_<Schema>_<Noun>` | `v_report_MonthlySales` |
-
-### File SQL
-
-- Tiền tố số `NN_` xác định thứ tự chạy (00, 01, 02…)
-- Tên mô tả rõ nội dung: `02_tables_auth.sql`
-- Tất cả viết thường, dùng dấu gạch dưới
-
----
-
-##  Sơ đồ quan hệ (tóm tắt)
-
-```
-auth.User ──────────────┐
-auth.Role               │ (1:N)
-auth.UserRole           │
-                        ▼
-inventory.Machine ←── sales.Order ──→ sales.OrderItem
-        │                                    │
-        ▼                                    ▼
-iot.Device ──→ iot.Telemetry        inventory.Product
-        │
-        ▼
-audit.AuditLog (ghi nhận mọi thay đổi)
-```
-
----
-
-
+Nhánh tv5-report, không push main; PR cần ít nhất một bạn review. TV5 THROW 50400–50499. SQL object dùng CREATE OR ALTER; bảng dùng IF OBJECT_ID IS NULL để giữ dữ liệu. Procedure ghi: NOCOUNT, XACT_ABORT, TRY, kiểm tra, transaction, COMMIT, CATCH rollback và THROW. Bảng mới PascalCase số nhiều (ngoại lệ tên giao việc), sp_<ĐộngTừ><ĐốiTượng>, fn_, trg_<Bảng><MụcĐích>, vw_, IX_<Bảng>_<Cột>, <Tên>Type. Mỗi sản phẩm SQL một file riêng.

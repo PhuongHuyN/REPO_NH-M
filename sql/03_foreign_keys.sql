@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- FILE        : 03_foreign_keys.sql
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
 -- DESCRIPTION : Gom toàn bộ Foreign Key tham chiếu CHÉO SCHEMA.
@@ -162,7 +162,7 @@ GO
 -- =============================================================================
 
 -- audit.AuditLog.UserId → auth.User
-IF NOT EXISTS (
+IF OBJECT_ID(N'audit.AuditLog',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_audit_AuditLog_auth_User'
 )
@@ -175,7 +175,7 @@ END
 GO
 
 -- audit.ChangeLog.UserId → auth.User
-IF NOT EXISTS (
+IF OBJECT_ID(N'audit.ChangeLog',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_audit_ChangeLog_auth_User'
 )
@@ -194,18 +194,18 @@ GO
 -- report.DailySalesSummary.MachineId → inventory.Machine
 IF NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
-    WHERE name = N'FK_report_DailySalesSummary_inventory_Machine'
+    WHERE name = N'FK_DailySalesSummary_MachineId'
 )
 BEGIN
     ALTER TABLE report.DailySalesSummary
-        ADD CONSTRAINT FK_report_DailySalesSummary_inventory_Machine
+        ADD CONSTRAINT FK_DailySalesSummary_MachineId
             FOREIGN KEY (MachineId) REFERENCES inventory.Machine(MachineId);
     PRINT N'[03] FK: report.DailySalesSummary.MachineId → inventory.Machine';
 END
 GO
 
 -- report.MachineStockSnapshot.MachineId → inventory.Machine
-IF NOT EXISTS (
+IF OBJECT_ID(N'report.MachineStockSnapshot',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_report_MachineStockSnapshot_inventory_Machine'
 )
@@ -218,7 +218,7 @@ END
 GO
 
 -- report.MachineStockSnapshot.ProductId → inventory.Product
-IF NOT EXISTS (
+IF OBJECT_ID(N'report.MachineStockSnapshot',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_report_MachineStockSnapshot_inventory_Product'
 )
@@ -231,7 +231,7 @@ END
 GO
 
 -- report.MachineStockSnapshot.SlotId → inventory.Slot
-IF NOT EXISTS (
+IF OBJECT_ID(N'report.MachineStockSnapshot',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_report_MachineStockSnapshot_inventory_Slot'
 )
