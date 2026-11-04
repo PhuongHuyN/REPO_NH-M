@@ -1,35 +1,11 @@
-# InstallGuide — Hướng dẫn Cài đặt Chi tiết
+﻿# Cài đặt TV5
 
-> **Dự án:** FreshVend  
-> **Phiên bản:** 0.1 (draft)  
+SQL Server 2022 (16.x), compatibility 160, Vietnamese_CI_AS. Chạy bằng SSMS hoặc sqlcmd -I -b; cần quyền tạo cấu trúc và ghi dữ liệu.
 
----
+Thứ tự chuẩn được duy trì tại README.md: 00/01 → tất cả bảng 02 → 03_foreign_keys → 04_report_dependencies → 24_objects_report → 07_procs_report → 05_seed_small → 06_seed_large (sau cùng, khi cần).
 
-## Yêu cầu môi trường
+Không dùng 09_seed cũ. Không chạy 00_database.sql trên một CSDL đang có phiên giao dịch cần giữ, vì script của TV1 bật READ_COMMITTED_SNAPSHOT với ROLLBACK IMMEDIATE. Bộ tests/run-tv5.ps1 tự tạo CSDL riêng và không gọi thao tác này trên CSDL ứng dụng.
 
-- SQL Server 2019+ (Developer / Express / Standard)
-- SSMS 18+ hoặc Azure Data Studio
-- Quyền `sysadmin` hoặc `dbcreator`
+Kiểm tra độc lập: powershell -NoProfile -File tests/run-tv5.ps1 -Server '.\SQLEXPRESS'. CSDL test và log giữ lại ở .local-test/tv5 để review. Đọc docs/TestReport.md để phân biệt kết quả đã chạy và phụ thuộc chưa tích hợp.
 
-## Các bước cài đặt
-
-```
-1. Kết nối SQL Server bằng SSMS
-2. Mở file sql/00_database.sql → Execute (F5)
-3. Mở file sql/01_schemas.sql  → Execute
-4. Chạy lần lượt 02_tables_auth.sql → _inventory → _sales → _iot → _audit
-5. Chạy sql/03_foreign_keys.sql
-6. Chạy sql/04_indexes.sql (nếu có)
-7. Chạy sql/09_seed_data.sql để nạp dữ liệu mẫu
-```
-
-## Kiểm tra sau cài đặt
-
-```sql
-USE FreshVendDB;
-SELECT TABLE_SCHEMA, TABLE_NAME
-FROM INFORMATION_SCHEMA.TABLES
-ORDER BY TABLE_SCHEMA, TABLE_NAME;
-```
-
-Kết quả kỳ vọng: 20+ bảng thuộc 5 schema (auth, inventory, sales, iot, audit, report).
+Các module auth/inventory/sales/iot hiện có bảng nhưng chưa có đầy đủ procedure nghiệp vụ trong repo. Seed là fixture SQL, không phải tài khoản đăng nhập thật. Việc chạy API toàn hệ thống cần các script nghiệp vụ, cấu hình quyền và tài khoản của chủ module.

@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- FILE        : 02_tables_report.sql
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
 -- DESCRIPTION : Tạo các bảng thuộc schema [report]
@@ -75,16 +75,16 @@ BEGIN
     );
 
     -- Index hỗ trợ truy vấn theo ngày (dải thời gian)
-    CREATE NONCLUSTERED INDEX IX_report_DSS_Date
+    CREATE NONCLUSTERED INDEX IX_DailySalesSummary_SummaryDate
         ON report.DailySalesSummary (SummaryDate DESC)
         INCLUDE (MachineId, ProductId, QtySold, Revenue);
 
     -- Index hỗ trợ truy vấn theo máy + ngày
-    CREATE NONCLUSTERED INDEX IX_report_DSS_Machine_Date
+    CREATE NONCLUSTERED INDEX IX_DailySalesSummary_MachineId_SummaryDate
         ON report.DailySalesSummary (MachineId, SummaryDate DESC);
 
     -- Index hỗ trợ truy vấn theo sản phẩm + ngày
-    CREATE NONCLUSTERED INDEX IX_report_DSS_Product_Date
+    CREATE NONCLUSTERED INDEX IX_DailySalesSummary_ProductId_SummaryDate
         ON report.DailySalesSummary (ProductId, SummaryDate DESC);
 
     PRINT N'[02-report] Bảng report.DailySalesSummary đã được tạo.';
@@ -115,7 +115,7 @@ BEGIN
             CONSTRAINT DF_report_ExportLogs_Format  DEFAULT (N'EXCEL'),
         FilePath        NVARCHAR(500)       NULL,   -- đường dẫn file trên server (nếu lưu file)
         FileSizeBytes   BIGINT              NULL,   -- kích thước file (bytes)
-        RowCount        INT                 NULL,   -- số dòng dữ liệu được xuất
+        [RowCount]        INT                 NULL,   -- số dòng dữ liệu được xuất
         DurationMs      INT                 NULL,   -- thời gian xử lý (milliseconds)
         Status          NVARCHAR(10)    NOT NULL    -- 'SUCCESS','FAILED','PENDING'
             CONSTRAINT DF_report_ExportLogs_Status  DEFAULT (N'PENDING'),
@@ -142,11 +142,11 @@ BEGIN
     );
 
     -- Index hỗ trợ tra lịch sử xuất của từng user
-    CREATE NONCLUSTERED INDEX IX_report_ExportLogs_User_Time
+    CREATE NONCLUSTERED INDEX IX_ExportLogs_UserId_ExportedAt
         ON report.ExportLogs (UserId, ExportedAt DESC);
 
     -- Index hỗ trợ lọc theo tên báo cáo + thời gian
-    CREATE NONCLUSTERED INDEX IX_report_ExportLogs_Report_Time
+    CREATE NONCLUSTERED INDEX IX_ExportLogs_ReportName_ExportedAt
         ON report.ExportLogs (ReportName, ExportedAt DESC);
 
     PRINT N'[02-report] Bảng report.ExportLogs đã được tạo.';
@@ -199,17 +199,17 @@ BEGIN
     );
 
     -- Index hỗ trợ xem kết quả theo module + thời gian chạy
-    CREATE NONCLUSTERED INDEX IX_report_TestResults_Module_RunAt
+    CREATE NONCLUSTERED INDEX IX_TestResults_Module_RunAt
         ON report.TestResults (Module, RunAt DESC)
         INCLUDE (TestCase, Passed);
 
     -- Index hỗ trợ lọc nhanh các test FAIL
-    CREATE NONCLUSTERED INDEX IX_report_TestResults_Passed_RunAt
+    CREATE NONCLUSTERED INDEX IX_TestResults_Passed_RunAt
         ON report.TestResults (Passed, RunAt DESC)
         WHERE Passed = 0;   -- filtered index — chỉ đánh index dòng FAIL
 
     -- Index hỗ trợ nhóm theo BatchId
-    CREATE NONCLUSTERED INDEX IX_report_TestResults_Batch
+    CREATE NONCLUSTERED INDEX IX_TestResults_BatchId_RunAt
         ON report.TestResults (BatchId, RunAt DESC);
 
     PRINT N'[02-report] Bảng report.TestResults đã được tạo.';
@@ -250,4 +250,11 @@ PRINT N'';
 PRINT N'================================================================';
 PRINT N'  02_tables_report.sql hoàn tất. Tiếp theo: 03_foreign_keys.sql';
 PRINT N'================================================================';
+GO
+
+-- Required relationships are owned here; do not depend on unfinished audit FK scripts.
+IF NOT EXISTS(SELECT 1 FROM sys.foreign_keys WHERE name=N'FK_DailySalesSummary_MachineId')
+ALTER TABLE report.DailySalesSummary ADD CONSTRAINT FK_DailySalesSummary_MachineId FOREIGN KEY(MachineId) REFERENCES inventory.Machine(MachineId);
+IF NOT EXISTS(SELECT 1 FROM sys.foreign_keys WHERE name=N'FK_DailySalesSummary_ProductId')
+ALTER TABLE report.DailySalesSummary ADD CONSTRAINT FK_DailySalesSummary_ProductId FOREIGN KEY(ProductId) REFERENCES inventory.Product(ProductId);
 GO
