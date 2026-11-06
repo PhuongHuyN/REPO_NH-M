@@ -351,7 +351,7 @@ END
 Cuối file:
 ```sql
 IF NOT EXISTS (SELECT 1 FROM auth.[User] WHERE Username = N'admin')
-  EXEC auth.sp_CreateUser @Username = N'admin', @Password = N'Admin@2026', @FullName = N'Quản trị hệ thống', @RoleName = N'Admin', @Email = N'admin@freshvend.vn';
+  EXEC auth.sp_CreateUser @Username = N'admin', @Password = N'Admin@2026', @FullName = N'Nguyễn Phương Huy', @RoleName = N'Admin', @Email = N'admin@freshvend.vn';
 ```
 Tương tự operator01, operator02, kiosk01…kiosk05 (mật khẩu theo `app/README.md`).
 
