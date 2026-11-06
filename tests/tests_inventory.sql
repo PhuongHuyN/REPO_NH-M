@@ -4,8 +4,10 @@
 -- DESCRIPTION : TV2 — Kiểm thử module inventory (chạy trong SSMS)
 --               PHẦN 1 — Cấu trúc bảng (FV-02, SCRUM-196)        T1–T11
 --               PHẦN 2 — Dữ liệu mẫu 08_seed_inventory.sql        T12–T18
---               (Procedure, view… sẽ nối tiếp bên dưới ở các task sau)
--- CÁCH CHẠY   : Chạy SAU 02_tables_inventory.sql và 08_seed_inventory.sql.
+--               PHẦN 3 — 5 procedure FV-03 (11_procs_inventory)   T19–T33
+--               (sp_Restock, sp_RemoveExpired, view… nối tiếp ở các task sau)
+-- CÁCH CHẠY   : Chạy SAU 02_tables_inventory.sql, 08_seed_inventory.sql và
+--               11_procs_inventory.sql. Phần 3 tự dọn dữ liệu test (tên '__TEST__…').
 --               Phần 1 sửa dữ liệu trong 1 transaction rồi ROLLBACK; Phần 2 chỉ đọc
 --               → không làm bẩn CSDL. Toàn file là 1 batch (không thêm GO ở giữa).
 --               T16 (lô sắp hết hạn) tính theo giờ thật: chạy trong vòng 4 giờ sau
@@ -206,6 +208,149 @@ JOIN inventory.StockBatch ba ON ba.BatchId = a.BatchId
 JOIN inventory.StockBatch bc ON bc.BatchId = c.BatchId
 WHERE ba.ExpiryAt > bc.ExpiryAt;
 INSERT @Result VALUES (18, N'FIFO: lô nạp trước hết hạn trước (số cặp sai)', N'0', CAST(@n AS NVARCHAR(10)), CASE WHEN @n = 0 THEN 1 ELSE 0 END);
+
+-- =============================================================================
+-- PHẦN 3 — 5 PROCEDURE FV-03 (11_procs_inventory.sql): mỗi proc 1 ca đúng + 2 ca sai
+--   Gọi EXEC trực tiếp (không bọc transaction ngoài — procedure tự quản lý giao dịch).
+--   Dữ liệu test có tên bắt đầu '__TEST__' và được dọn ở cuối phần này.
+-- =============================================================================
+DECLARE @tp INT, @tName NVARCHAR(100) = N'__TEST__ Bưởi da xanh', @busyProd INT,
+        @emptySlot INT, @emptySlotOldProd INT, @stockSlot INT, @tBatch INT,
+        @v1 NVARCHAR(100), @ok BIT;
+
+-- Dọn dữ liệu test còn sót nếu lần chạy trước bị dừng giữa chừng
+DELETE b FROM inventory.StockBatch b JOIN inventory.Product p ON p.ProductId = b.ProductId
+WHERE p.ProductName LIKE N'[_][_]TEST[_][_]%'
+  AND NOT EXISTS (SELECT 1 FROM inventory.SlotStock ss WHERE ss.BatchId = b.BatchId);
+UPDATE inventory.Slot SET ProductId = NULL
+WHERE ProductId IN (SELECT ProductId FROM inventory.Product WHERE ProductName LIKE N'[_][_]TEST[_][_]%')
+  AND CurrentStock = 0;
+DELETE p FROM inventory.Product p
+WHERE p.ProductName LIKE N'[_][_]TEST[_][_]%'
+  AND NOT EXISTS (SELECT 1 FROM inventory.Slot s WHERE s.ProductId = p.ProductId)
+  AND NOT EXISTS (SELECT 1 FROM inventory.StockBatch b WHERE b.ProductId = p.ProductId);
+
+-- ---------- sp_AddProduct ----------
+SET @err = 0;
+BEGIN TRY
+    EXEC inventory.sp_AddProduct @ProductName = @tName, @Price = 42000, @ShelfLifeHours = 36,
+                                 @Category = N'Trái cây cắt sẵn', @Description = N'Hộp 300 g';
+END TRY BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SELECT @tp = ProductId FROM inventory.Product WHERE ProductName = @tName;
+SET @ok = CASE WHEN @err = 0 AND @tp IS NOT NULL
+                AND EXISTS (SELECT 1 FROM inventory.Product WHERE ProductId = @tp AND UnitPrice = 42000
+                            AND ShelfLifeHours = 36 AND SKU LIKE N'FV-SP-%') THEN 1 ELSE 0 END;
+INSERT @Result VALUES (19, N'sp_AddProduct đúng: tạo sản phẩm, SKU FV-SP-…, giá 42000', N'OK',
+       CASE WHEN @ok = 1 THEN N'OK' ELSE N'lỗi ' + CAST(@err AS NVARCHAR(10)) END, @ok);
+
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_AddProduct @ProductName = N'__test__ BƯỞI DA XANH', @Price = 42000, @ShelfLifeHours = 36; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (20, N'sp_AddProduct trùng tên (khác hoa/thường)', N'50101', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50101 THEN 1 ELSE 0 END);
+
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_AddProduct @ProductName = N'__TEST__ Táo', @Price = 0, @ShelfLifeHours = 24; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (21, N'sp_AddProduct giá = 0', N'50102', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50102 THEN 1 ELSE 0 END);
+
+-- ---------- sp_UpdateProduct ----------
+SET @err = 0;
+BEGIN TRY
+    EXEC inventory.sp_UpdateProduct @ProductId = @tp, @ProductName = N'__TEST__ Bưởi da xanh (hộp lớn)',
+         @Category = N'Trái cây cắt sẵn', @Description = N'Hộp 400 g', @ImageUrl = NULL,
+         @ShelfLifeHours = 48, @IsActive = 1;
+END TRY BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SET @ok = CASE WHEN @err = 0 AND EXISTS (SELECT 1 FROM inventory.Product WHERE ProductId = @tp
+                AND ProductName = N'__TEST__ Bưởi da xanh (hộp lớn)' AND ShelfLifeHours = 48) THEN 1 ELSE 0 END;
+INSERT @Result VALUES (22, N'sp_UpdateProduct đúng: đổi tên + hạn dùng', N'OK',
+       CASE WHEN @ok = 1 THEN N'OK' ELSE N'lỗi ' + CAST(@err AS NVARCHAR(10)) END, @ok);
+
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_UpdateProduct @ProductId = -1, @ProductName = N'Bất kỳ', @ShelfLifeHours = 24; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (23, N'sp_UpdateProduct sản phẩm không tồn tại', N'50103', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50103 THEN 1 ELSE 0 END);
+
+-- Ngừng bán 1 sản phẩm đang được gán ở ngăn máy → 50109 (lỗi xảy ra trước khi sửa dữ liệu)
+SELECT TOP (1) @busyProd = p.ProductId, @v1 = p.ProductName
+FROM inventory.Product p WHERE EXISTS (SELECT 1 FROM inventory.Slot s WHERE s.ProductId = p.ProductId)
+ORDER BY p.ProductId;
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_UpdateProduct @ProductId = @busyProd, @ProductName = @v1, @ShelfLifeHours = 24, @IsActive = 0; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (24, N'sp_UpdateProduct ngừng bán khi còn gán ở ngăn', N'50109', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50109 THEN 1 ELSE 0 END);
+
+-- ---------- sp_UpdatePrice ----------
+SET @before = (SELECT COUNT(*) FROM inventory.ProductHistory WHERE ProductId = @tp);
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_UpdatePrice @ProductId = @tp, @NewPrice = 45000; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SET @after = (SELECT COUNT(*) FROM inventory.ProductHistory WHERE ProductId = @tp);
+SET @ok = CASE WHEN @err = 0 AND @after = @before + 1
+                AND EXISTS (SELECT 1 FROM inventory.Product WHERE ProductId = @tp AND UnitPrice = 45000) THEN 1 ELSE 0 END;
+INSERT @Result VALUES (25, N'sp_UpdatePrice đúng: 42000 → 45000, lịch sử +1', N'OK',
+       CASE WHEN @ok = 1 THEN N'OK' ELSE N'lỗi ' + CAST(@err AS NVARCHAR(10)) END, @ok);
+
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_UpdatePrice @ProductId = @tp, @NewPrice = 45000; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (26, N'sp_UpdatePrice giá mới trùng giá hiện tại', N'50104', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50104 THEN 1 ELSE 0 END);
+
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_UpdatePrice @ProductId = -1, @NewPrice = 30000; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (27, N'sp_UpdatePrice sản phẩm không tồn tại', N'50103', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50103 THEN 1 ELSE 0 END);
+
+-- ---------- sp_AssignColumn ----------
+-- Ngăn rỗng (không còn hàng) để gán thử, ghi nhớ sản phẩm cũ để trả lại
+SELECT TOP (1) @emptySlot = s.SlotId, @emptySlotOldProd = s.ProductId
+FROM inventory.Slot s
+WHERE s.CurrentStock = 0
+  AND NOT EXISTS (SELECT 1 FROM inventory.SlotStock ss WHERE ss.SlotId = s.SlotId AND ss.Quantity > 0)
+ORDER BY s.SlotId;
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_AssignColumn @ColumnId = @emptySlot, @ProductId = @tp; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SET @ok = CASE WHEN @err = 0 AND EXISTS (SELECT 1 FROM inventory.Slot WHERE SlotId = @emptySlot AND ProductId = @tp) THEN 1 ELSE 0 END;
+INSERT @Result VALUES (28, N'sp_AssignColumn đúng: gán sản phẩm vào ngăn rỗng', N'OK',
+       CASE WHEN @ok = 1 THEN N'OK' WHEN @emptySlot IS NULL THEN N'không có ngăn rỗng' ELSE N'lỗi ' + CAST(@err AS NVARCHAR(10)) END, @ok);
+
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_AssignColumn @ColumnId = -1, @ProductId = @tp; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (29, N'sp_AssignColumn ngăn không tồn tại', N'50105', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50105 THEN 1 ELSE 0 END);
+
+SELECT TOP (1) @stockSlot = SlotId FROM inventory.SlotStock WHERE Quantity > 0 ORDER BY SlotId;
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_AssignColumn @ColumnId = @stockSlot, @ProductId = @tp; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (30, N'sp_AssignColumn ngăn còn hàng', N'50106', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50106 THEN 1 ELSE 0 END);
+
+-- ---------- sp_AddBatch ----------
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_AddBatch @ProductId = @tp, @Quantity = 20, @Supplier = N'Bếp trung tâm FreshVend Quận 7'; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SELECT TOP (1) @tBatch = BatchId FROM inventory.StockBatch WHERE ProductId = @tp ORDER BY BatchId DESC;
+SET @ok = CASE WHEN @err = 0 AND EXISTS (SELECT 1 FROM inventory.StockBatch WHERE BatchId = @tBatch
+                AND Quantity = 20 AND BatchCode = N'LO' + RIGHT(N'000000' + CAST(@tBatch AS NVARCHAR(10)), 6)
+                AND ExpiryAt = DATEADD(HOUR, 48, PreparedAt)) THEN 1 ELSE 0 END;
+INSERT @Result VALUES (31, N'sp_AddBatch đúng: mã LOxxxxxx, hạn = giờ làm + 48 giờ', N'OK',
+       CASE WHEN @ok = 1 THEN N'OK' ELSE N'lỗi ' + CAST(@err AS NVARCHAR(10)) END, @ok);
+
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_AddBatch @ProductId = -1, @Quantity = 10; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (32, N'sp_AddBatch sản phẩm không tồn tại', N'50107', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50107 THEN 1 ELSE 0 END);
+
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_AddBatch @ProductId = @tp, @Quantity = 0; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (33, N'sp_AddBatch số lượng = 0', N'50113', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50113 THEN 1 ELSE 0 END);
+
+-- ---------- Dọn dữ liệu test của phần 3 ----------
+DELETE FROM inventory.StockBatch WHERE ProductId = @tp;
+IF @emptySlot IS NOT NULL
+    UPDATE inventory.Slot SET ProductId = @emptySlotOldProd WHERE SlotId = @emptySlot AND ProductId = @tp;
+DELETE FROM inventory.Product WHERE ProductId = @tp;
 
 -- =============================================================================
 -- KẾT QUẢ
