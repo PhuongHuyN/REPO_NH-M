@@ -704,7 +704,7 @@ function create() {
     const T0 = now();
     const call = (name, p, ctx = { visible: new Set(S.machines.map((m) => m.MachineId)), userId: null }) => SP[name](p, ctx);
     const all = () => ({ visible: new Set(S.machines.map((m) => m.MachineId)), userId: null });
-    call('auth.sp_CreateUser', { Username: 'admin', Password: 'Admin@2026', FullName: 'Quản trị hệ thống', RoleName: 'Admin', Email: 'admin@freshvend.vn' });
+    call('auth.sp_CreateUser', { Username: 'admin', Password: 'Admin@2026', FullName: 'Nguyễn Phương Huy', RoleName: 'Admin', Email: 'admin@freshvend.vn' });
     call('auth.sp_CreateUser', { Username: 'operator01', Password: 'Operator@2026', FullName: 'Nguyễn Văn An', RoleName: 'Operator' });
     call('auth.sp_CreateUser', { Username: 'operator02', Password: 'Operator@2026', FullName: 'Trần Thị Bình', RoleName: 'Operator' });
     for (let k = 1; k <= 5; k++) call('auth.sp_CreateUser', { Username: `kiosk0${k}`, Password: 'Kiosk@2026', FullName: `Kiosk FV-HCM-00${k}`, RoleName: 'Kiosk' });

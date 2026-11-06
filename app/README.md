@@ -1,4 +1,4 @@
-# FreshVend – Ứng dụng
+﻿# FreshVend – Ứng dụng
 
 Phần mềm vận hành chuỗi máy bán trái cây tươi tự động FreshVend, gồm:
 
@@ -39,12 +39,12 @@ Mở http://localhost:3000/ (quản trị) và http://localhost:3000/kiosk. Lệ
 | `operator01` | `Operator@2026` |
 | `kiosk01` (kích hoạt màn hình kiosk) | `Kiosk@2026` |
 
-Màn hình đăng nhập có sẵn nút điền nhanh. Dữ liệu demo mất khi tắt máy chủ (Ctrl + C) – đây là chủ ý.
+Màn hình đăng nhập **không** hiện sẵn tài khoản mẫu – nhập tay. Dữ liệu demo mất khi tắt máy chủ (Ctrl + C) – đây là chủ ý.
 **Khi CSDL xong:** làm mục 1–2 bên dưới, đặt `DB_MODE=sqlserver` trong `api/.env`, rồi `npm start`. Không phải sửa dòng code giao diện nào.
 
 ## 1. Cài đặt (một lần)
 1. Cài **Node.js LTS** (https://nodejs.org), khởi động lại VS Code. Kiểm tra: `node -v`.
-2. Đã tạo CSDL bằng gói **FreshVend_Database** (chạy `FreshVend_FULL.sql` trong SSMS).
+2. Đã tạo CSDL từ thư mục `sql/` trong repo **REPO_NH-M** — chạy lần lượt trong SSMS: `00_database.sql` → `01_schemas.sql` → các file `02_tables_*.sql` → `03_foreign_keys.sql` → `05_views_report.sql` → `06_functions_report.sql` → `07_procs_report.sql` → `09_seed_small.sql` (hoặc `09_seed_large.sql`). Xem chi tiết thứ tự tại **`sql/README`** (README.md gốc, mục Hướng dẫn cài đặt nhanh).
 3. Mở thư mục `FreshVend_App` trong VS Code → **Terminal → New Terminal**:
    ```powershell
    npm install

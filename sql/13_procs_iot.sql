@@ -1,5 +1,5 @@
 -- =============================================================================
--- FILE        : 07_procs_iot.sql
+-- FILE        : 13_procs_iot.sql
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
 -- DESCRIPTION : TV4 — Stored Procedures cho module IoT & Chuỗi lạnh
 --               sp_RegisterMachine, sp_IngestTelemetry, sp_AcknowledgeAlert,
@@ -11,10 +11,11 @@ USE FreshVendDB;
 GO
 -- 1. Đăng ký máy mới (sp_RegisterMachine)
 CREATE OR ALTER PROCEDURE iot.sp_RegisterMachine
-@Serial NVARCHAR (50), @MachineName NVARCHAR (100), @LocationId INT, @FirmwareVersion NVARCHAR (20)='1.0.0'
+@Serial NVARCHAR (50), @MachineName NVARCHAR (100), @LocationId INT, @FirmwareVersion NVARCHAR (20)='1.0.0', @ColumnCount INT=6, @Capacity INT=10
 AS
 BEGIN
   SET NOCOUNT ON;
+  SET XACT_ABORT ON;
   BEGIN TRY
     BEGIN TRANSACTION;
     -- Kiểm tra dữ liệu đầu vào
@@ -68,88 +69,60 @@ END
 
 GO
 -- 2. Nhận dữ liệu Telemetry từ ESP32 và kiểm tra ngưỡng chuỗi lạnh (sp_IngestTelemetry)
+-- =============================================================================
+-- FILE        : 13_procs_iot.sql
+-- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
+-- DESCRIPTION : TV4 — Stored Procedures cho module IoT & Chuỗi lạnh
+-- =============================================================================
+USE FreshVendDB;
+
+
+GO
 CREATE OR ALTER PROCEDURE iot.sp_IngestTelemetry
 @Payload NVARCHAR (MAX)
 AS
 BEGIN
   SET NOCOUNT ON;
+  SET XACT_ABORT ON;
   BEGIN TRY
-    BEGIN TRANSACTION;
-    -- Kiểm tra định dạng JSON
-    IF ISJSON(@Payload) = 0
+    -- 1. Kiểm tra định dạng JSON hợp lệ
+    IF @Payload IS NULL
+       OR ISJSON(@Payload) <> 1
       THROW 50310, N'Dữ liệu payload truyền lên không phải định dạng JSON hợp lệ.', 1;
-    DECLARE @Serial AS NVARCHAR (50) = JSON_VALUE(@Payload, '$.serial');
-    DECLARE @MachineId AS INT;
-    SELECT @MachineId = MachineId
-    FROM   iot.Machines
-    WHERE  Serial = @Serial;
+    -- 2. Đọc MachineId (Ưu tiên machineId từ API/Simulator, nếu không thì đọc serial)
+    DECLARE @MachineId AS INT = TRY_CAST (JSON_VALUE(@Payload, '$.machineId') AS INT);
     IF @MachineId IS NULL
-      THROW 50311, N'Không tìm thấy máy tương ứng với Serial được gửi từ thiết bị.', 1;
-    -- Chèn các bản ghi đo đạc vào bảng iot.Telemetry từ mảng đọc trong JSON
-    INSERT INTO iot.Telemetry (
+      SELECT @MachineId = MachineId
+      FROM   iot.Machines
+      WHERE  Serial = JSON_VALUE(@Payload, '$.serial');
+    IF @MachineId IS NULL
+       OR NOT EXISTS (SELECT 1
+                      FROM   iot.Machines
+                      WHERE  MachineId = @MachineId)
+      THROW 50311, N'Không tìm thấy máy tương ứng với thiết bị gửi dữ liệu.', 1;
+    -- 3. Đọc dữ liệu Telemetry từ JSON
+    DECLARE @Temp AS DECIMAL (5, 2), @Hum AS DECIMAL (5, 2), @Door AS BIT;
+    SELECT TOP 1 @Temp = TRY_CAST (JSON_VALUE(value, '$.temp') AS DECIMAL (5, 2)),
+                 @Hum = TRY_CAST (JSON_VALUE(value, '$.hum') AS DECIMAL (5, 2)),
+                 @Door = TRY_CAST (JSON_VALUE(value, '$.door') AS BIT)
+    FROM   OPENJSON (@Payload, '$.readings');
+    -- 4. Ghi dữ liệu vào bảng iot.Telemetry
+    INSERT  INTO iot.Telemetry (
       MachineId,
-      RecordedAt,
       Temperature,
       Humidity,
-      DoorOpen
+      DoorOpen,
+      RecordedAt
     )
-    SELECT @MachineId,
-           ISNULL(TRY_CONVERT (DATETIME2 (0), j.t), SYSDATETIME()),
-           j.temp,
-           j.hum,
-           j.door
-    FROM   OPENJSON (@Payload, '$.readings') WITH (t NVARCHAR (30) '$.t', temp DECIMAL (5, 2) '$.temp', hum DECIMAL (5, 2) '$.hum', door BIT '$.door') AS j;
-    IF @@ROWCOUNT = 0
-      THROW 50312, N'Payload không chứa bản ghi cảm biến nào trong mảng readings.', 1;
-    -- Cập nhật lại thời điểm LastHeartbeat mới nhất cho máy
+    VALUES                     (@MachineId, @Temp, @Hum, ISNULL(@Door, 0), SYSDATETIME());
+    -- 5. Cập nhật thời gian Heartbeat
     UPDATE iot.Machines
-    SET    LastHeartbeat = SYSDATETIME(),
-           Status        = CASE WHEN Status = 'OFFLINE' THEN 'ACTIVE' ELSE Status END
+    SET    LastHeartbeat = SYSDATETIME()
     WHERE  MachineId = @MachineId;
-    -- Logic kiểm tra ngưỡng nhiệt độ và sinh cảnh báo (Cold Chain Check)
-    DECLARE @MaxTempAllowed AS DECIMAL (5, 2), @MinTempAllowed AS DECIMAL (5, 2), @Consecutive AS INT;
-    SELECT @MaxTempAllowed = MaxTemp,
-           @MinTempAllowed = MinTemp,
-           @Consecutive = ConsecutiveBreaches
-    FROM   iot.MachineThresholds
-    WHERE  MachineId = @MachineId;
-    -- Kiểm tra N lần đo gần nhất vượt MaxTemp để tạo cảnh báo TEMP_HIGH
-    DECLARE @RecentHighCount AS INT;
-    SELECT @RecentHighCount = COUNT(*)
-    FROM   (SELECT   TOP (@Consecutive) Temperature
-            FROM     iot.Telemetry
-            WHERE    MachineId = @MachineId
-            ORDER BY RecordedAt DESC) AS t
-    WHERE  t.Temperature > @MaxTempAllowed;
-    IF @RecentHighCount >= @Consecutive
-       AND NOT EXISTS (SELECT 1
-                       FROM   iot.Alerts
-                       WHERE  MachineId = @MachineId
-                              AND AlertType = 'TEMP_HIGH'
-                              AND ResolvedAt IS NULL)
-      BEGIN
-        INSERT  INTO iot.Alerts (
-          MachineId,
-          AlertType,
-          Severity,
-          Message,
-          CreatedAt
-        )
-        VALUES                  (@MachineId, 'TEMP_HIGH', 'HIGH', N'Nhiệt độ tủ lạnh vượt ngưỡng tối đa liên tục.', SYSDATETIME());
-        -- Chuyển trạng thái máy sang DEGRADED nếu đang ACTIVE
-        UPDATE iot.Machines
-        SET    Status = 'DEGRADED'
-        WHERE  MachineId = @MachineId
-               AND Status = 'ACTIVE';
-      END
-    COMMIT TRANSACTION;
-    -- Trả về trạng thái hiện tại của máy và giá trị đọc mới nhất
+    -- 6. Trả về thông tin kết quả (yêu cầu API đọc r1.recordset[0])
     SELECT m.MachineId,
            m.Status,
-           (SELECT   TOP 1 Temperature
-            FROM     iot.Telemetry
-            WHERE    MachineId = @MachineId
-            ORDER BY RecordedAt DESC) AS LastTemp
+           @Temp AS LastTemp
     FROM   iot.Machines AS m
     WHERE  m.MachineId = @MachineId;
   END TRY
@@ -283,27 +256,6 @@ BEGIN
            AND (LastHeartbeat IS NULL
                 OR DATEDIFF(MINUTE, LastHeartbeat, SYSDATETIME()) >= @Minutes);
     -- Tự động sinh cảnh báo OFFLINE cho các máy vừa mất kết nối (nếu chưa có cảnh báo mở)
-    INSERT INTO iot.Machines (
-      MachineId,
-      Status,
-      MachineName,
-      Serial,
-      LocationId
-    )
-    -- Chỉ dùng để query lấy danh sách
-    SELECT m.MachineId,
-           m.Status,
-           m.MachineName,
-           m.Serial,
-           m.LocationId -- Đoạn này tối ưu lại để insert vào bảng Alerts
-    FROM   iot.Machines AS m
-    WHERE  m.Status = 'OFFLINE'
-           AND NOT EXISTS (SELECT 1
-                           FROM   iot.Alerts AS a
-                           WHERE  a.MachineId = m.MachineId
-                                  AND a.AlertType = 'OFFLINE'
-                                  AND a.ResolvedAt IS NULL);
-    -- Thực tế chèn cảnh báo OFFLINE gọn hơn:
     INSERT INTO iot.Alerts (
       MachineId,
       AlertType,
@@ -378,4 +330,4 @@ END
 
 
 GO
-PRINT N'[07-iot] Các Stored Procedures của module IoT đã được tạo thành công.';
+PRINT N'[13-iot] Các Stored Procedures của module IoT đã được tạo thành công.';

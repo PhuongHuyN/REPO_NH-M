@@ -230,9 +230,7 @@ let demoMode = false;
 fetch('/api/health').then((r) => r.json()).then((h) => {
   demoMode = h?.db?.mode === 'demo';
   $('#demoPay').classList.toggle('hidden', !demoMode);
-  $('#setupDemo').classList.toggle('hidden', !demoMode);
 }).catch(() => {});
-$('#fillKiosk').addEventListener('click', () => { $('#kUser').value = 'kiosk01'; $('#kPass').value = 'Kiosk@2026'; });
 $('#demoPay').addEventListener('click', async () => {
   if (!state.order) return;
   $('#demoPay').disabled = true;
