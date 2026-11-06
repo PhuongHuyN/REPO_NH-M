@@ -48,18 +48,6 @@ function connectLive() {
   source.onerror = () => setLive(false, 'Mất kết nối thời gian thực');
 }
 
-// ---------- Chế độ demo (DB_MODE=demo): chưa kết nối SQL Server ----------
-fetch('/api/health').then((r) => r.json()).then((h) => {
-  const demo = h?.db?.mode === 'demo';
-  $('#loginDemo').classList.toggle('hidden', !demo);
-  $('#demoBadge').classList.toggle('hidden', !demo);
-}).catch(() => {});
-$('#loginDemo').addEventListener('click', (e) => {
-  const b = e.target.closest('[data-demo]');
-  if (!b) return;
-  const [u, p] = b.dataset.demo.split('|');
-  $('#lu').value = u; $('#lp').value = p;
-});
 
 // ---------- Đăng nhập (TV1) ----------
 $('#pwToggle').addEventListener('click', () => {

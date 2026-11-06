@@ -39,7 +39,7 @@ Mở http://localhost:3000/ (quản trị) và http://localhost:3000/kiosk. Lệ
 | `operator01` | `Operator@2026` |
 | `kiosk01` (kích hoạt màn hình kiosk) | `Kiosk@2026` |
 
-Màn hình đăng nhập có sẵn nút điền nhanh. Dữ liệu demo mất khi tắt máy chủ (Ctrl + C) – đây là chủ ý.
+Màn hình đăng nhập **không** hiện sẵn tài khoản mẫu – nhập tay. Dữ liệu demo mất khi tắt máy chủ (Ctrl + C) – đây là chủ ý.
 **Khi CSDL xong:** làm mục 1–2 bên dưới, đặt `DB_MODE=sqlserver` trong `api/.env`, rồi `npm start`. Không phải sửa dòng code giao diện nào.
 
 ## 1. Cài đặt (một lần)

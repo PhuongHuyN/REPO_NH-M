@@ -17,7 +17,6 @@ server.listen(config.port, () => {
   console.log(`  Tài liệu API    : http://localhost:${config.port}/api-docs`);
   if (config.dbMode === 'demo') {
     console.log('  Cơ sở dữ liệu   : CHẾ ĐỘ DEMO – dữ liệu giả lập trong bộ nhớ, tắt máy chủ là mất (đổi DB_MODE=sqlserver trong api/.env khi đã có CSDL)');
-    console.log('  Tài khoản demo  : admin / Admin@2026 · operator01 / Operator@2026 · kiosk01 / Kiosk@2026');
   } else db.ping()
     .then((r) => console.log(`  Cơ sở dữ liệu   : đã kết nối ${r.db || r.mode}`))
     .catch((e) => console.error(`  Cơ sở dữ liệu   : CHƯA kết nối được – ${e.message}\n  -> Kiểm tra SQL Server và file api/.env`));
