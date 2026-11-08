@@ -1,82 +1,81 @@
-# TestReport — Báo cáo Kết quả Kiểm thử
+﻿# TestReport — kết quả thực thi TV5
 
-> **Dự án:** FreshVend
-> **Phiên bản:** 1.0
-> **Ngày thực hiện:** 2026-10-31
-> **Người thực hiện:** TV5 — Trương Tuấn Dũng
-> **Môi trường:** SQL Server 2022 (Developer Edition), DB = FreshVendDB, Seed = 09_seed_small.sql
+Ngày kiểm tra: 04/11/2026. Môi trường: Windows, SQL Server Express 2022 16.0.1000.6, compatibility 160, Vietnamese_CI_AS; CPU Intel Core i5-8250U 1.60 GHz, 8 logical processors. Chạy một client sqlcmd cục bộ, không có tải cạnh tranh chủ động. CSDL kiểm thử được giữ lại, không sửa CSDL ứng dụng.
 
----
+## Kết quả nghiệm thu SQL
 
-## 1. Tổng kết
+Lệnh: `powershell -NoProfile -File tests/run-tv5.ps1`.
+CSDL: `FreshVendTV5_Test_20261104_194444`. Log gốc: `.local-test/tv5-small-to-large/` (không commit).
 
-| Module | Tổng TC | Passed | Failed | Blocked |
-|--------|---------|--------|--------|---------|
-| auth | 4 | 4 | 0 | 0 |
-| inventory | 2 | 2 | 0 | 0 |
-| sales | 3 | 3 | 0 | 0 |
-| iot | 2 | 2 | 0 | 0 |
-| report | 1 | 1 | 0 | 0 |
-| **TỔNG** | **12** | **12** | **0** | **0** |
+| Nhóm kiểm tra | Kết quả |
+|---|---|
+| Tạo cấu trúc từ schema repo và chạy lại toàn bộ object | PASS |
+| Small: 3 địa điểm, 5 máy, 10 sản phẩm, 50 đơn, 500 telemetry | PASS |
+| Small chạy hai lần | PASS, không trùng và không tăng revenue |
+| Small→large: tổng 20 máy, 15 sản phẩm, 5.000 đơn, 200.000 telemetry | PASS |
+| Large chạy hai lần | PASS, số lượng và tổng tiền giữ nguyên |
+| Chi tiết, slot, product, payment, thời gian 90 ngày và giờ cao điểm | PASS |
+| 7 procedure × 1 ca đúng + 2 ca sai | 21/21 PASS |
+| Revenue TVF đủ/rỗng/đảo khoảng | PASS |
+| Failure rate, máy lạ/không lần nhả, đúng 2% và dưới 2% | PASS |
+| Ranking giảm dần, tổng tỷ trọng và đồng hạng | PASS |
+| Cold chain 2°C, 8°C, 8.001°C, thời lượng không đều | PASS: 120/240 giây = 50% |
+| JSON lỗi, thiếu duration, không dữ liệu | PASS: không tạo coverage giả |
+| paid→refunded→refresh | PASS: xóa summary cũ |
+| SQL client đối chiếu KPI, tăng trưởng, DATEFIRST 1/7, xuất dòng và log JSON/PDF PENDING | PASS |
 
-> **Kết quả: ✅ 12/12 PASS — Tất cả test cases đạt yêu cầu.**
+Các lỗi chạy thật phát hiện trong quá trình sửa đã được xử lý: RowCount là từ khóa cần bracket, dependency bảng/cột cũ, seed thiếu chi tiết, telemetry/summary nhân đôi khi chạy lại, tổng KPI bị nhân do cross join, thiếu index Payment.OrderId, phân tích lại JSON làm báo cáo chậm. Không sử dụng kết quả PASS seed hoặc số đo cũ để nghiệm thu.
 
----
+## Hiệu năng thực tế (ms)
 
-## 2. Chi tiết từng test case
+Một lượt khởi động/đo đầu và năm lượt warm. Dataset large 5.000 đơn, 200.000 raw telemetry và toàn bộ hourly tương ứng. Tiêu chí nghiêm ngặt: mỗi lượt warm của yêu cầu nghiệp vụ <500 ms. `sp_RefreshTelemetryHourly` đo cập nhật một ngày UTC như job định kỳ; backfill 90 ngày nằm trong thời gian seed. `sp_RefreshDailySummary` đo 90 ngày. `sp_ExportSales` đo 30 ngày và trả dòng thật.
 
-| TestId | Module | TestCase | Expected | Actual | Passed | DurationMs |
-|--------|--------|----------|----------|--------|--------|------------|
-| 1 | auth | sp_CreateUser: trùng tên đăng nhập | 50003 | 50003 | ✅ | 12 ms |
-| 2 | auth | sp_Login: sai 5 lần thì khóa tài khoản | LOCKED | LOCKED | ✅ | 34 ms |
-| 3 | auth | RBAC: Operator không xem được báo cáo tài chính | 229 | 0 | ✅ | 8 ms |
-| 4 | auth | RLS: operator01 chỉ thấy máy được giao | 3 | 3 | ✅ | 6 ms |
-| 5 | inventory | sp_Restock: vượt sức chứa thì rollback | 50117 | 50117 | ✅ | 15 ms |
-| 6 | inventory | sp_UpdatePrice: Temporal lưu lịch sử giá | HISTORY+1 | HISTORY+1 | ✅ | 22 ms |
-| 7 | sales | sp_CreateOrder: không bán vượt tồn kho | 50201 | 50201 | ✅ | 18 ms |
-| 8 | sales | sp_ConfirmPayment: callback trùng không ghi 2 lần | IDEMPOTENT | IDEMPOTENT | ✅ | 25 ms |
-| 9 | sales | sp_RecordDispense: kẹt 3 lần tự hoàn tiền | REFUNDED | REFUNDED | ✅ | 31 ms |
-| 10 | iot | Ngưỡng: vượt 3 lần liên tiếp thì cảnh báo | ALERT+DEGRADED | ALERT+DEGRADED | ✅ | 29 ms |
-| 11 | iot | Partition: bản ghi tháng này vào partition tháng này | CORRECT PARTITION | CORRECT PARTITION | ✅ | 5 ms |
-| 12 | report | sp_RefreshDailySummary: khớp tổng tính tay | MATCH | MATCH | ✅ | 44 ms |
+| Đối tượng | Cold | Lượt 1 | Lượt 2 | Lượt 3 | Lượt 4 | Lượt 5 | Max warm |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| fn_DispenseFailureRate | 32 | 13 | 13 | 12 | 14 | 12 | 14 |
+| fn_RevenueByLocation | 84 | 82 | 75 | 67 | 63 | 63 | 82 |
+| sp_DashboardKpi | 220 | 94 | 83 | 238 | 148 | 79 | 238 |
+| sp_ExportSales | 89 | 79 | 74 | 85 | 101 | 82 | 101 |
+| sp_PeakHours | 273 | 297 | 376 | 210 | 232 | 243 | 376 |
+| sp_RefreshDailySummary | 91 | 72 | 76 | 87 | 100 | 126 | 126 |
+| sp_RefreshTelemetryHourly | 50 | 45 | 63 | 40 | 25 | 37 | 63 |
+| sp_RevenueGrowth | 8 | 6 | 8 | 6 | 8 | 10 | 10 |
+| sp_RunAllTests | 641 | 647 | 591 | 795 | 621 | 356 | 795 |
+| vw_ColdChainCompliance | 94 | 83 | 74 | 117 | 190 | 189 | 190 |
+| vw_ProductRanking | 66 | 31 | 36 | 33 | 30 | 34 | 36 |
 
-> **Lưu ý TC-03:** Expected ghi "229" trong fakeDb.js (số máy), nhưng thực tế kiểm tra là số permission = 0 (Operator không có quyền xem báo cáo tài chính). Kết quả PASS đúng theo nghĩa nghiệp vụ.
+`sp_RunAllTests` là bộ điều phối chạy toàn suite, chỉ báo thời gian tham khảo; không áp ngân sách một truy vấn cho tổng suite. Các số trên là elapsed phía SQL, không bao gồm tải CSV/PDF qua HTTP. Không khẳng định SLA cho tải cạnh tranh hoặc máy khác.
 
----
+## Kiểm thử ứng dụng và tài liệu
 
-## 3. Kiểm thử hiệu năng (≤ 500 ms)
+`npm test --prefix app`: 16/16 PASS; kiểm tra đồng bộ 56 route, 59 lời gọi và 30 biến môi trường PASS. Đây là test API với fake DB, được tách biệt với bằng chứng SQL thực ở trên.
 
-Chạy với `09_seed_large.sql`, `SET STATISTICS TIME ON`:
+`python tools/build_testplan_docx.py`: tạo TestPlan.docx và xác thực cấu trúc ZIP/XML, chứa đầy đủ nội dung TestPlan.md. Chưa kiểm tra trình bày bằng Microsoft Word trên giao diện.
 
-| Đối tượng | CPU Time (ms) | Elapsed Time (ms) | Đạt ≤ 500 ms? |
-|-----------|---------------|-------------------|----------------|
-| sp_DashboardKpi | 47 | 62 | ✅ |
-| sp_RevenueGrowth | 31 | 45 | ✅ |
-| sp_PeakHours (30 ngày) | 58 | 78 | ✅ |
-| sp_ExportSales (30 ngày) | 112 | 148 | ✅ |
-| sp_RefreshDailySummary | 89 | 118 | ✅ |
-| vw_ProductRanking | 73 | 95 | ✅ |
-| vw_ColdChainCompliance | 28 | 41 | ✅ |
-| fn_RevenueByLocation (1 tháng) | 35 | 52 | ✅ |
+## Phạm vi còn phụ thuộc nhóm
 
-> **Tất cả đối tượng đều đạt tiêu chí ≤ 500 ms.**
+- Các procedure nghiệp vụ auth/inventory/sales/iot chưa có định nghĩa trong repo: ma trận khung đã có, kiểm thử SQL nghiệp vụ các module này BLOCKED đến khi chủ module cung cấp.
+- Đăng nhập, phân quyền DB thực, luồng mua hàng thực xuyên TV1–TV4, tạo/mở file PDF và xác nhận export SUCCESS/FAILED: chưa nghiệm thu end-to-end trên DB thật; thuộc các ca INT-04–06 của TestPlan.
+- Cần owner IoT đưa `report.sp_RefreshTelemetryHourly` vào lịch sau ingest; seed tự refresh. View hiển thị toàn lịch sử hourly đã tổng hợp.
+- PR trên tv5-report cần ít nhất một bạn review; chưa có review của người khác trong phiên làm việc này.
 
----
+Không dùng các phụ thuộc này để đánh dấu PASS toàn hệ thống. SCRUM 34 là User Story và khung Test Plan, không phải triển khai tính năng PDF ứng dụng.
 
-## 4. Lệnh xem kết quả tích hợp
+## Seed lớn độc lập
 
-```sql
--- Xem kết quả lần chạy mới nhất
-SELECT * FROM report.vw_LatestTestRun ORDER BY TestId;
+Lệnh: `powershell -NoProfile -File tests/run-tv5.ps1 -LargeOnly`.
+CSDL sạch: `FreshVendTV5_Test_20261104_194713`. Không chạy seed nhỏ trước. Tạo/rerun object, large/rerun seed, kiểm tra dữ liệu, 21 ca procedure, oracle client và hiệu năng đều PASS. Log gốc `.local-test/tv5/`.
 
--- Chạy lại toàn bộ test
-EXEC report.sp_RunAllTests;
-```
-
----
-
-## 5. Ghi chú & Vấn đề phát hiện
-
-| ID | Vấn đề | Trạng thái |
-|----|--------|-----------|
-| — | Không phát hiện lỗi nào trong lần chạy này | ✅ Đóng |
+| Đối tượng | Cold | Lượt 1 | Lượt 2 | Lượt 3 | Lượt 4 | Lượt 5 | Max warm |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| fn_DispenseFailureRate | 34 | 16 | 13 | 12 | 14 | 13 | 16 |
+| fn_RevenueByLocation | 83 | 74 | 64 | 66 | 60 | 88 | 88 |
+| sp_DashboardKpi | 356 | 163 | 196 | 162 | 165 | 162 | 196 |
+| sp_ExportSales | 96 | 78 | 58 | 61 | 58 | 59 | 78 |
+| sp_PeakHours | 265 | 215 | 202 | 129 | 129 | 134 | 215 |
+| sp_RefreshDailySummary | 199 | 57 | 57 | 60 | 76 | 50 | 76 |
+| sp_RefreshTelemetryHourly | 107 | 47 | 51 | 77 | 50 | 49 | 77 |
+| sp_RevenueGrowth | 29 | 11 | 9 | 7 | 7 | 8 | 11 |
+| sp_RunAllTests | 492 | 625 | 417 | 359 | 369 | 444 | 625 |
+| vw_ColdChainCompliance | 108 | 102 | 88 | 109 | 167 | 93 | 167 |
+| vw_ProductRanking | 52 | 33 | 36 | 34 | 34 | 34 | 36 |
