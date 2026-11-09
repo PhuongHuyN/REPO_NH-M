@@ -44,7 +44,7 @@ Màn hình đăng nhập **không** hiện sẵn tài khoản mẫu – nhập t
 
 ## 1. Cài đặt (một lần)
 1. Cài **Node.js LTS** (https://nodejs.org), khởi động lại VS Code. Kiểm tra: `node -v`.
-2. Đã tạo CSDL từ thư mục `sql/` trong repo **REPO_NH-M** — chạy lần lượt trong SSMS: `00_database.sql` → `01_schemas.sql` → các file `02_tables_*.sql` → `03_foreign_keys.sql` → `05_views_report.sql` → `06_functions_report.sql` → `07_procs_report.sql` → `09_seed_small.sql` (hoặc `09_seed_large.sql`). Xem chi tiết thứ tự tại **`sql/README`** (README.md gốc, mục Hướng dẫn cài đặt nhanh).
+2. Tạo CSDL theo bảng thứ tự **[README gốc](../README.md#thứ-tự-sql-theo-qđ-3)**: 00/01 → 02_tables_* → 03_foreign_keys → 08_seed_inventory → procedure 10–14 → object 20–24 → index/security/jobs/backup khi có → 80_seed_small.sql hoặc 81_seed_large.sql (sau cùng). Chỉ có một bộ seed 80/81; report ở 14_procs_report.sql và 24_objects_report.sql. **Hiện full install còn bị chặn bởi FK và hợp nhất máy (#19/#20); không coi test demo là SQL thật.** Sau khi Toàn bàn giao `99_run_all.bat` (FV-23), có thể chạy file đó từ gốc repo để tự động hóa cùng danh sách. File batch hiện chưa có; không dùng FreshVend_FULL.sql hay đường dẫn sql/README không tồn tại.
 3. Mở thư mục `FreshVend_App` trong VS Code → **Terminal → New Terminal**:
    ```powershell
    npm install
@@ -59,7 +59,7 @@ Màn hình đăng nhập **không** hiện sẵn tài khoản mẫu – nhập t
 |---|---|---|
 | Chế độ | `DB_MODE` | `demo` (mặc định – dữ liệu giả lập) · `sqlserver` (kết nối CSDL thật) |
 | SQL Server | `DB_SERVER`, `DB_PORT` / `DB_INSTANCE` | Bản Express: `DB_INSTANCE=SQLEXPRESS`, để trống `DB_PORT` |
-| | `DB_*_USER`, `DB_*_PASSWORD` | Phải trùng 4 login tạo trong `26_security.sql` |
+| | `DB_*_USER`, `DB_*_PASSWORD` | Phải trùng 4 login tạo trong `40_security.sql (FV-22, chưa có trên main)` |
 | Bảo mật | `JWT_SECRET`, `DEVICE_API_KEY`, `PAYMENT_WEBHOOK_SECRET` | Đổi thành chuỗi ngẫu nhiên dài |
 | Nhận tiền | `PAYMENT_BANK_BIN`, `PAYMENT_BANK_NAME`, `PAYMENT_ACCOUNT_NO`, `PAYMENT_ACCOUNT_NAME` | Tài khoản ngân hàng nhận tiền. Thiếu thì kiosk báo "chưa sẵn sàng nhận thanh toán" |
 | | `SEPAY_API_KEY` | Khóa webhook để tự xác nhận khi tiền về (tùy chọn) |

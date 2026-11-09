@@ -1,2 +1,0 @@
-﻿-- Legacy entry point: definitions moved to 24_objects_report.sql.
--- Run 04_report_dependencies.sql, then 24_objects_report.sql, then 07_procs_report.sql.

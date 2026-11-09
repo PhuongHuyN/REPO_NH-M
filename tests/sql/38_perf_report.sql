@@ -1,9 +1,8 @@
-USE FreshVendDB;
+﻿USE FreshVendDB;
 GO
 SET NOCOUNT ON;
 DECLARE @Tasks TABLE(Id INT IDENTITY,Name NVARCHAR(150),SqlText NVARCHAR(MAX));
 INSERT @Tasks(Name,SqlText) VALUES
-(N'sp_RefreshTelemetryHourly',N'EXEC report.sp_RefreshTelemetryHourly ''20261103'',''20261103'';'),
 (N'sp_DashboardKpi',N'EXEC report.sp_DashboardKpi @AsOf=''20261103'';'),
 (N'sp_RevenueGrowth',N'EXEC report.sp_RevenueGrowth @Year=2026;'),
 (N'sp_PeakHours',N'EXEC report.sp_PeakHours ''20260806'',''20261103'';'),
@@ -11,7 +10,7 @@ INSERT @Tasks(Name,SqlText) VALUES
 (N'sp_RefreshDailySummary',N'EXEC report.sp_RefreshDailySummary ''20260806'',''20261103'';'),
 (N'sp_RunAllTests',N'EXEC report.sp_RunAllTests @RunBy=N''performance'';'),
 (N'fn_RevenueByLocation',N'SELECT * FROM report.fn_RevenueByLocation(''20260806'',''20261103'');'),
-(N'fn_DispenseFailureRate',N'DECLARE @m INT=(SELECT MachineId FROM inventory.Machine WHERE MachineCode=N''TV5-M-002''); SELECT report.fn_DispenseFailureRate(@m) Rate;'),
+(N'fn_DispenseFailureRate',N'DECLARE @m INT=(SELECT MachineId FROM iot.Machines WHERE Serial=N''TV5-M-002''); SELECT report.fn_DispenseFailureRate(@m) Rate;'),
 (N'vw_ProductRanking',N'SELECT * FROM report.vw_ProductRanking;'),
 (N'vw_ColdChainCompliance',N'SELECT * FROM report.vw_ColdChainCompliance;');
 DECLARE @Id INT=1,@Count INT=(SELECT COUNT(*) FROM @Tasks),@Name NVARCHAR(150),@Sql NVARCHAR(MAX),@Try INT,@Start DATETIME2,@Elapsed INT;
