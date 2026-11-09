@@ -1,4 +1,6 @@
-﻿# TestReport — kết quả thực thi TV5
+﻿> **LỊCH SỬ 04/11/2026 — schema cũ.** Không dùng số đo/21 ca dưới đây làm bằng chứng schema 09/11. Xem [Week1_Anh_Validation.md](Week1_Anh_Validation.md).
+
+# TestReport — kết quả thực thi TV5
 
 Ngày kiểm tra: 04/11/2026. Môi trường: Windows, SQL Server Express 2022 16.0.1000.6, compatibility 160, Vietnamese_CI_AS; CPU Intel Core i5-8250U 1.60 GHz, 8 logical processors. Chạy một client sqlcmd cục bộ, không có tải cạnh tranh chủ động. CSDL kiểm thử được giữ lại, không sửa CSDL ứng dụng.
 

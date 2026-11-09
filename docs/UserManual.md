@@ -26,12 +26,12 @@ Procedure trả các dòng xuất và ghi log PENDING với tham số JSON. File
 ## Đội máy và chuỗi lạnh
 
 ```sql
-EXEC report.sp_RefreshTelemetryHourly @From='20261101',@To='20261103';
+EXEC iot.sp_AggregateHourly; -- owner IoT: giờ hiện tại; backfill chờ #21
 SELECT * FROM report.vw_ColdChainCompliance;
 SELECT MachineId,report.fn_DispenseFailureRate(MachineId) FailureRate FROM inventory.Machine;
 ```
 
-Refresh telemetry dùng ngày UTC, cần chạy sau ingest/sửa/xóa raw telemetry. Tích hợp lịch định kỳ với owner IoT; seed đã tự gọi. View compliance tính toàn lịch sử đã tổng hợp. Kiểm tra MonitoredSeconds cùng tỷ lệ; khoảng không được quan sát không tự tính là tuân thủ. Không dữ liệu trả NULL. FailureRate là tỷ lệ 0..1; nhân 100 để hiển thị phần trăm, <0.02 mới đạt mục tiêu kẹt dưới 2%.
+TelemetryHourly do owner IoT cập nhật. Raw→hourly và backfill cần hoàn thiện Issue #21; report không tự ghi hourly để che sai số phút. View compliance tính toàn lịch sử đã tổng hợp. Kiểm tra MonitoredSeconds cùng tỷ lệ; khoảng không được quan sát không tự tính là tuân thủ. Không dữ liệu trả NULL. FailureRate là tỷ lệ 0..1; nhân 100 để hiển thị phần trăm, <0.02 mới đạt mục tiêu kẹt dưới 2%.
 
 ## Tổng hợp và kiểm thử
 
@@ -41,4 +41,4 @@ EXEC report.sp_RunAllTests;
 SELECT * FROM report.vw_LatestTestRun ORDER BY TestId;
 ```
 
-Runner ghi dữ liệu và phục vụ kiểm thử, chỉ chạy trên CSDL test. Bộ SQL kiểm tra 21 ca procedure (7 procedure × 3), thêm oracle và ca biên tại tests/. Không dùng PASS từ mock ứng dụng làm bằng chứng SQL Server.
+Runner ghi dữ liệu và phục vụ kiểm thử, chỉ chạy trên CSDL test. Bộ SQL kiểm tra 18 ca procedure (6 procedure × 3), thêm oracle và ca biên tại tests/. Không dùng PASS từ mock ứng dụng làm bằng chứng SQL Server.
