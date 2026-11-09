@@ -1,0 +1,902 @@
+[
+  {
+    "id": "UT-AUTH-01-OK",
+    "module": "auth",
+    "procedure": "auth.sp_CreateUser",
+    "kind": "OK",
+    "input": "Username=qa_new, Password=QaPass123!, RoleName=Operator, FullName=QA",
+    "expected": "Tạo đúng 1 user, role đúng; mật khẩu không lưu plain text",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-01-ERR1",
+    "module": "auth",
+    "procedure": "auth.sp_CreateUser",
+    "kind": "ERR1",
+    "input": "Username=ab",
+    "expected": "50001; không tạo user",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-01-ERR2",
+    "module": "auth",
+    "procedure": "auth.sp_CreateUser",
+    "kind": "ERR2",
+    "input": "Username=admin đã có",
+    "expected": "50003; không tạo user trùng",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-02-OK",
+    "module": "auth",
+    "procedure": "auth.sp_Login",
+    "kind": "OK",
+    "input": "Admin hoạt động + mật khẩu đúng; ClientInfo=QA",
+    "expected": "Success=1, đúng UserId/RoleName; reset failed count, ghi LoginActivity",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-02-ERR1",
+    "module": "auth",
+    "procedure": "auth.sp_Login",
+    "kind": "ERR1",
+    "input": "Mật khẩu sai 1 lần",
+    "expected": "Success=0, failed count +1, không trả quyền",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-02-ERR2",
+    "module": "auth",
+    "procedure": "auth.sp_Login",
+    "kind": "ERR2",
+    "input": "Sai liên tiếp 5 lần trên fixture riêng",
+    "expected": "Success=0, tài khoản khóa, lần sau không đăng nhập; không coi là exception 500xx",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-03-OK",
+    "module": "auth",
+    "procedure": "auth.sp_ChangePassword",
+    "kind": "OK",
+    "input": "UserId=U hoạt động, OldPassword đúng, NewPassword=Different123!",
+    "expected": "Đổi salt/hash; mật khẩu cũ không đăng nhập được",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-03-ERR1",
+    "module": "auth",
+    "procedure": "auth.sp_ChangePassword",
+    "kind": "ERR1",
+    "input": "OldPassword sai",
+    "expected": "50011; hash giữ nguyên",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-03-ERR2",
+    "module": "auth",
+    "procedure": "auth.sp_ChangePassword",
+    "kind": "ERR2",
+    "input": "NewPassword ngắn 7 ký tự",
+    "expected": "50002; hash giữ nguyên",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-04-OK",
+    "module": "auth",
+    "procedure": "auth.sp_AssignMachine",
+    "kind": "OK",
+    "input": "UserId=Operator U, MachineId=M có thật, Unassign=0",
+    "expected": "Một assignment; gọi lại không trùng",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-04-ERR1",
+    "module": "auth",
+    "procedure": "auth.sp_AssignMachine",
+    "kind": "ERR1",
+    "input": "UserId=-1",
+    "expected": "50020; không assignment",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-04-ERR2",
+    "module": "auth",
+    "procedure": "auth.sp_AssignMachine",
+    "kind": "ERR2",
+    "input": "UserId=Admin",
+    "expected": "50021; không giao máy cho Admin",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-05-OK",
+    "module": "auth",
+    "procedure": "auth.sp_DeactivateUser",
+    "kind": "OK",
+    "input": "UserId=Operator U hoạt động, Activate=0; SESSION_CONTEXT UserId=Admin A",
+    "expected": "IsActive=0; phiên đăng nhập mới bị từ chối",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-05-ERR1",
+    "module": "auth",
+    "procedure": "auth.sp_DeactivateUser",
+    "kind": "ERR1",
+    "input": "UserId=-1",
+    "expected": "50030; không thay user khác",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-AUTH-05-ERR2",
+    "module": "auth",
+    "procedure": "auth.sp_DeactivateUser",
+    "kind": "ERR2",
+    "input": "UserId=A, Activate=0, SESSION_CONTEXT UserId=A",
+    "expected": "50031; không tự vô hiệu hóa",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-INVENTORY-06-OK",
+    "module": "inventory",
+    "procedure": "inventory.sp_AddProduct",
+    "kind": "OK",
+    "input": "ProductName=QA_NEW, Price=15000, ShelfLifeHours=24, Category=Trái cây cắt sẵn",
+    "expected": "Đúng ProductId, ProductName, Price; SKU duy nhất",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-06-ERR1",
+    "module": "inventory",
+    "procedure": "inventory.sp_AddProduct",
+    "kind": "ERR1",
+    "input": "Price=0",
+    "expected": "50102; không thêm sản phẩm",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-06-ERR2",
+    "module": "inventory",
+    "procedure": "inventory.sp_AddProduct",
+    "kind": "ERR2",
+    "input": "ProductName đã tồn tại",
+    "expected": "50101; không thêm trùng",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-07-OK",
+    "module": "inventory",
+    "procedure": "inventory.sp_UpdateProduct",
+    "kind": "OK",
+    "input": "ProductId=P, tên mới duy nhất, ShelfLifeHours=24, IsActive=1",
+    "expected": "Đúng cột thay đổi, không sửa giá bằng đường vòng",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-07-ERR1",
+    "module": "inventory",
+    "procedure": "inventory.sp_UpdateProduct",
+    "kind": "ERR1",
+    "input": "ProductId=-1",
+    "expected": "50103; không update",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-07-ERR2",
+    "module": "inventory",
+    "procedure": "inventory.sp_UpdateProduct",
+    "kind": "ERR2",
+    "input": "ProductName trùng sản phẩm khác",
+    "expected": "50101; không update",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-08-OK",
+    "module": "inventory",
+    "procedure": "inventory.sp_UpdatePrice",
+    "kind": "OK",
+    "input": "ProductId=P, NewPrice khác giá cũ và >0, UpdatedBy=A",
+    "expected": "OldPrice/NewPrice đúng, temporal history thêm phiên bản",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-08-ERR1",
+    "module": "inventory",
+    "procedure": "inventory.sp_UpdatePrice",
+    "kind": "ERR1",
+    "input": "ProductId=-1",
+    "expected": "50103; không history mới",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-08-ERR2",
+    "module": "inventory",
+    "procedure": "inventory.sp_UpdatePrice",
+    "kind": "ERR2",
+    "input": "NewPrice bằng giá hiện tại",
+    "expected": "50104; không update/history",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-09-OK",
+    "module": "inventory",
+    "procedure": "inventory.sp_AssignColumn",
+    "kind": "OK",
+    "input": "ColumnId=C rỗng trên máy được giao, ProductId=P, UpdatedBy=U",
+    "expected": "ColumnId/ColumnNo đúng alias Slot; gán đúng sản phẩm",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-09-ERR1",
+    "module": "inventory",
+    "procedure": "inventory.sp_AssignColumn",
+    "kind": "ERR1",
+    "input": "ColumnId=-1",
+    "expected": "50105; không update",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-09-ERR2",
+    "module": "inventory",
+    "procedure": "inventory.sp_AssignColumn",
+    "kind": "ERR2",
+    "input": "Cột còn ít nhất một hộp",
+    "expected": "50106; không đổi sản phẩm",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-10-OK",
+    "module": "inventory",
+    "procedure": "inventory.sp_AddBatch",
+    "kind": "OK",
+    "input": "ProductId=P hoạt động, Quantity=20, PreparedAt UTC=T, Supplier=QA",
+    "expected": "ExpiryAt=T+ShelfLifeHours; BatchCode duy nhất",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-10-ERR1",
+    "module": "inventory",
+    "procedure": "inventory.sp_AddBatch",
+    "kind": "ERR1",
+    "input": "ProductId=-1",
+    "expected": "50107; không lô mới",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-10-ERR2",
+    "module": "inventory",
+    "procedure": "inventory.sp_AddBatch",
+    "kind": "ERR2",
+    "input": "Quantity=0",
+    "expected": "50113; không lô mới",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-INVENTORY-11-OK",
+    "module": "inventory",
+    "procedure": "inventory.sp_Restock",
+    "kind": "OK",
+    "input": "MachineId=M được giao, UserId=U, Items TVP có C/B/Qty=2 hợp lệ, Note=QA",
+    "expected": "Tồn theo lô +2, phiếu/chi tiết/movement đủ, giao dịch atomic",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-INVENTORY-11-ERR1",
+    "module": "inventory",
+    "procedure": "inventory.sp_Restock",
+    "kind": "ERR1",
+    "input": "Items TVP rỗng",
+    "expected": "50111; không đổi tồn/phiếu",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-INVENTORY-11-ERR2",
+    "module": "inventory",
+    "procedure": "inventory.sp_Restock",
+    "kind": "ERR2",
+    "input": "Qty làm vượt Capacity (kèm dòng trước hợp lệ)",
+    "expected": "50117; rollback tất cả dòng, không nạp một phần",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-INVENTORY-12-OK",
+    "module": "inventory",
+    "procedure": "inventory.sp_RemoveExpired",
+    "kind": "OK",
+    "input": "MachineId=M; có một lô hết hạn và một lô còn hạn",
+    "expected": "Chỉ rút lô hết hạn; trả RemovedLines/RemovedQty đúng",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-INVENTORY-12-ERR1",
+    "module": "inventory",
+    "procedure": "inventory.sp_RemoveExpired",
+    "kind": "ERR1",
+    "input": "MachineId=-1",
+    "expected": "Không thay tồn, 0 dòng; nếu owner chốt mã lỗi mới thì cập nhật oracle trước chạy",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-INVENTORY-12-ERR2",
+    "module": "inventory",
+    "procedure": "inventory.sp_RemoveExpired",
+    "kind": "ERR2",
+    "input": "MachineId=M, không có lô hết hạn",
+    "expected": "0 dòng/hộp, không xóa lô còn hạn (ca âm nghiệp vụ)",
+    "definition": "planned",
+    "execution": "BLOCKED: procedure chưa có"
+  },
+  {
+    "id": "UT-SALES-13-OK",
+    "module": "sales",
+    "procedure": "sales.sp_CreateOrder",
+    "kind": "OK",
+    "input": "MachineId=M ACTIVE, Items TVP ColumnId=C/Qty=1 còn tồn chưa hết hạn, CustomerId=NULL",
+    "expected": "PENDING, TotalAmount đúng, FIFO trừ tồn đúng lô, ExpiresAt +5 phút",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-13-ERR1",
+    "module": "sales",
+    "procedure": "sales.sp_CreateOrder",
+    "kind": "ERR1",
+    "input": "Items TVP rỗng",
+    "expected": "50200; không đơn/tồn thay đổi",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-13-ERR2",
+    "module": "sales",
+    "procedure": "sales.sp_CreateOrder",
+    "kind": "ERR2",
+    "input": "Qty vượt tồn hợp lệ",
+    "expected": "50201; toàn bộ rollback",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-14-OK",
+    "module": "sales",
+    "procedure": "sales.sp_ConfirmPayment",
+    "kind": "OK",
+    "input": "OrderId=O PENDING chưa hết hạn, Method=VIETQR, GatewayTxnId=QA-UNIQUE, Amount đúng",
+    "expected": "PAID; một payment; callback y hệt lần hai IsDuplicate=1",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-14-ERR1",
+    "module": "sales",
+    "procedure": "sales.sp_ConfirmPayment",
+    "kind": "ERR1",
+    "input": "Amount khác TotalAmount",
+    "expected": "50208; chưa PAID, không payment mới",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-14-ERR2",
+    "module": "sales",
+    "procedure": "sales.sp_ConfirmPayment",
+    "kind": "ERR2",
+    "input": "O quá hạn 5 phút",
+    "expected": "50207; không thu tiền thành công",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-15-OK",
+    "module": "sales",
+    "procedure": "sales.sp_RecordDispense",
+    "kind": "OK",
+    "input": "OrderItemId=I thuộc PAID, Result=SUCCESS, ErrorCode=NULL",
+    "expected": "Ghi một DispenseEvents; toàn đơn nhả đủ → DISPENSED",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-15-ERR1",
+    "module": "sales",
+    "procedure": "sales.sp_RecordDispense",
+    "kind": "ERR1",
+    "input": "Result=UNKNOWN",
+    "expected": "50211; không event",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-15-ERR2",
+    "module": "sales",
+    "procedure": "sales.sp_RecordDispense",
+    "kind": "ERR2",
+    "input": "OrderItemId=-1",
+    "expected": "50212; không event/hoàn tiền",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-16-OK",
+    "module": "sales",
+    "procedure": "sales.sp_Refund",
+    "kind": "OK",
+    "input": "OrderId=O PAID chưa nhả, Reason=QA, RefundedBy=A",
+    "expected": "Đúng phần chưa nhả được hoàn; một Refund; tồn trả đúng",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-16-ERR1",
+    "module": "sales",
+    "procedure": "sales.sp_Refund",
+    "kind": "ERR1",
+    "input": "OrderId=-1",
+    "expected": "50216; không refund",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-16-ERR2",
+    "module": "sales",
+    "procedure": "sales.sp_Refund",
+    "kind": "ERR2",
+    "input": "OrderId của đơn PENDING",
+    "expected": "50217; không refund",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-17-OK",
+    "module": "sales",
+    "procedure": "sales.sp_ExpirePendingOrders",
+    "kind": "OK",
+    "input": "OrderId=O PENDING quá hạn; hoặc NULL cho batch",
+    "expected": "EXPIRED, trả tồn đúng; trả số đơn hết hạn",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-17-ERR1",
+    "module": "sales",
+    "procedure": "sales.sp_ExpirePendingOrders",
+    "kind": "ERR1",
+    "input": "OrderId của đơn PAID",
+    "expected": "Không đổi trạng thái hoặc tồn (ca âm trạng thái)",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-SALES-17-ERR2",
+    "module": "sales",
+    "procedure": "sales.sp_ExpirePendingOrders",
+    "kind": "ERR2",
+    "input": "OrderId đã EXPIRED",
+    "expected": "Không trả tồn hai lần; 0 thay đổi",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-18-OK",
+    "module": "iot",
+    "procedure": "iot.sp_RegisterMachine",
+    "kind": "OK",
+    "input": "Serial=QA-NEW, MachineName=QA, LocationId=L có thật, FirmwareVersion=1.0",
+    "expected": "Máy ACTIVE + thresholds 2..8; không tạo bản sao inventory",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-18-ERR1",
+    "module": "iot",
+    "procedure": "iot.sp_RegisterMachine",
+    "kind": "ERR1",
+    "input": "Serial đã tồn tại",
+    "expected": "50301; không máy/threshold mới",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-18-ERR2",
+    "module": "iot",
+    "procedure": "iot.sp_RegisterMachine",
+    "kind": "ERR2",
+    "input": "LocationId=-1",
+    "expected": "50302; không máy mới",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-19-OK",
+    "module": "iot",
+    "procedure": "iot.sp_IngestTelemetry",
+    "kind": "OK",
+    "input": "Payload JSON array [{machineId:M,temp:4,hum:65,door:0}]",
+    "expected": "Một telemetry đúng M và dữ liệu, heartbeat UTC cập nhật",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-19-ERR1",
+    "module": "iot",
+    "procedure": "iot.sp_IngestTelemetry",
+    "kind": "ERR1",
+    "input": "Payload=not-json",
+    "expected": "50310; không telemetry",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-19-ERR2",
+    "module": "iot",
+    "procedure": "iot.sp_IngestTelemetry",
+    "kind": "ERR2",
+    "input": "Payload machineId không tồn tại",
+    "expected": "50311; không telemetry",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-20-OK",
+    "module": "iot",
+    "procedure": "iot.sp_AcknowledgeAlert",
+    "kind": "OK",
+    "input": "AlertId=AL mở, UserId=A",
+    "expected": "AckBy/AckAt đúng, không tự resolve cảnh báo",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-20-ERR1",
+    "module": "iot",
+    "procedure": "iot.sp_AcknowledgeAlert",
+    "kind": "ERR1",
+    "input": "AlertId=-1",
+    "expected": "50320; không update",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-20-ERR2",
+    "module": "iot",
+    "procedure": "iot.sp_AcknowledgeAlert",
+    "kind": "ERR2",
+    "input": "AL đã acknowledge",
+    "expected": "50321; không ghi đè AckBy",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-21-OK",
+    "module": "iot",
+    "procedure": "iot.sp_ClearFault",
+    "kind": "OK",
+    "input": "MachineId=M FAULT, UserId=A, Note=QA",
+    "expected": "ACTIVE, đóng cảnh báo của máy, trả OldStatus/NewStatus",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-21-ERR1",
+    "module": "iot",
+    "procedure": "iot.sp_ClearFault",
+    "kind": "ERR1",
+    "input": "MachineId=-1",
+    "expected": "50330; không update",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-21-ERR2",
+    "module": "iot",
+    "procedure": "iot.sp_ClearFault",
+    "kind": "ERR2",
+    "input": "M đang ACTIVE",
+    "expected": "50331; không tạo chuyển trạng thái giả",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-22-OK",
+    "module": "iot",
+    "procedure": "iot.sp_UpdateThreshold",
+    "kind": "OK",
+    "input": "MachineId=M, MinTemp=2, MaxTemp=8, DoorOpenMaxMinutes=2, ConsecutiveBreaches=3, DegradedMessage=QA",
+    "expected": "Đúng một threshold và cột trả về",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-22-ERR1",
+    "module": "iot",
+    "procedure": "iot.sp_UpdateThreshold",
+    "kind": "ERR1",
+    "input": "MachineId=-1",
+    "expected": "50340; không update",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-22-ERR2",
+    "module": "iot",
+    "procedure": "iot.sp_UpdateThreshold",
+    "kind": "ERR2",
+    "input": "MinTemp=8, MaxTemp=2",
+    "expected": "50341; không update",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-23-OK",
+    "module": "iot",
+    "procedure": "iot.sp_CheckHeartbeat",
+    "kind": "OK",
+    "input": "Minutes=5; M heartbeat 6 phút trước, M2 heartbeat 1 phút trước",
+    "expected": "Chỉ M OFFLINE, một cảnh báo mở, gọi lại không trùng",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-23-ERR1",
+    "module": "iot",
+    "procedure": "iot.sp_CheckHeartbeat",
+    "kind": "ERR1",
+    "input": "Thực thi bằng Kiosk sau 40_security",
+    "expected": "229/permission denied, không thay máy; BLOCKED khi chưa có security",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-23-ERR2",
+    "module": "iot",
+    "procedure": "iot.sp_CheckHeartbeat",
+    "kind": "ERR2",
+    "input": "CSDL test READ_ONLY với máy cần update",
+    "expected": "3906; không thay đổi trạng thái; dọn READ_WRITE trong finally",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-24-OK",
+    "module": "iot",
+    "procedure": "iot.sp_AggregateHourly",
+    "kind": "OK",
+    "input": "Telemetry của giờ đang tổng hợp, nhiệt độ 2 và 8 và vượt ngưỡng",
+    "expected": "Hourly đúng min/max/avg/count, phút thật 0..60, upsert lặp không tăng",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-24-ERR1",
+    "module": "iot",
+    "procedure": "iot.sp_AggregateHourly",
+    "kind": "ERR1",
+    "input": "Thực thi bằng Operator sau 40_security",
+    "expected": "229, không sửa hourly; BLOCKED khi chưa có security",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-IOT-24-ERR2",
+    "module": "iot",
+    "procedure": "iot.sp_AggregateHourly",
+    "kind": "ERR2",
+    "input": "CSDL test READ_ONLY với dữ liệu cần MERGE",
+    "expected": "3906; không ghi một phần; khôi phục READ_WRITE trong finally",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-25-OK",
+    "module": "report",
+    "procedure": "report.sp_DashboardKpi",
+    "kind": "OK",
+    "input": "AsOf=2026-11-03, MachineId=NULL",
+    "expected": "3 result sets; net doanh thu PAID/DISPENSED, 14 ngày, top 5, máy ACTIVE",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-25-ERR1",
+    "module": "report",
+    "procedure": "report.sp_DashboardKpi",
+    "kind": "ERR1",
+    "input": "MachineId=-1",
+    "expected": "50401; không trả KPI giả",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-25-ERR2",
+    "module": "report",
+    "procedure": "report.sp_DashboardKpi",
+    "kind": "ERR2",
+    "input": "AsOf=9999-12-31",
+    "expected": "50401; không tràn ngày",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-26-OK",
+    "module": "report",
+    "procedure": "report.sp_RevenueGrowth",
+    "kind": "OK",
+    "input": "Year=2026",
+    "expected": "12 tháng, QtySold/PrevRevenue đúng; LAG, running sum đúng",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-26-ERR1",
+    "module": "report",
+    "procedure": "report.sp_RevenueGrowth",
+    "kind": "ERR1",
+    "input": "Year=1999",
+    "expected": "50401",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-26-ERR2",
+    "module": "report",
+    "procedure": "report.sp_RevenueGrowth",
+    "kind": "ERR2",
+    "input": "Year=9999",
+    "expected": "50401",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-27-OK",
+    "module": "report",
+    "procedure": "report.sp_PeakHours",
+    "kind": "OK",
+    "input": "From=2026-08-06, To=2026-11-03",
+    "expected": "24 hàng T2..CN; tổng đơn đúng; DATEFIRST 1/7 không đổi",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-27-ERR1",
+    "module": "report",
+    "procedure": "report.sp_PeakHours",
+    "kind": "ERR1",
+    "input": "From > To",
+    "expected": "50401",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-27-ERR2",
+    "module": "report",
+    "procedure": "report.sp_PeakHours",
+    "kind": "ERR2",
+    "input": "To=9999-12-31",
+    "expected": "50401",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-28-OK",
+    "module": "report",
+    "procedure": "report.sp_ExportSales",
+    "kind": "OK",
+    "input": "From/To hợp lệ, UserId có thật, LocationId=NULL, FileFormat=CSV",
+    "expected": "Audit rows PAID/DISPENSED/REFUNDED/DISPENSE_FAILED; Params JSON; log PENDING",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-28-ERR1",
+    "module": "report",
+    "procedure": "report.sp_ExportSales",
+    "kind": "ERR1",
+    "input": "From=NULL",
+    "expected": "50402; không log",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-28-ERR2",
+    "module": "report",
+    "procedure": "report.sp_ExportSales",
+    "kind": "ERR2",
+    "input": "UserId=-1",
+    "expected": "50402; không log",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-29-OK",
+    "module": "report",
+    "procedure": "report.sp_RefreshDailySummary",
+    "kind": "OK",
+    "input": "Date=2026-08-06, ToDate=2026-11-03",
+    "expected": "Gross chi tiết, discount phân bổ, net đúng; lặp không nhân, refund loại summary cũ",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-29-ERR1",
+    "module": "report",
+    "procedure": "report.sp_RefreshDailySummary",
+    "kind": "ERR1",
+    "input": "Date > ToDate",
+    "expected": "50403; không ghi",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-29-ERR2",
+    "module": "report",
+    "procedure": "report.sp_RefreshDailySummary",
+    "kind": "ERR2",
+    "input": "ToDate=9999-12-31",
+    "expected": "50403; không ghi",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-30-OK",
+    "module": "report",
+    "procedure": "report.sp_RunAllTests",
+    "kind": "OK",
+    "input": "RunBy=QA, phiên test độc lập",
+    "expected": "18 ca, đúng BatchId, kết thúc và ghi log thật; lỗi không biến PASS",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-30-ERR1",
+    "module": "report",
+    "procedure": "report.sp_RunAllTests",
+    "kind": "ERR1",
+    "input": "RunBy rỗng",
+    "expected": "50404; không tạo kết quả",
+    "definition": "present",
+    "execution": "NOT RUN"
+  },
+  {
+    "id": "UT-REPORT-30-ERR2",
+    "module": "report",
+    "procedure": "report.sp_RunAllTests",
+    "kind": "ERR2",
+    "input": "RunBy dài 101 ký tự",
+    "expected": "50404; không tạo kết quả",
+    "definition": "present",
+    "execution": "NOT RUN"
+  }
+]

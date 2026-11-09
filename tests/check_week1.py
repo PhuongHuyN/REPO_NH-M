@@ -2,6 +2,8 @@
 from pathlib import Path
 import re
 import subprocess
+import json
+from collections import Counter
 root=Path(__file__).resolve().parents[1]
 files=list((root/'sql').glob('*.sql'))
 prefixes={}
@@ -30,3 +32,19 @@ for doc in ['README.md','app/README.md']:
     for old in ['07_procs_report.sql','05_views_report.sql','06_functions_report.sql','09_seed_small.sql']:
         assert old not in text,(doc,old)
 print('PASS SCRUM-209/210: owner boundaries, unchanged FK, canonical SQL filenames and README references')
+matrix_file=root/'docs/TestCases_Week1.json'
+if matrix_file.exists():
+    cases=json.loads(matrix_file.read_text(encoding='utf-8-sig'))
+    counts=Counter(c['procedure'] for c in cases)
+    assert len(counts)==30 and len(cases)==90
+    assert set(c['module'] for c in cases)=={'auth','inventory','sales','iot','report'}
+    assert len({c['id'] for c in cases})==len(cases)
+    for proc,count in counts.items():
+        assert count>=3 and {c['kind'] for c in cases if c['procedure']==proc}=={'OK','ERR1','ERR2'},proc
+    definitions='\n'.join(p.read_text(encoding='utf-8-sig') for p in files)
+    actual=set(re.findall(r'CREATE\s+(?:OR\s+ALTER\s+)?PROCEDURE\s+([\w.]+)',definitions,re.I))
+    assert actual <= set(counts),'Procedure missing planned test coverage'
+    plan=(root/'docs/TestPlan.md').read_text(encoding='utf-8-sig')
+    assert all(c['id'] in plan for c in cases),'Word source must include all cases'
+    assert 'p95' in plan and '≤500 ms' in plan and 'READ_ONLY' in plan
+    print('PASS SCRUM-211: 5 modules, 30 procedures, 90 concrete planned cases, complete Word source')
