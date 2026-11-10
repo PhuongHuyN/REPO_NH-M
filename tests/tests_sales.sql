@@ -1,8 +1,8 @@
 -- =============================================================================
 -- FILE        : tests_sales.sql
 -- PROJECT     : FreshVend — TV3 (sales)
--- DESCRIPTION : Index bảng sales + unit test SQL (hết hàng, sai tiền, callback 2 lần, kẹt 3 lần)
--- RUN ORDER   : Sau 12_procs_sales.sql (và 22_objects_sales.sql nếu có)
+-- DESCRIPTION : Unit test SQL (hết hàng, sai tiền, callback 2 lần, kẹt 3 lần)
+-- RUN ORDER   : Sau 12_procs_sales.sql, 30_index_sales.sql (và 22_objects_sales.sql nếu có)
 -- NOTE        : In bảng kết quả cuối script; Passed = 1 là đạt
 -- =============================================================================
 
@@ -12,50 +12,7 @@ GO
 SET NOCOUNT ON;
 
 -- =============================================================================
--- 1. INDEX — schema sales (idempotent)
--- =============================================================================
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_sales_Order_Pending_ExpiresAt'
-               AND object_id = OBJECT_ID(N'sales.[Order]'))
-    CREATE NONCLUSTERED INDEX IX_sales_Order_Pending_ExpiresAt
-        ON sales.[Order] (ExpiresAt, CreatedAt)
-        INCLUDE (OrderId, OrderCode, MachineId, TotalAmount)
-        WHERE Status = N'PENDING';
-GO
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_sales_Order_Machine_CreatedAt'
-               AND object_id = OBJECT_ID(N'sales.[Order]'))
-    CREATE NONCLUSTERED INDEX IX_sales_Order_Machine_CreatedAt
-        ON sales.[Order] (MachineId, CreatedAt DESC)
-        INCLUDE (OrderId, Status, TotalAmount);
-GO
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_sales_OrderItem_OrderId'
-               AND object_id = OBJECT_ID(N'sales.OrderItem'))
-    CREATE NONCLUSTERED INDEX IX_sales_OrderItem_OrderId
-        ON sales.OrderItem (OrderId)
-        INCLUDE (OrderItemId, SlotId, ProductId, Quantity, LineTotal, StockId);
-GO
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_sales_Payment_OrderId_Status'
-               AND object_id = OBJECT_ID(N'sales.Payment'))
-    CREATE NONCLUSTERED INDEX IX_sales_Payment_OrderId_Status
-        ON sales.Payment (OrderId, Status)
-        INCLUDE (PaymentId, Amount, GatewayTxnId, PaidAt);
-GO
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_sales_DispenseEvents_OrderItem'
-               AND object_id = OBJECT_ID(N'sales.DispenseEvents'))
-    CREATE NONCLUSTERED INDEX IX_sales_DispenseEvents_OrderItem
-        ON sales.DispenseEvents (OrderItemId, AttemptNo)
-        INCLUDE (Result, ErrorCode, EventAt);
-GO
-
-PRINT N'[tests_sales] Index sales: xong.';
-GO
-
--- =============================================================================
--- 2. Bảng kết quả unit test
+-- 1. Bảng kết quả unit test
 -- =============================================================================
 
 DECLARE @Results TABLE (
@@ -76,7 +33,7 @@ IF OBJECT_ID(N'inventory.SlotStock', N'U') IS NULL
    OR OBJECT_ID(N'sales.sp_CreateOrder', N'P') IS NULL
 BEGIN
     INSERT @Results (TestCode, TestName, Passed, Detail)
-    VALUES (N'SKIP', N'Toan bo', 0, N'Chay 12_procs_sales.sql truoc (SlotStock + sp_CreateOrder).');
+    VALUES (N'SKIP', N'Toan bo', 0, N'Chay 02_tables_inventory.sql + 12_procs_sales.sql truoc (SlotStock + sp_CreateOrder).');
     GOTO PrintSummary;
 END;
 
@@ -119,11 +76,12 @@ BEGIN
     GOTO PrintSummary;
 END;
 
--- Đảm bảo có tồn FIFO cho các test (ít nhất 2 đơn vị cho test hết hàng)
+-- Đảm bảo có tồn FIFO (không DELETE SlotStock — OrderItem.StockId đang FK tới đó).
 UPDATE inventory.Slot SET CurrentStock = 5, UpdatedAt = SYSUTCDATETIME() WHERE SlotId = @SlotId;
-IF NOT EXISTS (SELECT 1 FROM inventory.SlotStock WHERE SlotId = @SlotId AND Quantity >= 5)
+IF EXISTS (SELECT 1 FROM inventory.SlotStock WHERE SlotId = @SlotId)
+    UPDATE inventory.SlotStock SET Quantity = 5 WHERE SlotId = @SlotId;
+ELSE
 BEGIN
-    DELETE FROM inventory.SlotStock WHERE SlotId = @SlotId;
     SET @BatchId = (SELECT TOP (1) BatchId FROM inventory.StockBatch WHERE ProductId = @ProductId ORDER BY BatchId);
     IF @BatchId IS NULL
     BEGIN
@@ -204,11 +162,8 @@ BEGIN CATCH
         CONCAT(N'Err ', ERROR_NUMBER(), N': ', ERROR_MESSAGE()));
 END CATCH;
 
--- UT04 Ket 3 lan hoan tien
+-- UT04 Ket 3 lan hoan tien (sp_RecordDispense ghi iot.Alerts, không cần iot.Device)
 BEGIN TRY
-    IF OBJECT_ID(N'iot.Device', N'U') IS NULL
-        THROW 50298, N'Can chay 02_tables_iot.sql de test kẹt 3 lan.', 1;
-
     DELETE FROM @Items;
     INSERT @Items (ColumnId, Qty) VALUES (@SlotId, 1);
     EXEC sales.sp_CreateOrder @MachineId = @MachineId, @Items = @Items, @OrderId = @OrderId OUTPUT;

@@ -2,9 +2,8 @@
 -- FILE        : 12_procs_sales.sql
 -- PROJECT     : FreshVend
 -- DESCRIPTION : TV3 sales procedures, aligned with app/api/src/routes/sales.js
--- RUN ORDER   : After 02_tables_*.sql, 03_foreign_keys.sql and inventory seed data.
---               This script adds lot-level slot stock because inventory.Slot only
---               stores an aggregate CurrentStock value in the base schema.
+-- RUN ORDER   : After 02_tables_*.sql (gồm SlotStock của TV2), 03_foreign_keys.sql
+--               và inventory seed data.
 -- =============================================================================
 
 USE FreshVendDB;
@@ -39,24 +38,7 @@ ALTER TABLE sales.Payment WITH CHECK
     CHECK (PaymentMethod IN (N'CASH', N'QRCODE', N'CARD', N'EWALLET', N'VIETQR', N'MOMO', N'VNPAY'));
 GO
 
--- Store each replenished lot in a slot so sales can reserve FIFO stock safely.
-IF OBJECT_ID(N'inventory.SlotStock', N'U') IS NULL
-BEGIN
-    CREATE TABLE inventory.SlotStock (
-        StockId     BIGINT       NOT NULL IDENTITY(1,1),
-        SlotId      INT          NOT NULL,
-        BatchId     INT          NOT NULL,
-        Quantity    SMALLINT     NOT NULL,
-        LoadedAt    DATETIME2(0) NOT NULL CONSTRAINT DF_inventory_SlotStock_LoadedAt DEFAULT SYSUTCDATETIME(),
-        CONSTRAINT PK_inventory_SlotStock PRIMARY KEY (StockId),
-        CONSTRAINT FK_inventory_SlotStock_Slot FOREIGN KEY (SlotId) REFERENCES inventory.Slot(SlotId),
-        CONSTRAINT FK_inventory_SlotStock_Batch FOREIGN KEY (BatchId) REFERENCES inventory.StockBatch(BatchId),
-        CONSTRAINT CK_inventory_SlotStock_Quantity CHECK (Quantity >= 0)
-    );
-    CREATE INDEX IX_inventory_SlotStock_FIFO
-        ON inventory.SlotStock (SlotId, LoadedAt, StockId) INCLUDE (BatchId, Quantity);
-END;
-GO
+-- inventory.SlotStock do TV2 tạo trong 02_tables_inventory.sql
 
 IF COL_LENGTH(N'sales.OrderItem', N'StockId') IS NULL
     ALTER TABLE sales.OrderItem ADD StockId BIGINT NULL;
@@ -373,7 +355,7 @@ BEGIN
         THROW 50211, N'Result chỉ nhận SUCCESS hoặc JAM.', 1;
 
     DECLARE @OrderId BIGINT, @MachineId INT, @Status NVARCHAR(20), @AttemptNo TINYINT,
-            @Now DATETIME2(0) = SYSUTCDATETIME(), @DeviceId INT;
+            @Now DATETIME2(0) = SYSUTCDATETIME();
     BEGIN TRY
         BEGIN TRAN;
         SELECT @OrderId = oi.OrderId, @MachineId = o.MachineId, @Status = o.Status
@@ -409,12 +391,19 @@ BEGIN
             UPDATE sales.[Order] SET Status = N'DISPENSE_FAILED', UpdatedAt = @Now WHERE OrderId = @OrderId;
             EXEC sales.sp_Refund @OrderId = @OrderId, @Reason = N'Tự động hoàn tiền do kẹt hàng 3 lần';
 
-            SELECT TOP (1) @DeviceId = DeviceId
-            FROM iot.Device WHERE MachineId = @MachineId AND IsActive = 1 ORDER BY DeviceId;
-            IF @DeviceId IS NOT NULL
-                INSERT iot.Alert (DeviceId, Severity, Message, CreatedAt)
-                VALUES (@DeviceId, N'WARNING',
-                        N'DISPENSE_JAM: kẹt hàng 3 lần ở đơn ' + CONVERT(NVARCHAR(20), @OrderId), @Now);
+            -- Cảnh báo ghi iot.Alerts (TV4). Không dùng iot.Device / iot.Alert (bảng cũ, không có trên CSDL).
+            IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL
+               AND OBJECT_ID(N'iot.Machines', N'U') IS NOT NULL
+               AND EXISTS (SELECT 1 FROM iot.Machines WHERE MachineId = @MachineId)
+                INSERT iot.Alerts (MachineId, AlertType, Severity, Message, RefKey, CreatedAt)
+                VALUES (
+                    @MachineId,
+                    N'DISPENSE_JAM',
+                    N'HIGH',
+                    N'Kẹt hàng 3 lần ở đơn ' + CONVERT(NVARCHAR(20), @OrderId) + N' – đã tự động hoàn tiền',
+                    N'ORD:' + CONVERT(NVARCHAR(20), @OrderId),
+                    @Now
+                );
         END;
 
         COMMIT;
