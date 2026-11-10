@@ -244,3 +244,28 @@ PRINT N'================================================================';
 PRINT N'  02_tables_report.sql hoàn tất. Tiếp theo: 03_foreign_keys.sql';
 PRINT N'================================================================';
 GO
+
+-- SCRUM-224: explicit status; BIT Passed remains backward compatible.
+IF COL_LENGTH(N'report.TestResults',N'Status') IS NULL
+ ALTER TABLE report.TestResults ADD Status NVARCHAR(10) NULL;
+GO
+UPDATE report.TestResults SET Status=CASE WHEN Passed=1 THEN N'PASS' ELSE N'FAIL' END WHERE Status IS NULL;
+ALTER TABLE report.TestResults ALTER COLUMN Status NVARCHAR(10) NOT NULL;
+IF NOT EXISTS(SELECT 1 FROM sys.default_constraints WHERE parent_object_id=OBJECT_ID(N'report.TestResults') AND name=N'DF_TestResults_Status')
+ ALTER TABLE report.TestResults ADD CONSTRAINT DF_TestResults_Status DEFAULT N'FAIL' FOR Status;
+IF NOT EXISTS(SELECT 1 FROM sys.check_constraints WHERE name=N'CK_TestResults_Status')
+ ALTER TABLE report.TestResults ADD CONSTRAINT CK_TestResults_Status CHECK(Status IN(N'PASS',N'FAIL',N'BLOCKED'));
+GO
+IF OBJECT_ID(N'report.SeedItems',N'U') IS NULL
+CREATE TABLE report.SeedItems (
+ Kind NVARCHAR(30) NOT NULL, ItemKey NVARCHAR(100) NOT NULL, ObjectId BIGINT NOT NULL,
+ CreatedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(),
+ CONSTRAINT PK_SeedItems PRIMARY KEY(Kind,ItemKey)
+);
+IF OBJECT_ID(N'report.SeedRuns',N'U') IS NULL
+CREATE TABLE report.SeedRuns (
+ Profile NVARCHAR(10) NOT NULL PRIMARY KEY, HistoryEnd DATE NOT NULL,
+ CompletedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(),
+ OrdersCreated INT NOT NULL, TelemetryCreated INT NOT NULL
+);
+GO

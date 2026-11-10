@@ -1,0 +1,132 @@
+{
+  "database": "FreshVendTV5_Week2_20261110_170803",
+  "totals": {
+    "PASS": 24,
+    "FAIL": 2,
+    "BLOCKED": 7
+  },
+  "results": [
+    {
+      "Module": "auth",
+      "Status": "BLOCKED",
+      "Count": 4
+    },
+    {
+      "Module": "inventory",
+      "Status": "BLOCKED",
+      "Count": 2
+    },
+    {
+      "Module": "inventory",
+      "Status": "PASS",
+      "Count": 6
+    },
+    {
+      "Module": "iot",
+      "Status": "BLOCKED",
+      "Count": 1
+    },
+    {
+      "Module": "iot",
+      "Status": "FAIL",
+      "Count": 2
+    },
+    {
+      "Module": "iot",
+      "Status": "PASS",
+      "Count": 6
+    },
+    {
+      "Module": "report",
+      "Status": "PASS",
+      "Count": 6
+    },
+    {
+      "Module": "sales",
+      "Status": "PASS",
+      "Count": 6
+    }
+  ],
+  "checks": [
+    {
+      "Status": "PASS",
+      "Name": "sql/01_schemas.sql",
+      "Log": "01_schemas.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/02_tables_auth.sql",
+      "Log": "02_tables_auth.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/02_tables_inventory.sql",
+      "Log": "02_tables_inventory.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/02_tables_iot.sql",
+      "Log": "02_tables_iot.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/02_tables_report.sql",
+      "Log": "02_tables_report.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/02_tables_sales.sql",
+      "Log": "02_tables_sales.sql.log"
+    },
+    {
+      "Status": "BLOCKED",
+      "Name": "sql/03_foreign_keys.sql",
+      "Log": "03_foreign_keys.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/11_procs_inventory.sql",
+      "Log": "11_procs_inventory.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/12_procs_sales.sql",
+      "Log": "12_procs_sales.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/13_procs_iot.sql",
+      "Log": "13_procs_iot.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/14_procs_report.sql",
+      "Log": "14_procs_report.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "sql/24_objects_report.sql",
+      "Log": "24_objects_report.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "tests/sql/fixtures_report.sql",
+      "Log": "fixtures_report.sql.log"
+    },
+    {
+      "Status": "BLOCKED",
+      "Name": "sql/80_seed_small.sql",
+      "Log": "80_seed_small.sql.log"
+    },
+    {
+      "Status": "BLOCKED",
+      "Name": "sql/81_seed_large.sql",
+      "Log": "81_seed_large.sql.log"
+    },
+    {
+      "Status": "PASS",
+      "Name": "tests/sql/224_verify_runner.sql",
+      "Log": "224_verify_runner.sql.log"
+    }
+  ]
+}

@@ -502,13 +502,13 @@ function create() {
         ['sales', 'sp_RecordDispense: kẹt 3 lần tự hoàn tiền', 'REFUNDED'], ['iot', 'Ngưỡng: vượt 3 lần liên tiếp thì cảnh báo', 'ALERT+DEGRADED'],
         ['iot', 'Partition: bản ghi tháng này vào partition tháng này', 'CORRECT PARTITION'], ['report', 'sp_RefreshDailySummary: khớp tổng tính tay', 'MATCH'],
       ];
-      const details = cases.map(([Module, TestCase, Expected], i) => ({ TestId: i + 1, RunId: runId, Module, TestCase, Expected, Actual: Expected, Passed: true, RunAt: now() }));
+      const details = cases.map(([Module, TestCase, Expected], i) => ({ TestId: i + 1, RunId: runId, Module, TestCase, Expected, Actual: 'DEMO: chưa thực thi trên SQL Server', Passed: false, Status: 'BLOCKED', Source: 'DEMO', RunAt: now() }));
       S.testResults = details;
       const mods = [...new Set(cases.map((c) => c[0]))].map((Module) => {
         const t = details.filter((d) => d.Module === Module).length;
-        return { Module, Total: t, Passed: t, Failed: 0 };
+        return { Module, Total: t, Passed: 0, Failed: 0, Blocked: t };
       });
-      return [mods, details.map(({ TestCase, Module, Expected, Actual, Passed }) => ({ TestCase, Module, Expected, Actual, Passed }))];
+      return [mods, details.map(({ TestCase, Module, Expected, Actual, Passed, Status, Source, RunAt }) => ({ TestCase, Module, Expected, Actual, Passed, Status, Source, RunAt }))];
     },
   };
 
