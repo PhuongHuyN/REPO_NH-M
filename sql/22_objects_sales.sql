@@ -3,11 +3,14 @@
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
 -- DESCRIPTION : TV3 — Function, trigger và view schema [sales]
 --               fn_OrderTotal, trg_Orders_StatusGuard,
---               vw_OrderDetail, vw_PendingOrders
--- VERSION     : 1.0.0
+--               vw_OrderDetail, vw_PendingOrders, vw_DispenseQueue
+-- VERSION     : 1.1.0
 -- CREATED     : 2026-11-04
+-- UPDATED     : 2026-11-10 — FV-10 (SCRUM-204) vw_DispenseQueue + cột khớp fakeDb.js
 -- RUN ORDER   : Sau 02_tables_sales.sql, 03_foreign_keys.sql, 12_procs_sales.sql
 -- NOTE        : Luồng trạng thái đơn khớp docs/UserStories_Sales.md và 12_procs_sales.sql
+--               Cột API (fakeDb.js): Serial = inventory.Machine.MachineCode;
+--               ColumnNo = inventory.Slot.SlotCode; Qty = OrderItem.Quantity.
 -- =============================================================================
 
 USE FreshVendDB;
@@ -71,32 +74,43 @@ CREATE OR ALTER VIEW sales.vw_OrderDetail
 AS
 SELECT
     o.OrderId,
-    o.OrderCode,
     o.MachineId,
-    m.MachineCode,
+    m.MachineCode         AS Serial,
+    m.MachineName,
     o.Status              AS OrderStatus,
+    o.CreatedAt,
+    o.PaidAt,
+    o.CompletedAt,
+    o.TotalAmount,
+    oi.OrderItemId,
+    s.SlotCode            AS ColumnNo,
+    oi.ProductId,
+    p.ProductName,
+    b.BatchCode,
+    oi.Quantity           AS Qty,
+    oi.UnitPrice,
+    oi.LineTotal,
+    pay.PaymentMethod,
+    pay.GatewayTxnId,
+    disp.DispenseAttempts,
+    disp.LastDispenseResult AS DispenseResult,
+    CAST(CASE WHEN disp.SuccessCount > 0 THEN 1 ELSE 0 END AS BIT) AS ItemDispensed,
+    -- cột bổ sung (không phá API; giữ cho SSMS / báo cáo)
+    o.OrderCode,
+    m.MachineCode,
     o.Subtotal,
     o.DiscountAmount,
-    o.TotalAmount,
     o.CreatedAt           AS OrderCreatedAt,
     o.PaidAt              AS OrderPaidAt,
     o.CompletedAt         AS OrderCompletedAt,
-    oi.OrderItemId,
     oi.SlotId,
-    oi.ProductId,
     p.SKU,
-    p.ProductName,
     oi.Quantity,
-    oi.UnitPrice,
-    oi.LineTotal,
     pay.PaymentId,
-    pay.PaymentMethod,
     pay.Status            AS PaymentStatus,
     pay.Amount            AS PaymentAmount,
     pay.TransactionRef,
-    pay.GatewayTxnId,
     pay.PaidAt            AS PaymentPaidAt,
-    disp.DispenseAttempts,
     disp.LastDispenseResult,
     disp.LastDispenseErrorCode,
     disp.LastDispenseAt
@@ -107,6 +121,10 @@ INNER JOIN inventory.Product p
     ON p.ProductId = oi.ProductId
 LEFT JOIN inventory.Machine m
     ON m.MachineId = o.MachineId
+LEFT JOIN inventory.Slot s
+    ON s.SlotId = oi.SlotId
+LEFT JOIN inventory.StockBatch b
+    ON b.BatchId = oi.BatchId
 OUTER APPLY (
     SELECT TOP (1)
         pmt.PaymentId,
@@ -123,6 +141,7 @@ OUTER APPLY (
 OUTER APPLY (
     SELECT
         COUNT(*) AS DispenseAttempts,
+        SUM(CASE WHEN UPPER(de.Result) = N'SUCCESS' THEN 1 ELSE 0 END) AS SuccessCount,
         MAX(CASE WHEN de.AttemptNo = mx.MaxAttempt THEN de.Result END) AS LastDispenseResult,
         MAX(CASE WHEN de.AttemptNo = mx.MaxAttempt THEN de.ErrorCode END) AS LastDispenseErrorCode,
         MAX(CASE WHEN de.AttemptNo = mx.MaxAttempt THEN de.EventAt END) AS LastDispenseAt
@@ -144,17 +163,56 @@ CREATE OR ALTER VIEW sales.vw_PendingOrders
 AS
 SELECT
     o.OrderId,
-    o.OrderCode,
     o.MachineId,
-    m.MachineCode,
+    m.MachineCode         AS Serial,
     o.TotalAmount,
     o.CreatedAt,
     o.ExpiresAt,
-    DATEDIFF(SECOND, o.CreatedAt, SYSUTCDATETIME()) AS AgeSeconds
+    DATEDIFF(SECOND, o.CreatedAt, SYSUTCDATETIME()) AS AgeSeconds,
+    o.OrderCode,
+    m.MachineCode
 FROM sales.[Order] o
 LEFT JOIN inventory.Machine m
     ON m.MachineId = o.MachineId
 WHERE UPPER(o.Status) = N'PENDING';
+GO
+
+-- =============================================================================
+-- 5. sales.vw_DispenseQueue — Hàng chờ nhả (simulator GET /api/dispense-queue)
+--    Cột fakeDb: OrderId, MachineId, OrderItemId, ColumnNo, Qty, PaidAt, AttemptsSoFar
+-- =============================================================================
+
+CREATE OR ALTER VIEW sales.vw_DispenseQueue
+AS
+SELECT
+    o.OrderId,
+    o.MachineId,
+    oi.OrderItemId,
+    s.SlotCode            AS ColumnNo,
+    oi.Quantity           AS Qty,
+    o.PaidAt,
+    (
+        SELECT COUNT(*)
+        FROM sales.DispenseEvents d
+        WHERE d.OrderItemId = oi.OrderItemId
+    ) AS AttemptsSoFar
+FROM sales.[Order] o
+INNER JOIN sales.OrderItem oi
+    ON oi.OrderId = o.OrderId
+INNER JOIN inventory.Slot s
+    ON s.SlotId = oi.SlotId
+WHERE UPPER(o.Status) = N'PAID'
+  AND NOT EXISTS (
+        SELECT 1
+        FROM sales.DispenseEvents d
+        WHERE d.OrderItemId = oi.OrderItemId
+          AND UPPER(d.Result) = N'SUCCESS'
+  )
+  AND (
+        SELECT COUNT(*)
+        FROM sales.DispenseEvents d
+        WHERE d.OrderItemId = oi.OrderItemId
+  ) < 3;
 GO
 
 -- =============================================================================
@@ -164,6 +222,6 @@ GO
 SELECT name AS [Object], type_desc AS [Type]
 FROM sys.objects
 WHERE schema_id = SCHEMA_ID(N'sales')
-  AND name IN (N'fn_OrderTotal', N'trg_Orders_StatusGuard', N'vw_OrderDetail', N'vw_PendingOrders')
+  AND name IN (N'fn_OrderTotal', N'trg_Orders_StatusGuard', N'vw_OrderDetail', N'vw_PendingOrders', N'vw_DispenseQueue')
 ORDER BY name;
 GO
