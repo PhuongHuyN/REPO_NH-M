@@ -1,0 +1,47 @@
+{
+  "database": "FreshVendTV5_Week2_20261110_223138",
+  "totals": {
+    "PASS": 26,
+    "FAIL": 0,
+    "BLOCKED": 7
+  },
+  "results": [
+    {
+      "Module": "auth",
+      "Status": "BLOCKED",
+      "Count": 4
+    },
+    {
+      "Module": "inventory",
+      "Status": "BLOCKED",
+      "Count": 2
+    },
+    {
+      "Module": "inventory",
+      "Status": "PASS",
+      "Count": 6
+    },
+    {
+      "Module": "iot",
+      "Status": "BLOCKED",
+      "Count": 1
+    },
+    {
+      "Module": "iot",
+      "Status": "PASS",
+      "Count": 8
+    },
+    {
+      "Module": "report",
+      "Status": "PASS",
+      "Count": 6
+    },
+    {
+      "Module": "sales",
+      "Status": "PASS",
+      "Count": 6
+    }
+  ],
+  "ingestRegression": "PASS: ordered batch, UTC timestamp/heartbeat, correct errors, atomic invalid batch",
+  "fullAcceptance": false
+}

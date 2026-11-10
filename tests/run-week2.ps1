@@ -1,4 +1,4 @@
-param([string]$Server='.\SQLEXPRESS',[switch]$RequireAll)
+﻿param([string]$Server='.\SQLEXPRESS',[switch]$RequireAll)
 $ErrorActionPreference='Stop'
 $repoRoot=Split-Path $PSScriptRoot -Parent
 $testDb='FreshVendTV5_Week2_'+(Get-Date -Format 'yyyyMMdd_HHmmss')
@@ -29,6 +29,7 @@ try {
  Run-Sql 'sql/80_seed_small.sql' -OwnerDependency
  Run-Sql 'sql/81_seed_large.sql' -OwnerDependency
  Run-Sql 'tests/sql/224_verify_runner.sql'
+ Run-Sql 'tests/sql/26_verify_ingest.sql'
  $connection=New-Object System.Data.SqlClient.SqlConnection("Server=$Server;Database=$testDb;Integrated Security=True;TrustServerCertificate=True;Encrypt=False")
  $connection.Open()
  try {
