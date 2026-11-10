@@ -177,8 +177,26 @@ BEGIN
 END;
 GO
 
+-- FIFO lô cũ nhất. Huy (FV-18) CREATE OR ALTER đè nếu đổi sang ExpiryAt.
+IF OBJECT_ID(N'inventory.fn_GetFifoStock', N'IF') IS NULL
+   AND OBJECT_ID(N'inventory.SlotStock', N'U') IS NOT NULL
+    EXEC(N'
+CREATE FUNCTION inventory.fn_GetFifoStock (@ColumnId INT)
+RETURNS TABLE
+AS
+RETURN
+    SELECT TOP (1) ss.StockId, ss.BatchId, ss.Quantity
+    FROM inventory.SlotStock ss
+    JOIN inventory.StockBatch b ON b.BatchId = ss.BatchId
+    WHERE ss.SlotId = @ColumnId
+      AND ss.Quantity > 0
+      AND (b.ExpiryDate IS NULL OR b.ExpiryDate >= CONVERT(DATE, SYSUTCDATETIME()))
+    ORDER BY ss.LoadedAt, ss.StockId;
+');
+GO
+
 -- =============================================================================
--- 1. Create order and reserve FIFO lots
+-- 1. Create order and reserve FIFO lots (fn_GetFifoStock + UPDLOCK)
 -- =============================================================================
 CREATE OR ALTER PROCEDURE sales.sp_CreateOrder
     @MachineId INT,
@@ -190,11 +208,11 @@ BEGIN
     SET XACT_ABORT ON;
 
     IF NOT EXISTS (SELECT 1 FROM @Items)
-        THROW 50200, N'Giỏ hàng phải có ít nhất một sản phẩm.', 1;
+        THROW 50200, N'Giỏ hàng rỗng', 1;
     IF NOT EXISTS (SELECT 1 FROM inventory.Machine WHERE MachineId = @MachineId AND IsActive = 1)
-        THROW 50202, N'Máy bán hàng không tồn tại hoặc đã ngừng hoạt động.', 1;
+        THROW 50202, N'Máy không tồn tại', 1;
     IF NOT EXISTS (SELECT 1 FROM inventory.Machine WHERE MachineId = @MachineId AND IsActive = 1 AND Status = N'online')
-        THROW 50203, N'Máy đang tạm ngưng phục vụ.', 1;
+        THROW 50203, N'Máy đang tạm ngưng phục vụ', 1;
 
     DECLARE @ColumnId INT, @Qty TINYINT, @SlotId INT, @ProductId INT,
             @StockId BIGINT, @BatchId INT, @LotQty SMALLINT, @Take SMALLINT,
@@ -215,7 +233,7 @@ BEGIN
             FROM inventory.Slot WITH (UPDLOCK, ROWLOCK)
             WHERE SlotId = @ColumnId AND MachineId = @MachineId AND IsActive = 1;
             IF @SlotId IS NULL OR @ProductId IS NULL
-                THROW 50204, N'Ngăn chứa không tồn tại trên máy này hoặc chưa có sản phẩm.', 1;
+                THROW 50204, N'Sản phẩm không thuộc máy này', 1;
 
             SELECT @Remaining = COALESCE(SUM(ss.Quantity), 0)
             FROM inventory.SlotStock ss WITH (UPDLOCK, ROWLOCK)
@@ -224,7 +242,7 @@ BEGIN
               AND b.ProductId = @ProductId
               AND (b.ExpiryDate IS NULL OR b.ExpiryDate >= CONVERT(DATE, @Now));
             IF @Remaining < @Qty
-                THROW 50201, N'Sản phẩm đã hết hàng hoặc không đủ số lượng.', 1;
+                THROW 50201, N'Sản phẩm đã hết hàng hoặc không đủ số lượng', 1;
             FETCH NEXT FROM item_check INTO @ColumnId, @Qty;
         END;
         CLOSE item_check;
@@ -250,16 +268,17 @@ BEGIN
             WHILE @Remaining > 0
             BEGIN
                 SELECT @StockId = NULL, @BatchId = NULL, @LotQty = NULL;
-                SELECT TOP (1) @StockId = ss.StockId, @BatchId = ss.BatchId, @LotQty = ss.Quantity
-                FROM inventory.SlotStock ss WITH (UPDLOCK, ROWLOCK)
-                JOIN inventory.StockBatch b ON b.BatchId = ss.BatchId
-                WHERE ss.SlotId = @SlotId AND ss.Quantity > 0
-                  AND b.ProductId = @ProductId
-                  AND (b.ExpiryDate IS NULL OR b.ExpiryDate >= CONVERT(DATE, @Now))
-                ORDER BY ss.LoadedAt, ss.StockId;
+                SELECT TOP (1)
+                    @StockId = f.StockId,
+                    @BatchId = f.BatchId,
+                    @LotQty  = ss.Quantity
+                FROM inventory.fn_GetFifoStock(@SlotId) AS f
+                JOIN inventory.SlotStock ss WITH (UPDLOCK, ROWLOCK)
+                  ON ss.StockId = f.StockId
+                WHERE ss.Quantity > 0;
 
                 IF @StockId IS NULL
-                    THROW 50201, N'Sản phẩm đã hết hàng hoặc không đủ số lượng.', 1;
+                    THROW 50201, N'Sản phẩm đã hết hàng hoặc không đủ số lượng', 1;
 
                 SET @Take = CASE WHEN @LotQty < @Remaining THEN @LotQty ELSE @Remaining END;
                 UPDATE inventory.SlotStock SET Quantity = Quantity - @Take WHERE StockId = @StockId;
@@ -311,7 +330,7 @@ BEGIN
     IF NULLIF(LTRIM(RTRIM(@GatewayTxnId)), N'') IS NULL
         THROW 50210, N'GatewayTxnId không được để trống.', 1;
     IF @Method IS NULL OR @Method NOT IN (N'VIETQR', N'MOMO', N'VNPAY')
-        THROW 50209, N'Phương thức thanh toán không được hỗ trợ.', 1;
+        THROW 50209, N'Phương thức thanh toán không hỗ trợ', 1;
 
     BEGIN TRY
         BEGIN TRAN;
@@ -329,12 +348,12 @@ BEGIN
                 @Now DATETIME2(0) = SYSUTCDATETIME();
         SELECT @Status = Status, @Total = TotalAmount, @ExpiresAt = ExpiresAt
         FROM sales.[Order] WITH (UPDLOCK, ROWLOCK) WHERE OrderId = @OrderId;
-        IF @Status IS NULL THROW 50205, N'Đơn hàng không tồn tại.', 1;
-        IF UPPER(@Status) <> N'PENDING' THROW 50206, N'Đơn hàng không ở trạng thái chờ thanh toán.', 1;
+        IF @Status IS NULL THROW 50205, N'Đơn hàng không tồn tại', 1;
+        IF UPPER(@Status) <> N'PENDING' THROW 50206, N'Đơn hàng không ở trạng thái chờ thanh toán', 1;
         IF @ExpiresAt <= @Now
-            THROW 50207, N'Đơn hàng đã quá hạn thanh toán (5 phút).', 1;
+            THROW 50207, N'Đơn hàng đã quá hạn thanh toán (5 phút)', 1;
         IF @Amount IS NULL OR @Amount <> @Total
-            THROW 50208, N'Số tiền thanh toán không khớp với đơn hàng.', 1;
+            THROW 50208, N'Số tiền thanh toán không khớp với đơn hàng', 1;
 
         INSERT sales.Payment (OrderId, PaymentMethod, Amount, TransactionRef, GatewayTxnId, Status, PaidAt, CreatedAt)
         VALUES (@OrderId, @Method, @Amount, @GatewayTxnId, @GatewayTxnId, N'success', @Now, @Now);
@@ -370,27 +389,27 @@ BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;
     IF @Result NOT IN (N'SUCCESS', N'JAM')
-        THROW 50211, N'Result chỉ nhận SUCCESS hoặc JAM.', 1;
+        THROW 50211, N'Kết quả nhả hàng chỉ nhận SUCCESS hoặc JAM', 1;
 
     DECLARE @OrderId BIGINT, @MachineId INT, @Status NVARCHAR(20), @AttemptNo TINYINT,
-            @Now DATETIME2(0) = SYSUTCDATETIME(), @DeviceId INT;
+            @Now DATETIME2(0) = SYSUTCDATETIME();
     BEGIN TRY
         BEGIN TRAN;
         SELECT @OrderId = oi.OrderId, @MachineId = o.MachineId, @Status = o.Status
         FROM sales.OrderItem oi WITH (UPDLOCK, ROWLOCK)
         JOIN sales.[Order] o WITH (UPDLOCK, ROWLOCK) ON o.OrderId = oi.OrderId
         WHERE oi.OrderItemId = @OrderItemId;
-        IF @OrderId IS NULL THROW 50212, N'Không tìm thấy dòng đơn hàng.', 1;
+        IF @OrderId IS NULL THROW 50212, N'Không tìm thấy dòng đơn hàng', 1;
         IF UPPER(@Status) <> N'PAID'
-            THROW 50213, N'Đơn hàng chưa thanh toán hoặc đã xử lý xong.', 1;
+            THROW 50213, N'Đơn hàng chưa thanh toán hoặc đã xử lý xong', 1;
         IF EXISTS (SELECT 1 FROM sales.DispenseEvents
                    WHERE OrderItemId = @OrderItemId AND Result = N'SUCCESS')
-            THROW 50214, N'Sản phẩm này đã được nhả thành công.', 1;
+            THROW 50214, N'Sản phẩm này đã được nhả thành công', 1;
 
         SELECT @AttemptNo = CONVERT(TINYINT, COALESCE(MAX(AttemptNo), 0) + 1)
         FROM sales.DispenseEvents WITH (UPDLOCK, HOLDLOCK)
         WHERE OrderItemId = @OrderItemId;
-        IF @AttemptNo > 3 THROW 50215, N'Đã vượt quá 3 lần thử nhả hàng.', 1;
+        IF @AttemptNo > 3 THROW 50215, N'Đã vượt quá 3 lần thử nhả hàng', 1;
 
         INSERT sales.DispenseEvents (OrderItemId, AttemptNo, Result, ErrorCode, EventAt)
         VALUES (@OrderItemId, @AttemptNo, @Result, @ErrorCode, @Now);
@@ -409,12 +428,16 @@ BEGIN
             UPDATE sales.[Order] SET Status = N'DISPENSE_FAILED', UpdatedAt = @Now WHERE OrderId = @OrderId;
             EXEC sales.sp_Refund @OrderId = @OrderId, @Reason = N'Tự động hoàn tiền do kẹt hàng 3 lần';
 
-            SELECT TOP (1) @DeviceId = DeviceId
-            FROM iot.Device WHERE MachineId = @MachineId AND IsActive = 1 ORDER BY DeviceId;
-            IF @DeviceId IS NOT NULL
-                INSERT iot.Alert (DeviceId, Severity, Message, CreatedAt)
-                VALUES (@DeviceId, N'WARNING',
-                        N'DISPENSE_JAM: kẹt hàng 3 lần ở đơn ' + CONVERT(NVARCHAR(20), @OrderId), @Now);
+            IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL
+               AND OBJECT_ID(N'iot.Machines', N'U') IS NOT NULL
+               AND EXISTS (SELECT 1 FROM iot.Machines WHERE MachineId = @MachineId)
+                INSERT iot.Alerts (MachineId, AlertType, Severity, Message, RefKey, CreatedAt)
+                VALUES (
+                    @MachineId, N'DISPENSE_JAM', N'HIGH',
+                    N'Kẹt hàng 3 lần (đơn #' + CONVERT(NVARCHAR(20), @OrderId) + N') – đã tự động hoàn tiền',
+                    N'ORD:' + CONVERT(NVARCHAR(20), @OrderId),
+                    @Now
+                );
         END;
 
         COMMIT;
@@ -446,12 +469,12 @@ BEGIN
     BEGIN TRY
         BEGIN TRAN;
         SELECT @Status = Status FROM sales.[Order] WITH (UPDLOCK, ROWLOCK) WHERE OrderId = @OrderId;
-        IF @Status IS NULL THROW 50216, N'Đơn hàng không tồn tại.', 1;
+        IF @Status IS NULL THROW 50216, N'Đơn hàng không tồn tại', 1;
         IF UPPER(@Status) NOT IN (N'PAID', N'DISPENSE_FAILED')
-            THROW 50217, N'Chỉ hoàn tiền đơn đã thanh toán và còn hàng chưa nhả.', 1;
+            THROW 50217, N'Chỉ hoàn tiền đơn đã thanh toán mà chưa nhả xong hoặc bị kẹt', 1;
         IF EXISTS (SELECT 1 FROM sales.Refund r JOIN sales.Payment p ON p.PaymentId = r.PaymentId
                    WHERE p.OrderId = @OrderId)
-            THROW 50218, N'Đơn hàng đã được hoàn tiền.', 1;
+            THROW 50218, N'Đơn hàng đã được hoàn tiền', 1;
 
         SELECT TOP (1) @PaymentId = PaymentId
         FROM sales.Payment WHERE OrderId = @OrderId AND Status = N'success'
@@ -463,7 +486,7 @@ BEGIN
         WHERE oi.OrderId = @OrderId
           AND NOT EXISTS (SELECT 1 FROM sales.DispenseEvents de
                           WHERE de.OrderItemId = oi.OrderItemId AND de.Result = N'SUCCESS');
-        IF @RefundAmount <= 0 THROW 50218, N'Không có sản phẩm nào cần hoàn tiền.', 1;
+        IF @RefundAmount <= 0 THROW 50219, N'Không có sản phẩm nào cần hoàn tiền', 1;
 
         -- Return only stock for items that have not left the machine.
         ;WITH ReturnLines AS (
