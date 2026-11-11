@@ -171,6 +171,36 @@ ELSE
 
 GO
 -- =============================================================================
+-- 7. COMPATIBILITY VIEW: inventory.Machine
+-- Nguồn dữ liệu chính: iot.Machines
+-- Mục đích: Tương thích với module Inventory cũ
+-- =============================================================================
+-- Đảm bảo schema inventory tồn tại
+IF SCHEMA_ID(N'inventory') IS NULL
+    BEGIN
+        EXECUTE (N'CREATE SCHEMA inventory');
+    END
+
+
+GO
+-- Tạo View tương thích
+CREATE OR ALTER VIEW inventory.Machine
+AS
+SELECT m.MachineId,
+       m.Serial AS MachineCode,
+       m.MachineName,
+       l.LocationName AS Location,
+       m.Status,
+       CAST (CASE WHEN m.Status = N'ACTIVE' THEN 1 ELSE 0 END AS BIT) AS IsActive,
+       m.LocationId
+FROM   iot.Machines AS m
+       LEFT OUTER JOIN
+       iot.Locations AS l
+       ON l.LocationId = m.LocationId;
+
+
+GO
+-- =============================================================================
 -- XÁC NHẬN
 -- =============================================================================
 SELECT   TABLE_SCHEMA AS [Schema],
