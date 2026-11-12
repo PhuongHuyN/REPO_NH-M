@@ -20,7 +20,7 @@ Yêu cầu SQL Server 2022, compatibility 160, Vietnamese_CI_AS; SSMS QUOTED_IDE
 |---|---|---|---|
 | 1 | sql/00_database.sql | Toàn | Có; chỉ khởi tạo CSDL chủ động, có thao tác ROLLBACK IMMEDIATE |
 | 2 | sql/01_schemas.sql | Toàn | Có |
-| 3 | sql/02_tables_audit.sql | Toàn | Chưa có, FV-06 |
+| 3 | sql/02_tables_audit.sql | Huy | Có: audit.ChangeLog, audit.AuditLog (FV-06) |
 | 4 | sql/02_tables_auth.sql | Toàn | Có, còn FV-06 |
 | 5 | sql/02_tables_inventory.sql | Huy | Có |
 | 6 | sql/02_tables_iot.sql | Dũng | Có; chưa view inventory.Machine, FV-13 |
@@ -33,7 +33,7 @@ Yêu cầu SQL Server 2022, compatibility 160, Vietnamese_CI_AS; SSMS QUOTED_IDE
 | 12 | sql/12_procs_sales.sql | Ân | Có |
 | 13 | sql/13_procs_iot.sql | Dũng | Có |
 | 14 | sql/14_procs_report.sql | Anh | Có 6 procedure; tạo trước object, chạy sau 24 |
-| 15 | sql/20_objects_auth.sql | Toàn | Chưa có, FV-21 |
+| 15 | sql/20_objects_auth.sql | Huy | Có: vw_UserPermissions, audit.vw_LoginActivity, trigger trg_Users_Audit (FV-21); chạy sau 10; test: tests/tests_audit.sql |
 | 16 | sql/21_objects_inventory.sql | Huy | Có: 4 view, fn_PriceHistory, fn_GetFifoStock, trigger sắp hết hàng (FV-18); chạy sau 02_tables_iot |
 | 17 | sql/22_objects_sales.sql | Ân | Có |
 | 18 | sql/23_objects_iot.sql | Dũng | Có |
