@@ -5,9 +5,10 @@
 --               PHẦN 1 — Cấu trúc bảng (FV-02, SCRUM-196)        T1–T11
 --               PHẦN 2 — Dữ liệu mẫu 08_seed_inventory.sql        T12–T18
 --               PHẦN 3 — 5 procedure FV-03 (11_procs_inventory)   T19–T33
---               (sp_Restock, sp_RemoveExpired, view… nối tiếp ở các task sau)
+--               PHẦN 4 — sp_Restock, sp_RemoveExpired (FV-04)     T34–T43
+--               (view, function, trigger… nối tiếp ở FV-18, FV-19)
 -- CÁCH CHẠY   : Chạy SAU 02_tables_inventory.sql, 08_seed_inventory.sql và
---               11_procs_inventory.sql. Phần 3 tự dọn dữ liệu test (tên '__TEST__…').
+--               11_procs_inventory.sql. Phần 3, 4 tự dọn dữ liệu test (tên '__TEST__…').
 --               Phần 1 sửa dữ liệu trong 1 transaction rồi ROLLBACK; Phần 2 chỉ đọc
 --               → không làm bẩn CSDL. Toàn file là 1 batch (không thêm GO ở giữa).
 --               T16 (lô sắp hết hạn) tính theo giờ thật: chạy trong vòng 4 giờ sau
@@ -219,6 +220,20 @@ DECLARE @tp INT, @tName NVARCHAR(100) = N'__TEST__ Bưởi da xanh', @busyProd I
         @v1 NVARCHAR(100), @ok BIT;
 
 -- Dọn dữ liệu test còn sót nếu lần chạy trước bị dừng giữa chừng
+DELETE ri FROM inventory.RestockItem ri JOIN inventory.StockBatch b ON b.BatchId = ri.BatchId
+JOIN inventory.Product p ON p.ProductId = b.ProductId WHERE p.ProductName LIKE N'[_][_]TEST[_][_]%';
+DELETE re FROM inventory.RestockEvent re
+WHERE re.Note = N'__TEST__ châm' AND NOT EXISTS (SELECT 1 FROM inventory.RestockItem ri WHERE ri.RestockId = re.RestockId);
+DELETE m FROM inventory.StockMovement m JOIN inventory.StockBatch b ON b.BatchId = m.BatchId
+JOIN inventory.Product p ON p.ProductId = b.ProductId WHERE p.ProductName LIKE N'[_][_]TEST[_][_]%';
+UPDATE s SET CurrentStock = CASE WHEN s.CurrentStock >= x.Qty THEN s.CurrentStock - x.Qty ELSE 0 END
+FROM inventory.Slot s
+JOIN (SELECT ss.SlotId, SUM(ss.Quantity) AS Qty FROM inventory.SlotStock ss
+      JOIN inventory.StockBatch b ON b.BatchId = ss.BatchId
+      JOIN inventory.Product p ON p.ProductId = b.ProductId
+      WHERE p.ProductName LIKE N'[_][_]TEST[_][_]%' GROUP BY ss.SlotId) x ON x.SlotId = s.SlotId;
+DELETE ss FROM inventory.SlotStock ss JOIN inventory.StockBatch b ON b.BatchId = ss.BatchId
+JOIN inventory.Product p ON p.ProductId = b.ProductId WHERE p.ProductName LIKE N'[_][_]TEST[_][_]%';
 DELETE b FROM inventory.StockBatch b JOIN inventory.Product p ON p.ProductId = b.ProductId
 WHERE p.ProductName LIKE N'[_][_]TEST[_][_]%'
   AND NOT EXISTS (SELECT 1 FROM inventory.SlotStock ss WHERE ss.BatchId = b.BatchId);
@@ -345,6 +360,145 @@ SET @err = 0;
 BEGIN TRY EXEC inventory.sp_AddBatch @ProductId = @tp, @Quantity = 0; END TRY
 BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
 INSERT @Result VALUES (33, N'sp_AddBatch số lượng = 0', N'50113', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50113 THEN 1 ELSE 0 END);
+
+-- =============================================================================
+-- PHẦN 4 — sp_Restock + sp_RemoveExpired (FV-04, SCRUM-198)            T34–T43
+--   Dùng lại sản phẩm test @tp, ngăn rỗng @emptySlot (đã gán @tp ở T28) và
+--   lô @tBatch (20 hộp, hạn 48 giờ) của phần 3. Dọn hết ở cuối phần 4.
+--   Lưu ý T41: sp_RemoveExpired rút MỌI lô hết hạn của máy chứa @emptySlot — nếu
+--   máy đó có lô X hết hạn của seed thì lô X cũng bị rút (đúng nghiệp vụ). Muốn
+--   demo lại rút hàng hết hạn: chạy lại 08_seed_inventory.sql trên CSDL mới.
+-- =============================================================================
+DECLARE @rMach INT, @rUser INT, @otherSlot INT, @wrongBatch INT, @nearBatch INT, @smallBatch INT,
+        @t4Start DATETIME2(0) = SYSUTCDATETIME(), @lines INT, @qty INT;
+DECLARE @it1 inventory.RestockItemType, @it2 inventory.RestockItemType, @it3 inventory.RestockItemType,
+        @it4 inventory.RestockItemType, @it5 inventory.RestockItemType, @it6 inventory.RestockItemType,
+        @it7 inventory.RestockItemType;
+DECLARE @rx TABLE (RemovedLines INT, RemovedQty INT);
+
+SELECT @rMach = MachineId FROM inventory.Slot WHERE SlotId = @emptySlot;
+SET @rUser = (SELECT TOP (1) UserId FROM auth.[User] ORDER BY UserId);
+SET @rUser = ISNULL(@rUser, 1);
+
+-- T34: châm đúng 3 hộp vào ngăn rỗng
+INSERT @it1 VALUES (@emptySlot, @tBatch, 3);
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_Restock @MachineId = @rMach, @UserId = @rUser, @Items = @it1, @Note = N'__TEST__ châm'; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SET @ok = CASE WHEN @err = 0
+                AND (SELECT CurrentStock FROM inventory.Slot WHERE SlotId = @emptySlot) = 3
+                AND (SELECT SUM(Quantity) FROM inventory.SlotStock WHERE SlotId = @emptySlot AND BatchId = @tBatch) = 3
+                AND EXISTS (SELECT 1 FROM inventory.RestockItem ri JOIN inventory.RestockEvent re ON re.RestockId = ri.RestockId
+                            WHERE ri.SlotId = @emptySlot AND ri.BatchId = @tBatch AND ri.Qty = 3 AND re.Note = N'__TEST__ châm')
+                AND EXISTS (SELECT 1 FROM inventory.StockMovement WHERE SlotId = @emptySlot AND BatchId = @tBatch
+                            AND MovementType = N'IN' AND Quantity = 3 AND Reason LIKE N'Nạp ngăn%') THEN 1 ELSE 0 END;
+INSERT @Result VALUES (34, N'sp_Restock đúng: ngăn +3, SlotStock, phiếu châm, StockMovement IN', N'OK',
+       CASE WHEN @ok = 1 THEN N'OK' WHEN @emptySlot IS NULL THEN N'không có ngăn rỗng' ELSE N'lỗi ' + CAST(@err AS NVARCHAR(10)) END, @ok);
+
+-- T35: vượt sức chứa (3 + 6 > 8) → 50117 và KHÔNG ghi gì (rollback)
+SET @before = (SELECT COUNT(*) FROM inventory.RestockEvent);
+INSERT @it2 VALUES (@emptySlot, @tBatch, 6);
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_Restock @MachineId = @rMach, @UserId = @rUser, @Items = @it2; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SET @after = (SELECT COUNT(*) FROM inventory.RestockEvent);
+SET @ok = CASE WHEN @err = 50117 AND @after = @before
+                AND (SELECT CurrentStock FROM inventory.Slot WHERE SlotId = @emptySlot) = 3 THEN 1 ELSE 0 END;
+INSERT @Result VALUES (35, N'sp_Restock vượt sức chứa: lỗi + rollback (tồn vẫn 3)', N'50117',
+       CAST(@err AS NVARCHAR(10)), @ok);
+
+-- T36: lô của sản phẩm khác → 50114
+SELECT TOP (1) @wrongBatch = BatchId FROM inventory.StockBatch WHERE ProductId <> @tp ORDER BY BatchId;
+INSERT @it3 VALUES (@emptySlot, @wrongBatch, 1);
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_Restock @MachineId = @rMach, @UserId = @rUser, @Items = @it3; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (36, N'sp_Restock lô không đúng sản phẩm của ngăn', N'50114', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50114 THEN 1 ELSE 0 END);
+
+-- T37: máy không tồn tại → 50110
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_Restock @MachineId = -1, @UserId = @rUser, @Items = @it1; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (37, N'sp_Restock máy không tồn tại', N'50110', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50110 THEN 1 ELSE 0 END);
+
+-- T38: ngăn của máy khác → 50112
+SELECT TOP (1) @otherSlot = SlotId FROM inventory.Slot WHERE MachineId <> @rMach ORDER BY SlotId;
+INSERT @it4 VALUES (@otherSlot, @tBatch, 1);
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_Restock @MachineId = @rMach, @UserId = @rUser, @Items = @it4; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (38, N'sp_Restock ngăn không thuộc máy', N'50112', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50112 THEN 1 ELSE 0 END);
+
+-- T39: lô còn dưới 1 giờ sử dụng (làm 47,5 giờ trước, hạn 48 giờ) → 50116
+DECLARE @prep DATETIME2(0) = DATEADD(MINUTE, -2850, SYSUTCDATETIME());
+EXEC inventory.sp_AddBatch @ProductId = @tp, @Quantity = 5, @PreparedAt = @prep;
+SELECT TOP (1) @nearBatch = BatchId FROM inventory.StockBatch WHERE ProductId = @tp ORDER BY BatchId DESC;
+INSERT @it5 VALUES (@emptySlot, @nearBatch, 1);
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_Restock @MachineId = @rMach, @UserId = @rUser, @Items = @it5; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (39, N'sp_Restock lô còn dưới 1 giờ sử dụng', N'50116', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50116 THEN 1 ELSE 0 END);
+
+-- T40: lô chỉ có 2 hộp mà châm 3 → 50118
+EXEC inventory.sp_AddBatch @ProductId = @tp, @Quantity = 2;
+SELECT TOP (1) @smallBatch = BatchId FROM inventory.StockBatch WHERE ProductId = @tp ORDER BY BatchId DESC;
+INSERT @it6 VALUES (@emptySlot, @smallBatch, 3);
+SET @err = 0;
+BEGIN TRY EXEC inventory.sp_Restock @MachineId = @rMach, @UserId = @rUser, @Items = @it6; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+INSERT @Result VALUES (40, N'sp_Restock lô không đủ số lượng', N'50118', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 50118 THEN 1 ELSE 0 END);
+
+-- T41: sp_RemoveExpired đúng — cho lô @tBatch hết hạn rồi rút ở máy @rMach
+UPDATE inventory.StockBatch
+SET    PreparedAt = DATEADD(HOUR, -49, SYSUTCDATETIME()), ExpiryAt = DATEADD(MINUTE, -1, SYSUTCDATETIME())
+WHERE  BatchId = @tBatch;
+SET @err = 0;
+BEGIN TRY INSERT @rx EXEC inventory.sp_RemoveExpired @MachineId = @rMach; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SELECT @lines = RemovedLines, @qty = RemovedQty FROM @rx;
+SET @ok = CASE WHEN @err = 0 AND @qty >= 3 AND @lines >= 1
+                AND (SELECT CurrentStock FROM inventory.Slot WHERE SlotId = @emptySlot) = 0
+                AND NOT EXISTS (SELECT 1 FROM inventory.SlotStock WHERE SlotId = @emptySlot AND Quantity > 0)
+                AND EXISTS (SELECT 1 FROM inventory.StockMovement WHERE SlotId = @emptySlot AND BatchId = @tBatch
+                            AND MovementType = N'OUT' AND Quantity = 3 AND Reason LIKE N'Rút hàng hết hạn%') THEN 1 ELSE 0 END;
+INSERT @Result VALUES (41, N'sp_RemoveExpired đúng: rút 3 hộp, ngăn về 0, StockMovement OUT', N'OK',
+       CASE WHEN @ok = 1 THEN N'OK' ELSE N'lỗi ' + CAST(@err AS NVARCHAR(10)) + N', rút ' + ISNULL(CAST(@qty AS NVARCHAR(10)), N'?') END, @ok);
+
+-- T42: chạy lại ngay → không còn gì để rút
+DELETE FROM @rx;
+SET @err = 0;
+BEGIN TRY INSERT @rx EXEC inventory.sp_RemoveExpired @MachineId = @rMach; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SELECT @lines = RemovedLines, @qty = RemovedQty FROM @rx;
+INSERT @Result VALUES (42, N'sp_RemoveExpired chạy lần 2 không rút thêm', N'0',
+       CASE WHEN @err <> 0 THEN N'lỗi ' + CAST(@err AS NVARCHAR(10)) ELSE CAST(@lines AS NVARCHAR(10)) END,
+       CASE WHEN @err = 0 AND @lines = 0 AND @qty = 0 THEN 1 ELSE 0 END);
+
+-- T43: máy không tồn tại → không lỗi, trả 0
+DELETE FROM @rx;
+SET @err = 0;
+BEGIN TRY INSERT @rx EXEC inventory.sp_RemoveExpired @MachineId = -1; END TRY
+BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+SELECT @lines = RemovedLines, @qty = RemovedQty FROM @rx;
+INSERT @Result VALUES (43, N'sp_RemoveExpired máy không tồn tại: không lỗi, 0 dòng', N'0',
+       CASE WHEN @err <> 0 THEN N'lỗi ' + CAST(@err AS NVARCHAR(10)) ELSE CAST(@lines AS NVARCHAR(10)) END,
+       CASE WHEN @err = 0 AND @lines = 0 THEN 1 ELSE 0 END);
+
+-- ---------- Dọn dữ liệu test của phần 4 ----------
+IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL
+    DELETE FROM iot.Alerts
+    WHERE RefKey IN (N'EXP:' + CAST(@emptySlot AS NVARCHAR(10)), N'COL:' + CAST(@emptySlot AS NVARCHAR(10)))
+      AND CreatedAt >= @t4Start;
+UPDATE s SET CurrentStock = CASE WHEN s.CurrentStock >= x.Qty THEN s.CurrentStock - x.Qty ELSE 0 END
+FROM inventory.Slot s
+JOIN (SELECT ss.SlotId, SUM(ss.Quantity) AS Qty FROM inventory.SlotStock ss
+      JOIN inventory.StockBatch b ON b.BatchId = ss.BatchId WHERE b.ProductId = @tp GROUP BY ss.SlotId) x
+  ON x.SlotId = s.SlotId;
+DELETE ri FROM inventory.RestockItem ri JOIN inventory.StockBatch b ON b.BatchId = ri.BatchId WHERE b.ProductId = @tp;
+DELETE re FROM inventory.RestockEvent re
+WHERE re.Note = N'__TEST__ châm' AND NOT EXISTS (SELECT 1 FROM inventory.RestockItem ri WHERE ri.RestockId = re.RestockId);
+DELETE m FROM inventory.StockMovement m JOIN inventory.StockBatch b ON b.BatchId = m.BatchId WHERE b.ProductId = @tp;
+DELETE ss FROM inventory.SlotStock ss JOIN inventory.StockBatch b ON b.BatchId = ss.BatchId WHERE b.ProductId = @tp;
 
 -- ---------- Dọn dữ liệu test của phần 3 ----------
 DELETE FROM inventory.StockBatch WHERE ProductId = @tp;
