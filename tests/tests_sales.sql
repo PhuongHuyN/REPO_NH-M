@@ -119,11 +119,12 @@ BEGIN
     GOTO PrintSummary;
 END;
 
--- Đảm bảo có tồn FIFO cho các test (ít nhất 2 đơn vị cho test hết hàng)
+-- Đảm bảo tồn FIFO (không DELETE SlotStock — OrderItem.StockId có thể đang FK)
 UPDATE inventory.Slot SET CurrentStock = 5, UpdatedAt = SYSUTCDATETIME() WHERE SlotId = @SlotId;
-IF NOT EXISTS (SELECT 1 FROM inventory.SlotStock WHERE SlotId = @SlotId AND Quantity >= 5)
+IF EXISTS (SELECT 1 FROM inventory.SlotStock WHERE SlotId = @SlotId)
+    UPDATE inventory.SlotStock SET Quantity = 5 WHERE SlotId = @SlotId;
+ELSE
 BEGIN
-    DELETE FROM inventory.SlotStock WHERE SlotId = @SlotId;
     SET @BatchId = (SELECT TOP (1) BatchId FROM inventory.StockBatch WHERE ProductId = @ProductId ORDER BY BatchId);
     IF @BatchId IS NULL
     BEGIN
@@ -204,11 +205,8 @@ BEGIN CATCH
         CONCAT(N'Err ', ERROR_NUMBER(), N': ', ERROR_MESSAGE()));
 END CATCH;
 
--- UT04 Ket 3 lan hoan tien
+-- UT04 Ket 3 lan hoan tien (iot.Alerts, không cần iot.Device)
 BEGIN TRY
-    IF OBJECT_ID(N'iot.Device', N'U') IS NULL
-        THROW 50298, N'Can chay 02_tables_iot.sql de test kẹt 3 lan.', 1;
-
     DELETE FROM @Items;
     INSERT @Items (ColumnId, Qty) VALUES (@SlotId, 1);
     EXEC sales.sp_CreateOrder @MachineId = @MachineId, @Items = @Items, @OrderId = @OrderId OUTPUT;
@@ -230,6 +228,37 @@ BEGIN TRY
 END TRY
 BEGIN CATCH
     INSERT @Results VALUES (N'UT04', N'Ket 3 lan hoan tien', 0,
+        CONCAT(N'Err ', ERROR_NUMBER(), N': ', ERROR_MESSAGE()));
+END CATCH;
+
+-- UT05 FV-24: mua thành công → DISPENSED, tồn giảm
+BEGIN TRY
+    DECLARE @StockBefore INT, @StockAfter INT;
+    UPDATE inventory.Slot SET CurrentStock = 5, UpdatedAt = SYSUTCDATETIME() WHERE SlotId = @SlotId;
+    UPDATE inventory.SlotStock SET Quantity = 5 WHERE SlotId = @SlotId;
+    SELECT @StockBefore = COALESCE(SUM(Quantity), 0) FROM inventory.SlotStock WHERE SlotId = @SlotId;
+
+    DELETE FROM @Items;
+    INSERT @Items (ColumnId, Qty) VALUES (@SlotId, 1);
+    EXEC sales.sp_CreateOrder @MachineId = @MachineId, @Items = @Items, @OrderId = @OrderId OUTPUT;
+    SELECT @Total = TotalAmount FROM sales.[Order] WHERE OrderId = @OrderId;
+    SET @GatewayTxnId = CONCAT(N'TV3UTOK', REPLACE(CONVERT(NVARCHAR(36), NEWID()), N'-', N''));
+    EXEC sales.sp_ConfirmPayment @OrderId = @OrderId, @Method = N'VIETQR',
+         @GatewayTxnId = @GatewayTxnId, @Amount = @Total;
+    SELECT TOP (1) @OrderItemId = OrderItemId FROM sales.OrderItem WHERE OrderId = @OrderId;
+    EXEC sales.sp_RecordDispense @OrderItemId = @OrderItemId, @Result = N'SUCCESS';
+
+    SELECT @Status = Status FROM sales.[Order] WHERE OrderId = @OrderId;
+    SELECT @StockAfter = COALESCE(SUM(Quantity), 0) FROM inventory.SlotStock WHERE SlotId = @SlotId;
+    INSERT @Results VALUES (
+        N'UT05', N'Mua thanh cong DISPENSED, ton giam 1',
+        CASE WHEN @Status = N'DISPENSED' AND @StockAfter = @StockBefore - 1 THEN 1 ELSE 0 END,
+        CONCAT(N'Status=', COALESCE(@Status, N'NULL'),
+               N' stock ', CONVERT(NVARCHAR(10), @StockBefore), N'->', CONVERT(NVARCHAR(10), @StockAfter))
+    );
+END TRY
+BEGIN CATCH
+    INSERT @Results VALUES (N'UT05', N'Mua thanh cong DISPENSED', 0,
         CONCAT(N'Err ', ERROR_NUMBER(), N': ', ERROR_MESSAGE()));
 END CATCH;
 
