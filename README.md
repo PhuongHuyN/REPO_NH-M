@@ -39,6 +39,7 @@ Yêu cầu SQL Server 2022, compatibility 160, Vietnamese_CI_AS; SSMS QUOTED_IDE
 | 18 | sql/23_objects_iot.sql | Dũng | Có |
 | 19 | sql/24_objects_report.sql | Anh | Có, gồm function/view, không còn file 05/06 trùng |
 | 20 | sql/30_index_<module>.sql | Từng chủ module | Chưa có; TV5 không tự tạo index trên schema khác |
+| 20a | sql/30_index_inventory.sql | Huy | Có: 9 index inventory (FV-19); chạy sau 02_tables_inventory |
 | 21 | sql/40_security.sql | Toàn | Chưa có, FV-22 |
 | 22 | sql/45_jobs.sql | Dũng | Chưa có, FV-28 |
 | 23 | sql/50_backup.sql | Toàn | Chưa có, FV-23 |

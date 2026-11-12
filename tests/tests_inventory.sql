@@ -7,9 +7,10 @@
 --               PHẦN 3 — 5 procedure FV-03 (11_procs_inventory)   T19–T33
 --               PHẦN 4 — sp_Restock, sp_RemoveExpired (FV-04)     T34–T43
 --               PHẦN 5 — 4 view, 3 function, 1 trigger (FV-18)    T44–T51
---               (index… nối tiếp ở FV-19)
+--               PHẦN 6 — 9 index (FV-19, 30_index_inventory)      T52–T54
 -- CÁCH CHẠY   : Chạy SAU 02_tables_inventory.sql, 02_tables_iot.sql,
---               08_seed_inventory.sql, 11_procs_inventory.sql, 21_objects_inventory.sql.
+--               08_seed_inventory.sql, 11_procs_inventory.sql, 21_objects_inventory.sql,
+--               30_index_inventory.sql.
 --               Phần 3, 4 tự dọn dữ liệu test (tên '__TEST__…').
 --               Phần 1 sửa dữ liệu trong 1 transaction rồi ROLLBACK; Phần 2 chỉ đọc
 --               → không làm bẩn CSDL. Toàn file là 1 batch (không thêm GO ở giữa).
@@ -596,6 +597,44 @@ DELETE FROM inventory.StockBatch WHERE ProductId = @tp;
 IF @emptySlot IS NOT NULL
     UPDATE inventory.Slot SET ProductId = @emptySlotOldProd WHERE SlotId = @emptySlot AND ProductId = @tp;
 DELETE FROM inventory.Product WHERE ProductId = @tp;
+
+-- =============================================================================
+-- PHẦN 6 — Index FV-19 (30_index_inventory.sql)                        T52–T54
+--   T53–T54 chèn thẳng vào bảng trong 1 transaction rồi ROLLBACK.
+-- =============================================================================
+DECLARE @dupCat INT, @dupName NVARCHAR(150);
+
+-- T52: đủ 9 index của FV-19
+SET @n = (SELECT COUNT(*) FROM sys.indexes WHERE name IN (
+            N'IX_inventory_Slot_ProductId', N'IX_inventory_SlotStock_BatchId',
+            N'IX_inventory_StockBatch_ExpiryAt', N'IX_inventory_StockBatch_Product_Expiry',
+            N'IX_inventory_StockMovement_Batch_Type', N'IX_inventory_StockMovement_Slot_CreatedAt',
+            N'IX_inventory_RestockEvent_Machine_At', N'IX_inventory_RestockItem_BatchId',
+            N'UX_inventory_Product_Name'));
+INSERT @Result VALUES (52, N'Có đủ 9 index FV-19', N'9', CAST(@n AS NVARCHAR(10)), CASE WHEN @n = 9 THEN 1 ELSE 0 END);
+
+BEGIN TRANSACTION;
+    SELECT TOP (1) @dupCat = CategoryId FROM inventory.Category ORDER BY CategoryId;
+    SELECT TOP (1) @dupName = ProductName FROM inventory.Product WHERE IsDeleted = 0 ORDER BY ProductId;
+
+    -- T53: chèn thẳng (không qua procedure) 1 sản phẩm trùng tên, khác hoa/thường → 2601
+    SET @err = 0;
+    BEGIN TRY
+        INSERT inventory.Product (SKU, ProductName, CategoryId, UnitPrice, Unit, ShelfLifeHours)
+        VALUES (N'__TEST_UX1__', UPPER(@dupName), @dupCat, 10000, N'hộp', 24);
+    END TRY
+    BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+    INSERT @Result VALUES (53, N'UX tên sản phẩm: chèn thẳng tên trùng bị chặn', N'2601', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 2601 THEN 1 ELSE 0 END);
+
+    -- T54: sản phẩm đã xóa mềm (IsDeleted = 1) được trùng tên
+    SET @err = 0;
+    BEGIN TRY
+        INSERT inventory.Product (SKU, ProductName, CategoryId, UnitPrice, Unit, ShelfLifeHours, IsDeleted)
+        VALUES (N'__TEST_UX2__', @dupName, @dupCat, 10000, N'hộp', 24, 1);
+    END TRY
+    BEGIN CATCH SET @err = ERROR_NUMBER(); END CATCH;
+    INSERT @Result VALUES (54, N'UX tên sản phẩm: bản đã xóa mềm được trùng tên', N'0', CAST(@err AS NVARCHAR(10)), CASE WHEN @err = 0 THEN 1 ELSE 0 END);
+ROLLBACK TRANSACTION;
 
 -- =============================================================================
 -- KẾT QUẢ
