@@ -87,6 +87,29 @@ npm run simulator
 ```
 Tùy chọn: `node simulator/esp32.js --overheat 3` (máy 3 nóng dần), `--door 2` (mở cửa), `--jam 1` (kẹt motor), `--offline 4` (mất mạng).
 
+## 3b. Docker (SQL Server + API)
+
+Cần Docker Desktop (WSL 2). Mật khẩu SA **không** commit: tạo file `.env` ở **gốc repo** (cùng cấp `docker-compose.yml`):
+
+```
+SA_PASSWORD=DatMatKhauManh@2026
+```
+
+SQL Server bắt buộc mật khẩu đủ phức tạp. Sao chép `app/api/.env.example` thành `app/api/.env` (compose đọc file này). Để chạy giao diện không cần CSDL thật, trong `.env` đặt `DB_MODE=demo`.
+
+Từ gốc repo:
+
+```powershell
+docker compose build
+docker compose up -d api
+```
+
+- Demo: http://localhost:3000 (API trong container, `DB_MODE=demo`).
+- SQL Server: `docker compose up -d db` rồi nạp script thư mục `sql/` vào container (hoặc SSMS `localhost,1433`, user `sa`). Sau đó `DB_MODE=sqlserver`, `DB_SERVER=db` (đã gán trong compose), `docker compose up -d api`.
+- Kiểm tra: http://localhost:3000/api/health
+
+Tắt: `docker compose down`. Volume `mssql-data` giữ dữ liệu SQL.
+
 ## 4. Quy trình bán hàng
 1. Lần đầu mở `/kiosk`, kỹ thuật viên nhập **mã thiết bị** và **mã kích hoạt** (tài khoản vai trò Kiosk, tạo ở trang *Người dùng*, gắn máy bằng nút *Giao máy*).
 2. Khách chọn sản phẩm → **Thanh toán** → màn hình hiện mã **VietQR** kèm số tài khoản, số tiền, nội dung `FV<mã đơn>`. Đơn được giữ 5 phút.
