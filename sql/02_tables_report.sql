@@ -95,7 +95,7 @@ GO
 -- 2. report.ExportLogs
 -- =============================================================================
 -- Ghi nhật ký mỗi lần người dùng xuất báo cáo (PDF, Excel, CSV…).
--- FK sang auth.User: ExportLogs.UserId → auth.User.UserId.
+-- Cross-schema FK ExportLogs.UserId is owned by TV1 in 03_foreign_keys.sql.
 
 IF OBJECT_ID(N'report.ExportLogs', N'U') IS NOT NULL
     PRINT N'[02-report] report.ExportLogs đã tồn tại — bỏ qua.';
@@ -131,14 +131,7 @@ BEGIN
         CONSTRAINT CK_report_ExportLogs_Format
             CHECK (FileFormat IN (N'PDF', N'EXCEL', N'CSV', N'JSON')),
         CONSTRAINT CK_report_ExportLogs_Status
-            CHECK (Status IN (N'SUCCESS', N'FAILED', N'PENDING')),
-        CONSTRAINT FK_report_ExportLogs_User
-            FOREIGN KEY (UserId) REFERENCES auth.[User](UserId)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
-        -- Ghi chú: FK tới auth.User tạo trực tiếp ở đây vì auth.User
-        --          đã được tạo ở bước trước (02_tables_auth.sql).
-        --          Nếu muốn tập trung tất cả FK, di chuyển vào 03_foreign_keys.sql.
+            CHECK (Status IN (N'SUCCESS', N'FAILED', N'PENDING'))
     );
 
     -- Index hỗ trợ tra lịch sử xuất của từng user
@@ -250,11 +243,4 @@ PRINT N'';
 PRINT N'================================================================';
 PRINT N'  02_tables_report.sql hoàn tất. Tiếp theo: 03_foreign_keys.sql';
 PRINT N'================================================================';
-GO
-
--- Required relationships are owned here; do not depend on unfinished audit FK scripts.
-IF NOT EXISTS(SELECT 1 FROM sys.foreign_keys WHERE name=N'FK_DailySalesSummary_MachineId')
-ALTER TABLE report.DailySalesSummary ADD CONSTRAINT FK_DailySalesSummary_MachineId FOREIGN KEY(MachineId) REFERENCES inventory.Machine(MachineId);
-IF NOT EXISTS(SELECT 1 FROM sys.foreign_keys WHERE name=N'FK_DailySalesSummary_ProductId')
-ALTER TABLE report.DailySalesSummary ADD CONSTRAINT FK_DailySalesSummary_ProductId FOREIGN KEY(ProductId) REFERENCES inventory.Product(ProductId);
 GO
