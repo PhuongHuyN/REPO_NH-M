@@ -64,9 +64,8 @@ BEGIN
     SET CurrentStock = 1, UpdatedAt = SYSUTCDATETIME()
     WHERE SlotId = @SlotId;
 
-    DELETE ss
-    FROM inventory.SlotStock ss
-    WHERE ss.SlotId = @SlotId;
+    -- Không DELETE SlotStock (có thể đang FK từ OrderItem) — gộp tồn về 1 hộp
+    UPDATE inventory.SlotStock SET Quantity = 0 WHERE SlotId = @SlotId;
 
     DECLARE @BatchId INT;
     SELECT TOP (1) @BatchId = b.BatchId
@@ -82,8 +81,12 @@ BEGIN
         SET @BatchId = CONVERT(INT, SCOPE_IDENTITY());
     END;
 
-    INSERT inventory.SlotStock (SlotId, BatchId, Quantity, LoadedAt)
-    VALUES (@SlotId, @BatchId, 1, SYSUTCDATETIME());
+    IF EXISTS (SELECT 1 FROM inventory.SlotStock WHERE SlotId = @SlotId)
+        UPDATE inventory.SlotStock SET Quantity = 1, BatchId = @BatchId
+        WHERE StockId = (SELECT MIN(StockId) FROM inventory.SlotStock WHERE SlotId = @SlotId);
+    ELSE
+        INSERT inventory.SlotStock (SlotId, BatchId, Quantity, LoadedAt)
+        VALUES (@SlotId, @BatchId, 1, SYSUTCDATETIME());
 
     SELECT @MachineId AS MachineId, @SlotId AS SlotId, @ProductId AS ProductId,
            N'Ngăn này chỉ còn 1 hộp — dùng cho demo 2 cửa sổ SSMS' AS Note;
@@ -222,7 +225,13 @@ EXEC sales.sp_ConcurrencyDemo_Prepare @MachineId = @Mid OUTPUT, @SlotId = @Sid O
 GO
 
 /* =============================================================================
-   D. DEMO THỦ CÔNG — 2 CỬA SỔ SSMS (BẮT BUỘC QUAY / CHỤP)
+   D. HƯỚNG DẪN 2 CỬA SỔ SSMS (FV-25) — quay video ≤ 5 phút (Win + Alt + R)
+
+   1. F5 cả file này (SETUP). Ghi MachineId / SlotId ở lưới kết quả.
+   2. Mở thêm 1 tab SSMS (cùng FreshVendDB).
+
+   --- Có UPDLOCK (đạt): 1 đơn thành công, tab kia 50201 hết hàng ---
+   Tab A: F5 trước (giữ 10 giây). Tab B: F5 ngay trong lúc A còn chạy.
 
    Thay @MachineId, @SlotId bằng giá trị từ SETUP phía trên.
 
