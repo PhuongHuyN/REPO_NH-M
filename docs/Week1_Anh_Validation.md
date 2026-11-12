@@ -1,6 +1,6 @@
 ﻿# Anh — bằng chứng Tuần 1 (SCRUM-209/210/211)
 
-Ngày 09/11/2026; SQL Server Express 2022 16.0.1000.6, compatibility 160, Vietnamese_CI_AS. CSDL riêng `FreshVendTV5_Week1_20261109_075826`. Lệnh `powershell -NoProfile -File tests/run-tv5.ps1`. Log gốc tại `.local-test\tv5-week1\FreshVendTV5_Week1_20261109_075826` (không commit). Không chạy trên dữ liệu ứng dụng.
+Ngày 09/11/2026; SQL Server Express 2022 16.0.1000.6, compatibility 160, Vietnamese_CI_AS. CSDL riêng `FreshVendTV5_Week1_20261109_082431`. Lệnh `powershell -NoProfile -File tests/run-tv5.ps1`. Log gốc tại `.local-test\tv5-week1\FreshVendTV5_Week1_20261109_082431` (không commit). Không chạy trên dữ liệu ứng dụng.
 
 | Bước thực thi | Kết quả |
 |---|---|
@@ -11,12 +11,14 @@ Ngày 09/11/2026; SQL Server Express 2022 16.0.1000.6, compatibility 160, Vietna
 | 02_tables_report.sql | PASS |
 | 02_tables_sales.sql | PASS |
 | 03_foreign_keys.sql | BLOCKED |
-| 07_procs_report.sql | PASS |
+| 14_procs_report.sql | PASS |
 | 24_objects_report.sql | PASS |
+| preflight-80_seed_small.sql | BLOCKED |
+| preflight-81_seed_large.sql | BLOCKED |
 | fixtures-report.sql | PASS |
 | fixtures-report-rerun.sql | PASS |
 | rerun-02_tables_report.sql | PASS |
-| rerun-07_procs_report.sql | PASS |
+| rerun-14_procs_report.sql | PASS |
 | rerun-24_objects_report.sql | PASS |
 | verify-report.sql | PASS |
 | client-oracles | PASS |

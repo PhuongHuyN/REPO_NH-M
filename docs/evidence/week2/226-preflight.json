@@ -1,0 +1,91 @@
+﻿{
+    "SqlE2ePassed":  false,
+    "RunAt":  "2026-11-10T14:46:56.7955908Z",
+    "Steps":  [
+                  {
+                      "Step":  1,
+                      "Evidence":  null,
+                      "Name":  "Operator login sees exactly three assigned machines",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  2,
+                      "Evidence":  null,
+                      "Name":  "Add batch and restock",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  3,
+                      "Evidence":  null,
+                      "Name":  "Kiosk buys two items and receives VietQR",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  4,
+                      "Evidence":  null,
+                      "Name":  "Payment callback sets PAID",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  5,
+                      "Evidence":  null,
+                      "Name":  "Simulator dispenses and order DISPENSED",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  6,
+                      "Evidence":  null,
+                      "Name":  "Stock decremented from FIFO lot",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  7,
+                      "Evidence":  null,
+                      "Name":  "Machine 3 overheat creates alert and pause",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  8,
+                      "Evidence":  null,
+                      "Name":  "Machine 1 jams and is REFUNDED",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  9,
+                      "Evidence":  null,
+                      "Name":  "Admin report contains new order",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  },
+                  {
+                      "Step":  10,
+                      "Evidence":  null,
+                      "Name":  "Operator report request returns 403",
+                      "Status":  "BLOCKED",
+                      "Actual":  null
+                  }
+              ],
+    "BaseUrl":  "http://127.0.0.1:19326",
+    "Prerequisites":  [
+                          "auth.sp_Login",
+                          "auth.sp_AssignMachine",
+                          "inventory.sp_Restock",
+                          "inventory.sp_RemoveExpired",
+                          "iot.vw_MachineHealth",
+                          "iot.vw_OpenAlerts",
+                          "sales.vw_DispenseQueue",
+                          "inventory.vw_StockStatus",
+                          "Procedure-driven SMALL seed has not completed",
+                          "RLS/security owner setup is not ready",
+                          "API with SQL Server is not reachable"
+                      ],
+    "Database":  "FreshVendTV5_Week2_20261110_170803"
+}

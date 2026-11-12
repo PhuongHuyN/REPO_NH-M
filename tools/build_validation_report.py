@@ -1,8 +1,10 @@
-"""Publish concise, actual SQL benchmark evidence from successful local test logs."""
+﻿"""Publish concise, actual SQL benchmark evidence from successful local test logs."""
 from pathlib import Path
 import re
 import sys
 
+if '--historical' not in sys.argv:
+    raise SystemExit('Historical 04/11 only; use build_week1_evidence.py for current schema. Pass --historical to rebuild archived measurements.')
 root=Path(__file__).resolve().parents[1]
 primary=root/'.local-test/tv5-small-to-large'
 standalone=root/'.local-test/tv5'
@@ -82,5 +84,5 @@ Không dùng các phụ thuộc này để đánh dấu PASS toàn hệ thống.
 if '--standalone' in sys.argv:
     db2=(standalone/'database.txt').read_text(encoding='utf-8-sig').strip()
     body+=f'''\n## Seed lớn độc lập\n\nLệnh: `powershell -NoProfile -File tests/run-tv5.ps1 -LargeOnly`.\nCSDL sạch: `{db2}`. Không chạy seed nhỏ trước. Tạo/rerun object, large/rerun seed, kiểm tra dữ liệu, 21 ca procedure, oracle client và hiệu năng đều PASS. Log gốc `.local-test/tv5/`.\n\n{benchmark_table(standalone)}'''
-(root/'docs/TestReport.md').write_text(body,encoding='utf-8-sig')
+(root/'docs/TestReport.md').write_text('> HISTORICAL 04/11: see Week1_Anh_Validation.md for current schema.\n\n'+body,encoding='utf-8-sig')
 print('Wrote docs/TestReport.md from actual SQL logs')

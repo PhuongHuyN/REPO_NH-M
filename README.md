@@ -1,68 +1,75 @@
 ﻿# FreshVend — SQL Server 2022
 
-Hệ thống máy bán trái cây tự động: auth, inventory, sales, iot, audit và report.
+Hệ thống máy bán trái cây tự động. Nhiệm vụ và quyết định kỹ thuật: NHIEM_VU_CHI_TIET/MASTER_PLAN.md.
 
-| Thành viên | MSSV |
-|---|---|
-| Nguyễn Phạm Xuân Anh | 089306017838 |
-| Đoàn Phương Thiên Ân | 079306092350 |
-| Nguyễn Phương Huy | 054206004278 |
-| Huỳnh Nhật Toàn | 051206007163 |
-| Trương Tuấn Dũng (TV5) | 079206042161 |
+## Nhóm thực hiện
 
-## TV5 — SCRUM 34, 35, 37
+| Thành viên | MSSV | Phụ trách |
+|---|---|---|
+| Nguyễn Phạm Xuân Anh | 089306017838 | TV5 — report, QA, Test Plan/Report |
+| Đoàn Phương Thiên Ân | 079306092350 | TV3 — sales, kiosk, Docker |
+| Nguyễn Phương Huy | 054206004278 | Leader, TV2 — inventory, review/tích hợp |
+| Huỳnh Nhật Toàn | 051206007163 | TV1 — auth/audit, FK, security, backup |
+| Trương Tuấn Dũng | 079206042161 | TV4 — iot, máy/địa điểm, telemetry, jobs |
 
-| Sản phẩm | File |
-|---|---|
-| User Story Admin và khung kiểm thử | docs/TestPlan.docx (nguồn docs/TestPlan.md) |
-| Ba bảng report | sql/02_tables_report.sql |
-| Seed nhỏ | sql/05_seed_small.sql |
-| Seed lớn | sql/06_seed_large.sql |
-| Hai function và hai view | sql/24_objects_report.sql |
-| Hợp đồng dữ liệu phụ thuộc | sql/04_report_dependencies.sql |
-| Procedure báo cáo và runner | sql/07_procs_report.sql |
-| Kiểm thử SQL và hiệu năng | tests/run-tv5.ps1, tests/sql/ |
-| Kết quả chạy thực tế | docs/TestReport.md |
+## Thứ tự SQL theo QĐ-3
 
-## Thứ tự chạy
+Yêu cầu SQL Server 2022, compatibility 160, Vietnamese_CI_AS; SSMS QUOTED_IDENTIFIER ON hoặc sqlcmd -I -b. Không chạy theo thứ tự chữ cái toàn thư mục. Mọi file là script riêng, không tạo FULL.
 
-SQL Server 2022, compatibility level 160, Vietnamese_CI_AS. SSMS dùng QUOTED_IDENTIFIER ON; sqlcmd dùng -I -b để bật thiết lập này và dừng khi lỗi.
+| Thứ tự | File | Chủ module | Hiện trạng 09/11/2026 |
+|---|---|---|---|
+| 1 | sql/00_database.sql | Toàn | Có; chỉ khởi tạo CSDL chủ động, có thao tác ROLLBACK IMMEDIATE |
+| 2 | sql/01_schemas.sql | Toàn | Có |
+| 3 | sql/02_tables_audit.sql | Toàn | Chưa có, FV-06 |
+| 4 | sql/02_tables_auth.sql | Toàn | Có, còn FV-06 |
+| 5 | sql/02_tables_inventory.sql | Huy | Có |
+| 6 | sql/02_tables_iot.sql | Dũng | Có; chưa view inventory.Machine, FV-13 |
+| 7 | sql/02_tables_report.sql | Anh | Có, chỉ cấu trúc report |
+| 8 | sql/02_tables_sales.sql | Ân | Có |
+| 9 | sql/03_foreign_keys.sql | Toàn | Có nhưng đang BLOCKED, Issue #19 |
+| 9a | sql/08_seed_inventory.sql | Huy | Có, danh mục/tồn kho vận hành; trước 12 và 80/81 |
+| 10 | sql/10_procs_auth.sql | Toàn | Chưa có, FV-08 |
+| 11 | sql/11_procs_inventory.sql | Huy | Có 5 procedure; Restock/RemoveExpired chờ FV-04 |
+| 12 | sql/12_procs_sales.sql | Ân | Có |
+| 13 | sql/13_procs_iot.sql | Dũng | Có |
+| 14 | sql/14_procs_report.sql | Anh | Có 6 procedure; tạo trước object, chạy sau 24 |
+| 15 | sql/20_objects_auth.sql | Toàn | Chưa có, FV-21 |
+| 16 | sql/21_objects_inventory.sql | Huy | Chưa có, FV-18 |
+| 17 | sql/22_objects_sales.sql | Ân | Có |
+| 18 | sql/23_objects_iot.sql | Dũng | Có |
+| 19 | sql/24_objects_report.sql | Anh | Có, gồm function/view, không còn file 05/06 trùng |
+| 20 | sql/30_index_<module>.sql | Từng chủ module | Chưa có; TV5 không tự tạo index trên schema khác |
+| 21 | sql/40_security.sql | Toàn | Chưa có, FV-22 |
+| 22 | sql/45_jobs.sql | Dũng | Chưa có, FV-28 |
+| 23 | sql/50_backup.sql | Toàn | Chưa có, FV-23 |
+| 24 | sql/80_seed_small.sql, sql/81_seed_large.sql | Anh | Một bộ seed; chỉ chạy sau hợp nhất máy (#20) |
+| 25 | tests/tests_<module>.sql, tests/60_concurrency_demo.sql, tests/70_perf_tests.sql | Từng chủ module | inventory/sales/concurrency có; các phần khác chờ Sprint 2–3 |
+| 26 | 99_run_all.bat | Toàn | Chưa có, FV-23; không hướng dẫn chạy file chưa tồn tại |
 
-1. sql/00_database.sql, sql/01_schemas.sql.
-2. sql/02_tables_auth.sql, sql/02_tables_inventory.sql, sql/02_tables_sales.sql, sql/02_tables_iot.sql, sql/02_tables_report.sql.
-3. sql/03_foreign_keys.sql, sql/04_report_dependencies.sql.
-4. sql/24_objects_report.sql, sql/07_procs_report.sql.
-5. sql/05_seed_small.sql; sau khi chốt cấu trúc và cần đo hiệu năng, chạy sql/06_seed_large.sql sau cùng.
+Các mục chưa có là kế hoạch của MASTER_PLAN, không phải sản phẩm đã bàn giao. File 03 hiện lỗi iot.Device/iot.Alert cũ; full install chưa đạt. Không bỏ qua lỗi này rồi coi hệ thống đã cài thành công. Issue: [#19 FK](https://github.com/PhuongHuyN/REPO_NH-M/issues/19), [#20 hợp nhất máy](https://github.com/PhuongHuyN/REPO_NH-M/issues/20), [#21 phút ngoài ngưỡng](https://github.com/PhuongHuyN/REPO_NH-M/issues/21).
 
-Không chạy theo thứ tự tên file toàn thư mục: số 05/06 là tên sản phẩm được giao, các phụ thuộc 24 và 07 phải tạo trước khi gọi logic. File 05_views_report/06_functions_report là thông báo chuyển vị trí; 09_seed_small/large dừng bằng lỗi hướng dẫn để ngăn chạy nhầm seed cũ.
+## Seed và hợp đồng dữ liệu
 
-Small có 3 địa điểm, 5 máy, 10 sản phẩm, 50 đơn. Large độc lập có 20 máy, 15 sản phẩm, 5.000 đơn, 200.000 telemetry trong cửa sổ cố định 06/08/2026–03/11/2026. Hai profile chung mã TV5-; small→large vẫn đạt tổng large, không cộng thêm 50 đơn. Chạy lại không tăng dữ liệu hoặc doanh thu. Người dùng mẫu bị vô hiệu hóa, không dùng đăng nhập thật; owner auth cấp tài khoản demo khi tích hợp ứng dụng.
+80_seed_small: fixture TV5 3 địa điểm, 5 máy, 10 sản phẩm, 50 đơn, 500 telemetry. 81_seed_large: tổng fixture TV5 20 máy, 15 sản phẩm, 5.000 đơn trong 90 ngày và 200.000 telemetry. Cùng mã TV5- nên small→large không thành 5.050 đơn. Số lượng là fixture sở hữu TV5, không xóa danh mục 36 sản phẩm của Huy hoặc dữ liệu khác.
 
-## Kiểm thử
+Cửa sổ lịch sử cố định [06/08/2026,04/11/2026), ngày/giờ bán theo UTC+7, giờ cao điểm 7–9h / 11–13h / 17–19h. Seed dùng GENERATE_SERIES và hash ngẫu nhiên, không vòng lặp. Chạy lại không cộng doanh thu lần nữa. Tài khoản fixture không đăng nhập thật. Dữ liệu bán hàng lịch sử phục vụ report; dữ liệu FIFO/châm hàng vận hành đến từ 08_seed_inventory, không coi seed report là kiểm thử nghiệp vụ kho.
+
+Seed dừng 50400 nếu chưa có inventory.Machine view theo QĐ-1. Không tự tạo bảng máy thay thế. iot.TelemetryHourly do Dũng cung cấp; TV5 không tự ước lượng phút từ số mẫu thưa để làm compliance đẹp. Historical hourly backfill cần hợp đồng #21, sẽ được nghiệm thu ở FV-30.
+
+Report đọc iot.Machines, iot.Locations, sales.DispenseEvents, iot.TelemetryHourly. KPI/TVF dùng doanh thu thuần Order.TotalAmount của PAID/DISPENSED; ranking/summary tổng hợp dòng gộp và summary có NetRevenue trừ giảm giá. Audit export gồm PAID/DISPENSED/REFUNDED/DISPENSE_FAILED theo fakeDb. Params là JSON, trạng thái PENDING đến khi ứng dụng xác nhận file đã tạo. Phần trăm kẹt dùng hàm tỷ lệ 0..1; chưa có lần nhả trả NULL. Không bịa coverage chuỗi lạnh khi owner gửi phút ngoài 0..60.
+
+## Kiểm thử hiện tại
 
 ```powershell
 powershell -NoProfile -File tests/run-tv5.ps1
+npm test --prefix app
+python tests/check_week1.py
 ```
 
-Tạo CSDL FreshVendTV5_Test_timestamp riêng, giữ lại để review; log tại .local-test/tv5 (không commit). Kết nối mặc định .\SQLEXPRESS, có thể truyền -Server. Bộ test chạy seed hai lần, đối chiếu dữ liệu và biên function/view, kiểm tra unit procedure, đo hiệu năng warm-up + 5 lượt với ngưỡng nghiêm ngặt <500 ms. Không chạy runner ghi dữ liệu trên production.
+Runner tạo FreshVendTV5_Week1_timestamp, giữ CSDL và log trong .local-test/tv5-week1. Report acceptance và integration là hai trạng thái riêng: report có 18 ca, còn file FK chung lỗi thì ghi BLOCKED. Fixture bridge MachineId chỉ nằm trong CSDL test; không dùng làm giải pháp migration. Bằng chứng mới: docs/Week1_Anh_Validation.md; TestReport cũ có số đo 04/11 là lịch sử schema cũ.
 
-```sql
-EXEC report.sp_RunAllTests;
-SELECT * FROM report.vw_LatestTestRun ORDER BY TestId;
-SELECT * FROM report.fn_RevenueByLocation('20260806','20261103');
-SELECT report.fn_DispenseFailureRate(1); -- tỷ lệ 0..1, NULL khi không có lần nhả
-```
+Test Plan tổng: docs/TestPlan.md, docs/TestPlan.docx. Sinh Word: python tools/build_testplan_docx.py. Sinh lại seed: python tools/complete_tv5.py. Phạm vi triển khai ứng dụng xem app/README.md; test mock không thay cho SQL thật.
 
-Tạo lại tài liệu Word: python tools/build_testplan_docx.py. Sinh lại hai seed từ cùng nguồn: python tools/complete_tv5.py. Không tạo file FULL.
+## Quy trình Git
 
-## Hợp đồng với các module khác
-
-Giữ nguyên tên bảng số ít đã có của TV1–TV4. Script 04 bổ sung inventory.Locations, Machine.LocationId, sales.DispenseAttempts và iot.TelemetryHourly để report có nguồn chuẩn. TelemetryHourly là bảng tiền tổng hợp theo giờ, cập nhật bằng report.sp_RefreshTelemetryHourly theo ngày UTC sau ingest; seed tự refresh. Nhiệt độ và thời lượng được phân tích một lần bằng computed columns persisted; 2–8°C bao gồm hai biên, không tự coi mất dữ liệu là tuân thủ. Gói tin cần t và durationSeconds; thời lượng 1..300 giây, các khoảng cùng thiết bị không chồng nhau. Đọc coverage cùng compliance khi đánh giá.
-
-Revenue là tổng giá dòng đơn paid, chưa trừ chiết khấu; NetRevenue ở summary có trừ chiết khấu phân bổ. FailureRate tính JAM/tổng lần nhả vật lý, kể cả retry. SQL export chuẩn bị dữ liệu, log PENDING; việc tạo file CSV/PDF và cập nhật SUCCESS/FAILED thuộc ứng dụng.
-
-03_foreign_keys bỏ qua audit.AuditLog/ChangeLog và MachineStockSnapshot khi các bảng này chưa được module chủ cung cấp. Không giả tạo các bảng ngoài phạm vi TV5. Các ca login/quyền, nghiệp vụ TV1–TV4 và PDF ứng dụng được ghi riêng trong TestPlan; kết quả mock không thay kiểm thử SQL thật.
-
-## Quy ước nhóm
-
-Nhánh tv5-report, không push main; PR cần ít nhất một bạn review. TV5 THROW 50400–50499. SQL object dùng CREATE OR ALTER; bảng dùng IF OBJECT_ID IS NULL để giữ dữ liệu. Procedure ghi: NOCOUNT, XACT_ABORT, TRY, kiểm tra, transaction, COMMIT, CATCH rollback và THROW. Bảng mới PascalCase số nhiều (ngoại lệ tên giao việc), sp_<ĐộngTừ><ĐốiTượng>, fn_, trg_<Bảng><MụcĐích>, vw_, IX_<Bảng>_<Cột>, <Tên>Type. Mỗi sản phẩm SQL một file riêng.
+Mỗi task nhánh riêng theo NHIEM_VU_CHI_TIET/Cach_su_dung_GITHUB.md; nhánh TV5 cũ giữ cho SCRUM-209, SCRUM-210 dùng chore/SCRUM-210-thu-tu-file, SCRUM-211 dùng docs/SCRUM-211-test-plan. Không push main. PR cần Huy review, CI xanh và xử lý phụ thuộc trước merge; không tự approve. TV5 THROW 50400–50499; procedure ghi dùng NOCOUNT, XACT_ABORT, TRY/kiểm tra/transaction/COMMIT/CATCH rollback/THROW. FK chéo schema chỉ do Toàn quản lý trong 03_foreign_keys.sql.

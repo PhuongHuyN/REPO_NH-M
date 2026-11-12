@@ -191,6 +191,8 @@ test('TV5 – báo cáo, xuất CSV và chạy test', async () => {
   assert.match(res.headers.get('content-type'), /text\/csv/);
   const tests = (await call('POST', '/api/reports/run-tests', { token: admin })).data;
   assert.ok(tests.summary.length > 0);
+    assert.ok(tests.summary.every((row) => row.Passed === 0 && row.Blocked > 0));
+    assert.ok(tests.details.every((row) => row.Status === 'BLOCKED' && row.Source === 'DEMO'));
 });
 
 test('Swagger – openapi.json liệt kê đầy đủ API', async () => {

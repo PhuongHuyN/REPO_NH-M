@@ -1,4 +1,4 @@
-﻿param([string]$Server='.\SQLEXPRESS')
+﻿param([string]$Server='.\SQLEXPRESS',[switch]$RequireIntegration)
 $ErrorActionPreference='Stop'
 $repoRoot=Split-Path $PSScriptRoot -Parent
 $testDb='FreshVendTV5_Week1_'+(Get-Date -Format 'yyyyMMdd_HHmmss')
@@ -27,10 +27,11 @@ try {
  foreach($file in $files) { Invoke-TestSql (Join-Path $repoRoot "sql/$file") $file }
  # Never patch the owner's FK script or hide the integration failure.
  Invoke-TestSql (Join-Path $repoRoot 'sql/03_foreign_keys.sql') '03_foreign_keys.sql' -AllowBlocked
- foreach($file in @('07_procs_report.sql','24_objects_report.sql')) { Invoke-TestSql (Join-Path $repoRoot "sql/$file") $file }
+ foreach($file in @('14_procs_report.sql','24_objects_report.sql')) { Invoke-TestSql (Join-Path $repoRoot "sql/$file") $file }
+ foreach($file in @('80_seed_small.sql','81_seed_large.sql')) { Invoke-TestSql (Join-Path $repoRoot "sql/$file") "preflight-$file" -AllowBlocked }
  Invoke-TestSql (Join-Path $repoRoot 'tests/sql/fixtures_report.sql') 'fixtures-report.sql'
  Invoke-TestSql (Join-Path $repoRoot 'tests/sql/fixtures_report.sql') 'fixtures-report-rerun.sql'
- foreach($file in @('02_tables_report.sql','07_procs_report.sql','24_objects_report.sql')) { Invoke-TestSql (Join-Path $repoRoot "sql/$file") "rerun-$file" }
+ foreach($file in @('02_tables_report.sql','14_procs_report.sql','24_objects_report.sql')) { Invoke-TestSql (Join-Path $repoRoot "sql/$file") "rerun-$file" }
  Invoke-TestSql (Join-Path $repoRoot 'tests/sql/37_verify_report.sql') 'verify-report.sql'
  $connection=New-Object System.Data.SqlClient.SqlConnection("Server=$Server;Database=$testDb;Integrated Security=True;TrustServerCertificate=True;Encrypt=False")
  $connection.Open()
@@ -64,6 +65,7 @@ try {
   $checks.Add(@{Name='client-oracles';Status='PASS'})
  } finally { $connection.Close() }
  Write-Output "Report acceptance PASS; full integration status is recorded separately. Database: $testDb"
+ if($RequireIntegration -and ($checks | Where-Object Status -eq 'BLOCKED')) { throw 'Full integration BLOCKED: see owner issues #19/#20/#21.' }
 } finally {
  $checks | ConvertTo-Json -Depth 5 | Set-Content -Encoding UTF8 (Join-Path $outputRoot 'checks.json')
  Set-Content -Encoding UTF8 (Join-Path $repoRoot '.local-test/tv5-week1/latest.txt') $outputRoot
