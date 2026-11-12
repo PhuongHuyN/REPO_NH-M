@@ -28,7 +28,7 @@ Yêu cầu SQL Server 2022, compatibility 160, Vietnamese_CI_AS; SSMS QUOTED_IDE
 | 8 | sql/02_tables_sales.sql | Ân | Có |
 | 9 | sql/03_foreign_keys.sql | Toàn | Có nhưng đang BLOCKED, Issue #19 |
 | 9a | sql/08_seed_inventory.sql | Huy | Có, danh mục/tồn kho vận hành; trước 12 và 80/81 |
-| 10 | sql/10_procs_auth.sql | Toàn | Chưa có, FV-08 |
+| 10 | sql/10_procs_auth.sql | Ân | Có: sp_Login + 4 procedure auth, fn_HashPassword, seed admin/operator/kiosk (FV-08) |
 | 11 | sql/11_procs_inventory.sql | Huy | Có 7 procedure (gồm sp_Restock, sp_RemoveExpired – FV-04) |
 | 12 | sql/12_procs_sales.sql | Ân | Có |
 | 13 | sql/13_procs_iot.sql | Dũng | Có |
@@ -40,7 +40,7 @@ Yêu cầu SQL Server 2022, compatibility 160, Vietnamese_CI_AS; SSMS QUOTED_IDE
 | 19 | sql/24_objects_report.sql | Anh | Có, gồm function/view, không còn file 05/06 trùng |
 | 20 | sql/30_index_<module>.sql | Từng chủ module | Chưa có; TV5 không tự tạo index trên schema khác |
 | 20a | sql/30_index_inventory.sql | Huy | Có: 9 index inventory (FV-19); chạy sau 02_tables_inventory |
-| 21 | sql/40_security.sql | Toàn | Chưa có, FV-22 |
+| 21 | sql/40_security.sql | Huy | Có: 4 login app, 4 role, GRANT/DENY theo ALLOW, RLS máy được giao (FV-22); chạy SAU CÙNG, cần Mixed Mode; test: tests/tests_security.sql |
 | 22 | sql/45_jobs.sql | Dũng | Chưa có, FV-28 |
 | 23 | sql/50_backup.sql | Toàn | Chưa có, FV-23 |
 | 24 | sql/80_seed_small.sql, sql/81_seed_large.sql | Anh | Một bộ seed; chỉ chạy sau hợp nhất máy (#20) |
