@@ -1,11 +1,11 @@
 -- =============================================================================
 -- FILE        : 11_procs_inventory.sql
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
--- DESCRIPTION : TV2 — Stored procedure module inventory (phần 1/2)
+-- DESCRIPTION : TV2 — Stored procedure module inventory
 --               FV-03 (SCRUM-197): sp_AddProduct, sp_UpdateProduct, sp_UpdatePrice,
 --                                  sp_AssignColumn, sp_AddBatch
---               (FV-04 sẽ thêm sp_Restock, sp_RemoveExpired vào cuối file này)
--- VERSION     : 1.0.0
+--               FV-04 (SCRUM-198): sp_Restock (TVP + transaction), sp_RemoveExpired
+-- VERSION     : 1.1.0
 -- CREATED     : 2026-11-07
 -- RUN ORDER   : Sau 02_tables_inventory.sql (v1.1), 03_foreign_keys.sql, 08_seed_inventory.sql
 -- ĐẶC TẢ      : app/api/test/fakeDb.js (dòng 145–196) — tên tham số, mã lỗi, cột trả về
@@ -364,5 +364,246 @@ BEGIN
 END
 GO
 
-PRINT N'[11-inv] Đã tạo/cập nhật 5 procedure: sp_AddProduct, sp_UpdateProduct, sp_UpdatePrice, sp_AssignColumn, sp_AddBatch.';
+-- =============================================================================
+-- 6. inventory.sp_Restock — Châm hàng nhiều dòng trong 1 giao dịch (TVP)
+--    FV-04 (SCRUM-198). API: POST /api/inventory/restock
+--    @Items (inventory.RestockItemType): ColumnId (= SlotId), BatchId, Qty 1–20
+--    Lỗi (giống fakeDb.js):
+--      50110 máy không tồn tại / không được giao   · 50111 danh sách rỗng
+--      50112 có cột không thuộc máy này            · 50115 có lô không tồn tại
+--      50114 lô không đúng sản phẩm của cột (hoặc cột chưa gán sản phẩm)
+--      50116 lô đã hết hạn / còn dưới 1 giờ sử dụng · 50117 vượt sức chứa của cột
+--      50118 lô không đủ số lượng để châm           · 50119 không xác định người châm
+--    TẤT CẢ hoặc KHÔNG: 1 dòng sai → không dòng nào được ghi (ROLLBACK).
+--    Ghi: RestockEvent (đầu phiếu), RestockItem (dòng phiếu), SlotStock (tồn theo
+--         lô, LoadedAt = bây giờ → bán sau lô cũ theo FIFO), StockMovement 'IN',
+--         Slot.CurrentStock, đóng cảnh báo LOW_STOCK của cột đã đủ hàng.
+--    "Đã châm từ lô" = tổng StockMovement 'IN' có Reason bắt đầu bằng 'Nạp ngăn'
+--         (seed 08 và procedure này đều ghi đúng tiền tố đó; hoàn hàng của TV3
+--         ghi 'Hoàn hàng…' nên không bị tính trùng).
+--    Trả về: RestockId, Lines, TotalQty
+--    TODO FV-06/FV-22 (TV1): kiểm tra Operator chỉ châm máy được giao (bảng giao
+--         máy + RLS) — khi đó máy không được giao cũng báo 50110.
+-- =============================================================================
+CREATE OR ALTER PROCEDURE inventory.sp_Restock
+    @MachineId  INT,
+    @UserId     INT = NULL,                          -- NULL → lấy từ SESSION_CONTEXT
+    @Items      inventory.RestockItemType READONLY,
+    @Note       NVARCHAR(200) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    BEGIN TRY
+        DECLARE @Now DATETIME2(0) = SYSUTCDATETIME(), @RestockId INT, @MachineCode NVARCHAR(20);
+
+        SET @UserId = ISNULL(@UserId, TRY_CAST(SESSION_CONTEXT(N'UserId') AS INT));
+        SET @Note   = NULLIF(LTRIM(RTRIM(@Note)), N'');
+
+        -- 1. Kiểm tra đầu vào không cần khóa
+        SELECT @MachineCode = MachineCode FROM inventory.Machine WHERE MachineId = @MachineId;
+        IF @MachineCode IS NULL
+            THROW 50110, N'Máy không tồn tại hoặc bạn không được giao máy này', 1;
+        IF NOT EXISTS (SELECT 1 FROM @Items)
+            THROW 50111, N'Danh sách châm hàng rỗng', 1;
+        IF @UserId IS NULL
+            THROW 50119, N'Không xác định được người châm hàng', 1;
+
+        BEGIN TRANSACTION;
+
+        -- 2. Khóa các ngăn và lô liên quan đến hết giao dịch (UPDLOCK + HOLDLOCK):
+        --    2 người châm cùng ngăn / cùng lô phải chờ nhau → không vượt sức chứa,
+        --    không châm quá số lượng lô.
+        DECLARE @L TABLE (
+            SlotId          INT          NOT NULL,
+            BatchId         INT          NOT NULL,
+            Qty             SMALLINT     NOT NULL,
+            SlotMachineId   INT              NULL,
+            SlotProductId   INT              NULL,
+            BatchProductId  INT              NULL,
+            BatchCode       NVARCHAR(30)     NULL,
+            ExpiryAt        DATETIME2(0)     NULL,
+            PRIMARY KEY (SlotId, BatchId)
+        );
+
+        INSERT @L (SlotId, BatchId, Qty, SlotMachineId, SlotProductId, BatchProductId, BatchCode, ExpiryAt)
+        SELECT i.ColumnId, i.BatchId, i.Qty, s.MachineId, s.ProductId, b.ProductId, b.BatchCode, b.ExpiryAt
+        FROM   @Items i
+        LEFT JOIN inventory.Slot       s WITH (UPDLOCK, HOLDLOCK) ON s.SlotId  = i.ColumnId
+        LEFT JOIN inventory.StockBatch b WITH (UPDLOCK, HOLDLOCK) ON b.BatchId = i.BatchId;
+
+        -- 3. Kiểm tra từng dòng
+        IF EXISTS (SELECT 1 FROM @L WHERE SlotMachineId IS NULL OR SlotMachineId <> @MachineId)
+            THROW 50112, N'Có cột không thuộc máy này', 1;
+        IF EXISTS (SELECT 1 FROM @L WHERE BatchProductId IS NULL)
+            THROW 50115, N'Có lô hàng không tồn tại', 1;
+        IF EXISTS (SELECT 1 FROM @L WHERE SlotProductId IS NULL OR BatchProductId <> SlotProductId)
+            THROW 50114, N'Lô hàng không đúng sản phẩm của cột', 1;
+        IF EXISTS (SELECT 1 FROM @L WHERE ExpiryAt IS NULL OR ExpiryAt <= DATEADD(HOUR, 1, @Now))
+            THROW 50116, N'Không châm lô đã hết hạn hoặc còn dưới 1 giờ sử dụng', 1;
+
+        -- Sức chứa: tồn hiện tại của ngăn + tổng số châm thêm (1 ngăn có thể nhận nhiều lô)
+        IF EXISTS (SELECT 1
+                   FROM  (SELECT SlotId, SUM(Qty) AS AddQty FROM @L GROUP BY SlotId) x
+                   JOIN   inventory.Slot s ON s.SlotId = x.SlotId
+                   WHERE  s.CurrentStock + x.AddQty > s.Capacity)
+            THROW 50117, N'Vượt sức chứa của cột', 1;
+
+        -- Số lượng lô: đã nạp vào ngăn (mọi máy) + lần này không vượt Quantity của lô
+        IF EXISTS (SELECT 1
+                   FROM  (SELECT BatchId, SUM(Qty) AS AddQty FROM @L GROUP BY BatchId) x
+                   JOIN   inventory.StockBatch b ON b.BatchId = x.BatchId
+                   OUTER APPLY (SELECT ISNULL(SUM(m.Quantity), 0) AS Loaded
+                                FROM   inventory.StockMovement m
+                                WHERE  m.BatchId = x.BatchId
+                                  AND  m.MovementType = N'IN'
+                                  AND  m.Reason LIKE N'Nạp ngăn%') u
+                   WHERE  u.Loaded + x.AddQty > b.Quantity)
+            THROW 50118, N'Lô hàng không đủ số lượng để châm', 1;
+
+        -- 4. Ghi phiếu châm hàng
+        INSERT inventory.RestockEvent (MachineId, UserId, RestockedAt, Note)
+        VALUES (@MachineId, @UserId, @Now, @Note);
+        SET @RestockId = SCOPE_IDENTITY();
+
+        INSERT inventory.RestockItem (RestockId, SlotId, BatchId, Qty)
+        SELECT @RestockId, SlotId, BatchId, Qty FROM @L;
+
+        -- 5. Tồn theo lô + lịch sử nhập ngăn + tồn tổng của ngăn
+        INSERT inventory.SlotStock (SlotId, BatchId, Quantity, LoadedAt)
+        SELECT SlotId, BatchId, Qty, @Now FROM @L;
+
+        INSERT inventory.StockMovement (SlotId, BatchId, MovementType, Quantity, Reason, CreatedBy, CreatedAt)
+        SELECT SlotId, BatchId, N'IN', Qty,
+               N'Nạp ngăn từ lô ' + BatchCode + N' (phiếu châm #' + CAST(@RestockId AS NVARCHAR(10)) + N')',
+               CASE WHEN EXISTS (SELECT 1 FROM auth.[User] WHERE UserId = @UserId) THEN @UserId END,
+               @Now
+        FROM   @L;
+
+        UPDATE s
+        SET    CurrentStock = s.CurrentStock + x.AddQty,
+               UpdatedAt    = @Now
+        FROM   inventory.Slot s
+        JOIN  (SELECT SlotId, SUM(Qty) AS AddQty FROM @L GROUP BY SlotId) x ON x.SlotId = s.SlotId;
+
+        -- 6. Đóng cảnh báo "sắp hết hàng" của cột đã có trên 20 % sức chứa (hàng còn hạn)
+        IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL
+            UPDATE a
+            SET    ResolvedAt = @Now
+            FROM   iot.Alerts a
+            JOIN  (SELECT s.SlotId
+                   FROM   inventory.Slot s
+                   JOIN  (SELECT DISTINCT SlotId FROM @L) l ON l.SlotId = s.SlotId
+                   CROSS APPLY (SELECT ISNULL(SUM(ss.Quantity), 0) AS Remaining
+                                FROM   inventory.SlotStock ss
+                                JOIN   inventory.StockBatch b ON b.BatchId = ss.BatchId
+                                WHERE  ss.SlotId = s.SlotId AND b.ExpiryAt > @Now) r
+                   WHERE  r.Remaining * 5 > s.Capacity) ok
+              ON   a.RefKey = N'COL:' + CAST(ok.SlotId AS NVARCHAR(10))
+            WHERE  a.AlertType = N'LOW_STOCK' AND a.ResolvedAt IS NULL;
+
+        COMMIT TRANSACTION;
+
+        SELECT @RestockId AS RestockId, COUNT(*) AS Lines, SUM(CAST(Qty AS INT)) AS TotalQty
+        FROM   @L;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+GO
+
+-- =============================================================================
+-- 7. inventory.sp_RemoveExpired — Rút hàng hết hạn khỏi ngăn
+--    FV-04 (SCRUM-198). API: POST /api/inventory/remove-expired; job mỗi giờ (FV-28)
+--    @MachineId NULL → mọi máy.
+--    Mỗi dòng SlotStock còn hàng của lô có ExpiryAt <= bây giờ:
+--      Quantity = 0, Slot.CurrentStock giảm tương ứng, StockMovement 'OUT'
+--      (lý do 'Rút hàng hết hạn'), 1 cảnh báo EXPIRY (HIGH) cho mỗi cột bị rút.
+--    Không lỗi khi không có gì để rút (trả 0, 0).
+--    Trả về: RemovedLines (số dòng tồn theo lô bị rút), RemovedQty (số hộp)
+--    Cảnh báo ghi iot.Alerts (TV4); máy bên iot tìm theo Serial = MachineCode
+--    (QĐ-1 chưa chốt bảng máy nên không dùng thẳng MachineId).
+-- =============================================================================
+CREATE OR ALTER PROCEDURE inventory.sp_RemoveExpired
+    @MachineId  INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    BEGIN TRY
+        DECLARE @Now DATETIME2(0) = SYSUTCDATETIME(),
+                @UserId INT = TRY_CAST(SESSION_CONTEXT(N'UserId') AS INT);
+        IF NOT EXISTS (SELECT 1 FROM auth.[User] WHERE UserId = @UserId) SET @UserId = NULL;
+
+        DECLARE @R TABLE (
+            StockId  BIGINT   NOT NULL PRIMARY KEY,
+            SlotId   INT      NOT NULL,
+            BatchId  INT      NOT NULL,
+            Qty      SMALLINT NOT NULL
+        );
+
+        BEGIN TRANSACTION;
+
+        -- 1. Rút: đưa tồn theo lô về 0, ghi lại dòng đã rút
+        UPDATE ss
+        SET    Quantity = 0
+        OUTPUT deleted.StockId, deleted.SlotId, deleted.BatchId, deleted.Quantity INTO @R
+        FROM   inventory.SlotStock ss
+        JOIN   inventory.StockBatch b ON b.BatchId = ss.BatchId
+        JOIN   inventory.Slot s       ON s.SlotId  = ss.SlotId
+        WHERE  ss.Quantity > 0
+          AND  b.ExpiryAt <= @Now
+          AND (@MachineId IS NULL OR s.MachineId = @MachineId);
+
+        IF EXISTS (SELECT 1 FROM @R)
+        BEGIN
+            -- 2. Tồn tổng của ngăn (không để âm nếu dữ liệu cũ lệch)
+            UPDATE s
+            SET    CurrentStock = CASE WHEN s.CurrentStock >= x.Qty THEN s.CurrentStock - x.Qty ELSE 0 END,
+                   UpdatedAt    = @Now
+            FROM   inventory.Slot s
+            JOIN  (SELECT SlotId, SUM(Qty) AS Qty FROM @R GROUP BY SlotId) x ON x.SlotId = s.SlotId;
+
+            -- 3. Lịch sử xuất ngăn
+            INSERT inventory.StockMovement (SlotId, BatchId, MovementType, Quantity, Reason, CreatedBy, CreatedAt)
+            SELECT r.SlotId, r.BatchId, N'OUT', r.Qty,
+                   N'Rút hàng hết hạn – lô ' + b.BatchCode, @UserId, @Now
+            FROM   @R r
+            JOIN   inventory.StockBatch b ON b.BatchId = r.BatchId;
+
+            -- 4. Cảnh báo cho nhân viên vận hành: mỗi cột bị rút 1 cảnh báo
+            IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL AND OBJECT_ID(N'iot.Machines', N'U') IS NOT NULL
+                INSERT iot.Alerts (MachineId, AlertType, Severity, Message, RefKey, CreatedAt)
+                SELECT im.MachineId, N'EXPIRY', N'HIGH',
+                       N'Đã rút ' + CAST(x.Qty AS NVARCHAR(10)) + N' hộp hết hạn ở cột '
+                         + CAST(n.ColumnNo AS NVARCHAR(10)) + N' – cần châm lại',
+                       N'EXP:' + CAST(x.SlotId AS NVARCHAR(10)), @Now
+                FROM  (SELECT SlotId, SUM(Qty) AS Qty FROM @R GROUP BY SlotId) x
+                JOIN   inventory.Slot s    ON s.SlotId     = x.SlotId
+                JOIN   inventory.Machine m ON m.MachineId  = s.MachineId
+                JOIN   iot.Machines im     ON im.Serial    = m.MachineCode
+                CROSS APPLY (SELECT COUNT(*) AS ColumnNo          -- số thứ tự ngăn trong máy
+                             FROM   inventory.Slot s2
+                             WHERE  s2.MachineId = s.MachineId
+                               AND (LEN(s2.SlotCode) < LEN(s.SlotCode)
+                                    OR (LEN(s2.SlotCode) = LEN(s.SlotCode) AND s2.SlotCode <= s.SlotCode))) n;
+        END;
+
+        COMMIT TRANSACTION;
+
+        SELECT COUNT(*) AS RemovedLines, ISNULL(SUM(CAST(Qty AS INT)), 0) AS RemovedQty
+        FROM   @R;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+GO
+
+PRINT N'[11-inv] Đã tạo/cập nhật 7 procedure: sp_AddProduct, sp_UpdateProduct, sp_UpdatePrice, sp_AssignColumn, sp_AddBatch, sp_Restock, sp_RemoveExpired.';
 GO
