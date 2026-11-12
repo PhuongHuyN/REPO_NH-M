@@ -29,12 +29,12 @@ Yêu cầu SQL Server 2022, compatibility 160, Vietnamese_CI_AS; SSMS QUOTED_IDE
 | 9 | sql/03_foreign_keys.sql | Toàn | Có nhưng đang BLOCKED, Issue #19 |
 | 9a | sql/08_seed_inventory.sql | Huy | Có, danh mục/tồn kho vận hành; trước 12 và 80/81 |
 | 10 | sql/10_procs_auth.sql | Toàn | Chưa có, FV-08 |
-| 11 | sql/11_procs_inventory.sql | Huy | Có 5 procedure; Restock/RemoveExpired chờ FV-04 |
+| 11 | sql/11_procs_inventory.sql | Huy | Có 7 procedure (gồm sp_Restock, sp_RemoveExpired – FV-04) |
 | 12 | sql/12_procs_sales.sql | Ân | Có |
 | 13 | sql/13_procs_iot.sql | Dũng | Có |
 | 14 | sql/14_procs_report.sql | Anh | Có 6 procedure; tạo trước object, chạy sau 24 |
 | 15 | sql/20_objects_auth.sql | Toàn | Chưa có, FV-21 |
-| 16 | sql/21_objects_inventory.sql | Huy | Chưa có, FV-18 |
+| 16 | sql/21_objects_inventory.sql | Huy | Có: 4 view, fn_PriceHistory, fn_GetFifoStock, trigger sắp hết hàng (FV-18); chạy sau 02_tables_iot |
 | 17 | sql/22_objects_sales.sql | Ân | Có |
 | 18 | sql/23_objects_iot.sql | Dũng | Có |
 | 19 | sql/24_objects_report.sql | Anh | Có, gồm function/view, không còn file 05/06 trùng |

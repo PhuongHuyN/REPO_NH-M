@@ -6,9 +6,11 @@
 --               PHẦN 2 — Dữ liệu mẫu 08_seed_inventory.sql        T12–T18
 --               PHẦN 3 — 5 procedure FV-03 (11_procs_inventory)   T19–T33
 --               PHẦN 4 — sp_Restock, sp_RemoveExpired (FV-04)     T34–T43
---               (view, function, trigger… nối tiếp ở FV-18, FV-19)
--- CÁCH CHẠY   : Chạy SAU 02_tables_inventory.sql, 08_seed_inventory.sql và
---               11_procs_inventory.sql. Phần 3, 4 tự dọn dữ liệu test (tên '__TEST__…').
+--               PHẦN 5 — 4 view, 3 function, 1 trigger (FV-18)    T44–T51
+--               (index… nối tiếp ở FV-19)
+-- CÁCH CHẠY   : Chạy SAU 02_tables_inventory.sql, 02_tables_iot.sql,
+--               08_seed_inventory.sql, 11_procs_inventory.sql, 21_objects_inventory.sql.
+--               Phần 3, 4 tự dọn dữ liệu test (tên '__TEST__…').
 --               Phần 1 sửa dữ liệu trong 1 transaction rồi ROLLBACK; Phần 2 chỉ đọc
 --               → không làm bẩn CSDL. Toàn file là 1 batch (không thêm GO ở giữa).
 --               T16 (lô sắp hết hạn) tính theo giờ thật: chạy trong vòng 4 giờ sau
@@ -483,6 +485,95 @@ SELECT @lines = RemovedLines, @qty = RemovedQty FROM @rx;
 INSERT @Result VALUES (43, N'sp_RemoveExpired máy không tồn tại: không lỗi, 0 dòng', N'0',
        CASE WHEN @err <> 0 THEN N'lỗi ' + CAST(@err AS NVARCHAR(10)) ELSE CAST(@lines AS NVARCHAR(10)) END,
        CASE WHEN @err = 0 AND @lines = 0 THEN 1 ELSE 0 END);
+
+-- =============================================================================
+-- PHẦN 5 — View, function, trigger FV-18 (21_objects_inventory.sql)    T44–T51
+--   Chạy trước khi dọn dữ liệu test phần 3 (cần sản phẩm test @tp cho T48).
+--   T50–T51 sửa dữ liệu trong 1 transaction rồi ROLLBACK.
+-- =============================================================================
+DECLARE @fSlot INT, @fRem INT, @fCum INT, @fMach INT, @fCode NVARCHAR(20), @fLoc INT, @alerts INT;
+
+-- T44: đủ 8 đối tượng
+SET @n = (SELECT COUNT(*) FROM sys.objects WHERE object_id IN (
+            OBJECT_ID(N'inventory.vw_ProductCatalog'), OBJECT_ID(N'inventory.vw_StockStatus'),
+            OBJECT_ID(N'inventory.vw_AvailableBatches'), OBJECT_ID(N'inventory.vw_ExpiringBatches'),
+            OBJECT_ID(N'inventory.fn_PriceHistory'), OBJECT_ID(N'inventory.fn_GetFifoStock'),
+            OBJECT_ID(N'inventory.fn_ColumnNo'), OBJECT_ID(N'inventory.trg_Slot_LowStock')));
+INSERT @Result VALUES (44, N'Có 4 view + 3 function + 1 trigger', N'8', CAST(@n AS NVARCHAR(10)), CASE WHEN @n = 8 THEN 1 ELSE 0 END);
+
+-- T45: danh mục = số sản phẩm chưa xóa
+SET @n = (SELECT COUNT(*) FROM inventory.vw_ProductCatalog) - (SELECT COUNT(*) FROM inventory.Product WHERE IsDeleted = 0);
+INSERT @Result VALUES (45, N'vw_ProductCatalog đủ sản phẩm (chênh lệch)', N'0', CAST(@n AS NVARCHAR(10)), CASE WHEN @n = 0 THEN 1 ELSE 0 END);
+
+-- T46: Remaining + ExpiredQty khớp tồn theo lô; ColumnNo 1–12 không trùng trong 1 máy
+SET @n = (SELECT COUNT(*) FROM inventory.vw_StockStatus v
+          WHERE v.Remaining + v.ExpiredQty <> (SELECT ISNULL(SUM(Quantity), 0) FROM inventory.SlotStock WHERE SlotId = v.ColumnId))
+       + (SELECT COUNT(*) FROM (SELECT MachineId, ColumnNo FROM inventory.vw_StockStatus
+                                GROUP BY MachineId, ColumnNo HAVING COUNT(*) > 1) d);
+INSERT @Result VALUES (46, N'vw_StockStatus: tồn khớp SlotStock, ColumnNo không trùng (số dòng sai)', N'0', CAST(@n AS NVARCHAR(10)), CASE WHEN @n = 0 THEN 1 ELSE 0 END);
+
+-- T47: lô còn châm được phải còn hạn và Available > 0; nhãn hết hạn đúng
+SET @n = (SELECT COUNT(*) FROM inventory.vw_AvailableBatches WHERE Available <= 0 OR ExpiryAt <= SYSUTCDATETIME())
+       + (SELECT COUNT(*) FROM inventory.vw_ExpiringBatches
+          WHERE ExpiryAt > DATEADD(HOUR, 6, SYSUTCDATETIME())
+             OR (ExpiryLabel = N'ĐÃ HẾT HẠN'  AND ExpiryAt >  SYSUTCDATETIME())
+             OR (ExpiryLabel = N'SẮP HẾT HẠN' AND ExpiryAt <= SYSUTCDATETIME()));
+INSERT @Result VALUES (47, N'vw_AvailableBatches / vw_ExpiringBatches lọc đúng (số dòng sai)', N'0', CAST(@n AS NVARCHAR(10)), CASE WHEN @n = 0 THEN 1 ELSE 0 END);
+
+-- T48: fn_PriceHistory của sản phẩm test: 42000 → 45000 (đổi tên ở T22 KHÔNG tạo mốc giá)
+SET @n = (SELECT COUNT(*) FROM inventory.fn_PriceHistory(@tp));
+SET @ok = CASE WHEN @n = 2
+                AND EXISTS (SELECT 1 FROM inventory.fn_PriceHistory(@tp) WHERE Price = 45000 AND IsCurrent = 1)
+                AND EXISTS (SELECT 1 FROM inventory.fn_PriceHistory(@tp) WHERE Price = 42000 AND IsCurrent = 0) THEN 1 ELSE 0 END;
+INSERT @Result VALUES (48, N'fn_PriceHistory: 2 mốc giá, 45000 là giá hiện tại', N'2', CAST(@n AS NVARCHAR(10)), @ok);
+
+-- T49: fn_GetFifoStock — ngăn có ≥ 2 lô: thứ tự 1 là lô nạp sớm nhất, cộng dồn = Remaining
+SELECT TOP (1) @fSlot = ss.SlotId
+FROM inventory.SlotStock ss JOIN inventory.StockBatch b ON b.BatchId = ss.BatchId
+WHERE ss.Quantity > 0 AND b.ExpiryAt > SYSUTCDATETIME()
+GROUP BY ss.SlotId HAVING COUNT(*) >= 2 ORDER BY ss.SlotId;
+SELECT @fRem = Remaining FROM inventory.vw_StockStatus WHERE ColumnId = @fSlot;
+SELECT @fCum = MAX(CumulativeQty) FROM inventory.fn_GetFifoStock(@fSlot);
+SET @ok = CASE WHEN @fSlot IS NOT NULL AND @fCum = @fRem
+                AND (SELECT LoadedAt FROM inventory.fn_GetFifoStock(@fSlot) WHERE FifoOrder = 1)
+                    = (SELECT MIN(LoadedAt) FROM inventory.fn_GetFifoStock(@fSlot)) THEN 1 ELSE 0 END;
+INSERT @Result VALUES (49, N'fn_GetFifoStock: lô nạp trước đứng đầu, cộng dồn = Remaining', N'OK',
+       CASE WHEN @ok = 1 THEN N'OK' WHEN @fSlot IS NULL THEN N'không có ngăn 2 lô'
+            ELSE N'cộng dồn ' + ISNULL(CAST(@fCum AS NVARCHAR(10)), N'?') + N' / còn ' + ISNULL(CAST(@fRem AS NVARCHAR(10)), N'?') END, @ok);
+
+-- T50–T51: trigger sắp hết hàng (trong transaction, ROLLBACK ở cuối)
+BEGIN TRANSACTION;
+    SELECT TOP (1) @fSlot = s.SlotId, @fMach = s.MachineId, @fCode = m.MachineCode
+    FROM inventory.Slot s JOIN inventory.Machine m ON m.MachineId = s.MachineId
+    WHERE s.ProductId IS NOT NULL AND s.CurrentStock * 5 > s.Capacity
+    ORDER BY s.SlotId;
+
+    -- Máy phải có bên iot.Machines (cùng Serial) thì cảnh báo mới ghi được
+    IF NOT EXISTS (SELECT 1 FROM iot.Machines WHERE Serial = @fCode)
+    BEGIN
+        INSERT iot.Locations (LocationName, LocationType) VALUES (N'__TEST__ địa điểm', N'OFFICE');
+        SET @fLoc = SCOPE_IDENTITY();
+        INSERT iot.Machines (Serial, MachineName, LocationId) VALUES (@fCode, N'__TEST__ máy', @fLoc);
+    END;
+    UPDATE iot.Alerts SET ResolvedAt = SYSUTCDATETIME()
+    WHERE AlertType = N'LOW_STOCK' AND RefKey = N'COL:' + CAST(@fSlot AS NVARCHAR(10)) AND ResolvedAt IS NULL;
+
+    -- Bán hết: tồn theo lô về 0 rồi giảm tồn tổng → trigger bắn
+    UPDATE inventory.SlotStock SET Quantity = 0 WHERE SlotId = @fSlot;
+    UPDATE inventory.Slot SET CurrentStock = 0 WHERE SlotId = @fSlot;
+    SET @alerts = (SELECT COUNT(*) FROM iot.Alerts WHERE AlertType = N'LOW_STOCK' AND Severity = N'HIGH'
+                   AND RefKey = N'COL:' + CAST(@fSlot AS NVARCHAR(10)) AND ResolvedAt IS NULL);
+    INSERT @Result VALUES (50, N'trg_Slot_LowStock: ngăn về 0 → 1 cảnh báo LOW_STOCK (HIGH)', N'1',
+           CAST(@alerts AS NVARCHAR(10)), CASE WHEN @alerts = 1 THEN 1 ELSE 0 END);
+
+    -- Giảm tiếp (ví dụ chỉnh tay) → không ghi trùng cảnh báo đang mở
+    UPDATE inventory.Slot SET CurrentStock = 1 WHERE SlotId = @fSlot;
+    UPDATE inventory.Slot SET CurrentStock = 0 WHERE SlotId = @fSlot;
+    SET @alerts = (SELECT COUNT(*) FROM iot.Alerts WHERE AlertType = N'LOW_STOCK'
+                   AND RefKey = N'COL:' + CAST(@fSlot AS NVARCHAR(10)) AND ResolvedAt IS NULL);
+    INSERT @Result VALUES (51, N'trg_Slot_LowStock: không ghi trùng khi cảnh báo còn mở', N'1',
+           CAST(@alerts AS NVARCHAR(10)), CASE WHEN @alerts = 1 THEN 1 ELSE 0 END);
+ROLLBACK TRANSACTION;
 
 -- ---------- Dọn dữ liệu test của phần 4 ----------
 IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL
