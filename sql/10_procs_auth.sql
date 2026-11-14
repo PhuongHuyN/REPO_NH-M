@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- FILE        : 10_procs_auth.sql
 -- PROJECT     : FreshVend — TV1 (auth)
 -- DESCRIPTION : FV-08 (SCRUM-202) — fn_HashPassword + 5 procedure auth
@@ -42,13 +42,14 @@ IF EXISTS (
 GO
 
 IF EXISTS (
-    SELECT 1 FROM sys.indexes
-    WHERE name = N'UQ_auth_User_Email' AND object_id = OBJECT_ID(N'auth.[User]')
+    SELECT 1 FROM sys.key_constraints
+    WHERE name = N'UQ_auth_User_Email' AND parent_object_id = OBJECT_ID(N'auth.[User]')
 )
     ALTER TABLE auth.[User] DROP CONSTRAINT UQ_auth_User_Email;
 GO
 
-ALTER TABLE auth.[User] ALTER COLUMN Email NVARCHAR(150) NULL;
+IF EXISTS (SELECT 1 FROM sys.columns WHERE object_id=OBJECT_ID(N'auth.[User]') AND name=N'Email' AND is_nullable=0)
+    ALTER TABLE auth.[User] ALTER COLUMN Email NVARCHAR(150) NULL;
 GO
 
 IF NOT EXISTS (
