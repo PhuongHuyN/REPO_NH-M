@@ -1,0 +1,9 @@
+﻿{
+    "Output":  "D:\\VSC\\REPO_NH-M\\.local-test\\scrum239-worktree\\.local-test\\perf\\20261115_005930",
+    "PlanCount":  0,
+    "Reason":  "Exception calling \"ExecuteReader\" with \"0\" argument(s): \"BLOCKED: seed LARGE chưa chạy thật hoặc chưa đủ 5000/200000.\"",
+    "After":  "BLOCKED",
+    "Before":  "BLOCKED",
+    "ControlOnly":  false,
+    "Database":  "FreshVend_QA239_20261115_005521"
+}

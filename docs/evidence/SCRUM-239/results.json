@@ -1,0 +1,4095 @@
+﻿[
+    {
+        "CompletedAt":  "2026-11-15T00:55:42.0299906+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:41.1292507+07:00",
+        "Tables":  [
+
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027."
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+
+                  ],
+        "Name":  "239_inventory_fixture.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:43.1998713+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:42.1496972+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "Bảng":  "Supplier",
+                               "Số dòng":  4
+                           },
+                           {
+                               "Bảng":  "Category",
+                               "Số dòng":  4
+                           },
+                           {
+                               "Bảng":  "Product",
+                               "Số dòng":  36
+                           },
+                           {
+                               "Bảng":  "Machine",
+                               "Số dòng":  5
+                           },
+                           {
+                               "Bảng":  "Slot",
+                               "Số dòng":  60
+                           },
+                           {
+                               "Bảng":  "StockBatch",
+                               "Số dòng":  52
+                           },
+                           {
+                               "Bảng":  "SlotStock",
+                               "Số dòng":  81
+                           },
+                           {
+                               "Bảng":  "StockMovement",
+                               "Số dòng":  81
+                           },
+                           {
+                               "Bảng":  "RestockEvent",
+                               "Số dòng":  5
+                           },
+                           {
+                               "Bảng":  "RestockItem",
+                               "Số dòng":  55
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                         "[08-inv] ── Bắt đầu nạp dữ liệu inventory ──────────────────────────────",
+                         "[08-inv] 1. Supplier: xong (4 nhà cung cấp).",
+                         "[08-inv] 2. Category: xong (4 danh mục).",
+                         "[08-inv] 3. Product: xong (36 sản phẩm, 35 đang bán).",
+                         "[08-inv] 4. Machine: xong (5 máy).",
+                         "[08-inv] 5. Slot: xong (5 máy × 12 ngăn, sức chứa 8).",
+                         "[08-inv] 6. StockBatch / SlotStock / StockMovement: xong (60 ngăn được nạp).",
+                         "[08-inv] 7. RestockEvent/RestockItem: xong (5 phiếu mới).",
+                         "[08-inv] ── Hoàn tất dữ liệu inventory ────────────────────────────────"
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+
+                  ],
+        "Name":  "08_seed_inventory.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:43.9866130+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:43.2497289+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "UserId":  2,
+                               "MachineId":  1,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-BK-01"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  2,
+                               "MachineId":  1,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-BK-01"
+                           },
+                           {
+                               "UserId":  2,
+                               "MachineId":  2,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-BK-02"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  2,
+                               "MachineId":  1,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-BK-01"
+                           },
+                           {
+                               "UserId":  2,
+                               "MachineId":  2,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-BK-02"
+                           },
+                           {
+                               "UserId":  2,
+                               "MachineId":  3,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-VT-01"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  3,
+                               "MachineId":  4,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-VT-02"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  3,
+                               "MachineId":  4,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-VT-02"
+                           },
+                           {
+                               "UserId":  3,
+                               "MachineId":  5,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-CM-01"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  4,
+                               "MachineId":  1,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-BK-01"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  5,
+                               "MachineId":  2,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-BK-02"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  6,
+                               "MachineId":  3,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-VT-01"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  7,
+                               "MachineId":  4,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-VT-02"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  8,
+                               "MachineId":  5,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "VM-CM-01"
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                         "[10-auth] fn_HashPassword + 5 procedure + seed demo xong."
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+
+                  ],
+        "Name":  "10_procs_auth.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:46.2643082+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:43.9932945+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "UserId":  9,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  9,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  9,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  9,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  9,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  9,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  9,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  10,
+                               "Username":  "qa230_new",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  11,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  11,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  11,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  11,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  11,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  11,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  11,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  12,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  12,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  12,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  12,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  12,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  12,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  12,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  13,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  13,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  13,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  13,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  13,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  13,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  13,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "Success":  true,
+                               "Message":  "Đăng nhập thành công",
+                               "UserId":  13,
+                               "Username":  "qa230_op",
+                               "FullName":  "QA Operator",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "MachineId":  6
+                           },
+                           {
+                               "MachineId":  7
+                           },
+                           {
+                               "MachineId":  8
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  14,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  14,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  14,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  14,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  14,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  14,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  14,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "Success":  false,
+                               "Message":  "Sai tên đăng nhập hoặc mật khẩu (còn 4 lần thử)",
+                               "UserId":  null,
+                               "Username":  null,
+                               "FullName":  null,
+                               "RoleName":  null
+                           }
+                       ],
+                       [
+
+                       ],
+                       [
+                           {
+                               "UserId":  15,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  15,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  15,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  15,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  15,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  15,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  15,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "Success":  false,
+                               "Message":  "Sai tên đăng nhập hoặc mật khẩu",
+                               "UserId":  null,
+                               "Username":  null,
+                               "FullName":  null,
+                               "RoleName":  null
+                           }
+                       ],
+                       [
+
+                       ],
+                       [
+                           {
+                               "UserId":  16,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  16,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  16,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  16,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  16,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  16,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  16,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  16,
+                               "Message":  "Đã đổi mật khẩu"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  17,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  17,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  17,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  17,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  17,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  17,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  17,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  18,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  18,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  18,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  18,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  18,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  18,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  18,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  19,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  19,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  19,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  19,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  19,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  19,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  19,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  19,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  19,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  19,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           },
+                           {
+                               "UserId":  19,
+                               "MachineId":  9,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-9"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  20,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  20,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  20,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  20,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  20,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  20,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  20,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  21,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  21,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  21,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  21,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  21,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  21,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  21,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  22,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  22,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  22,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  22,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  22,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  22,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  22,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  22,
+                               "Username":  "qa230_op",
+                               "IsActive":  false
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  23,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  23,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  23,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  23,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  23,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  23,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  23,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  24,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  24,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  24,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  24,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  24,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  24,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  24,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  25,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  25,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  25,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  25,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  25,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  25,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  25,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  26,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  26,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  26,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  26,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  26,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  26,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  26,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  27,
+                               "Username":  "qa230_op",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  27,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  27,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  27,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           }
+                       ],
+                       [
+                           {
+                               "UserId":  27,
+                               "MachineId":  6,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-6"
+                           },
+                           {
+                               "UserId":  27,
+                               "MachineId":  7,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-7"
+                           },
+                           {
+                               "UserId":  27,
+                               "MachineId":  8,
+                               "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                               "Serial":  "QA230-8"
+                           }
+                       ],
+                       [
+                           {
+                               "TestNo":  1,
+                               "TestCase":  "CreateUser valid",
+                               "ExpectedError":  0,
+                               "ActualError":  0,
+                               "Passed":  true,
+                               "Detail":  "Assertions completed",
+                               "RunAt":  "\/Date(1794678944169)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  2,
+                               "TestCase":  "CreateUser short username",
+                               "ExpectedError":  50001,
+                               "ActualError":  50001,
+                               "Passed":  true,
+                               "Detail":  "Tên đăng nhập phải có ít nhất 3 ký tự",
+                               "RunAt":  "\/Date(1794678944259)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  3,
+                               "TestCase":  "CreateUser duplicate",
+                               "ExpectedError":  50003,
+                               "ActualError":  50003,
+                               "Passed":  true,
+                               "Detail":  "Tên đăng nhập đã tồn tại",
+                               "RunAt":  "\/Date(1794678944350)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  4,
+                               "TestCase":  "Login valid",
+                               "ExpectedError":  0,
+                               "ActualError":  0,
+                               "Passed":  true,
+                               "Detail":  "Assertions completed",
+                               "RunAt":  "\/Date(1794678944494)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  5,
+                               "TestCase":  "Login wrong password",
+                               "ExpectedError":  0,
+                               "ActualError":  0,
+                               "Passed":  true,
+                               "Detail":  "Assertions completed",
+                               "RunAt":  "\/Date(1794678944614)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  6,
+                               "TestCase":  "Login unknown username",
+                               "ExpectedError":  0,
+                               "ActualError":  0,
+                               "Passed":  true,
+                               "Detail":  "Assertions completed",
+                               "RunAt":  "\/Date(1794678944753)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  7,
+                               "TestCase":  "ChangePassword valid",
+                               "ExpectedError":  0,
+                               "ActualError":  0,
+                               "Passed":  true,
+                               "Detail":  "Assertions completed",
+                               "RunAt":  "\/Date(1794678944881)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  8,
+                               "TestCase":  "ChangePassword wrong old password",
+                               "ExpectedError":  50011,
+                               "ActualError":  50011,
+                               "Passed":  true,
+                               "Detail":  "Mật khẩu cũ không đúng",
+                               "RunAt":  "\/Date(1794678944997)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  9,
+                               "TestCase":  "ChangePassword short new password",
+                               "ExpectedError":  50002,
+                               "ActualError":  50002,
+                               "Passed":  true,
+                               "Detail":  "Mật khẩu phải có ít nhất 8 ký tự",
+                               "RunAt":  "\/Date(1794678945121)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  10,
+                               "TestCase":  "AssignMachine valid",
+                               "ExpectedError":  0,
+                               "ActualError":  0,
+                               "Passed":  true,
+                               "Detail":  "Assertions completed",
+                               "RunAt":  "\/Date(1794678945239)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  11,
+                               "TestCase":  "AssignMachine unknown user",
+                               "ExpectedError":  50020,
+                               "ActualError":  50020,
+                               "Passed":  true,
+                               "Detail":  "Người dùng không tồn tại",
+                               "RunAt":  "\/Date(1794678945350)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  12,
+                               "TestCase":  "AssignMachine unknown machine",
+                               "ExpectedError":  50022,
+                               "ActualError":  50022,
+                               "Passed":  true,
+                               "Detail":  "Máy không tồn tại",
+                               "RunAt":  "\/Date(1794678945468)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  13,
+                               "TestCase":  "DeactivateUser valid",
+                               "ExpectedError":  0,
+                               "ActualError":  0,
+                               "Passed":  true,
+                               "Detail":  "Assertions completed",
+                               "RunAt":  "\/Date(1794678945622)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  14,
+                               "TestCase":  "DeactivateUser unknown user",
+                               "ExpectedError":  50030,
+                               "ActualError":  50030,
+                               "Passed":  true,
+                               "Detail":  "Người dùng không tồn tại",
+                               "RunAt":  "\/Date(1794678945732)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  15,
+                               "TestCase":  "DeactivateUser self forbidden",
+                               "ExpectedError":  50031,
+                               "ActualError":  50031,
+                               "Passed":  true,
+                               "Detail":  "Không thể tự khóa tài khoản của chính mình",
+                               "RunAt":  "\/Date(1794678945873)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  16,
+                               "TestCase":  "RLS exact three assigned machines",
+                               "ExpectedError":  0,
+                               "ActualError":  0,
+                               "Passed":  true,
+                               "Detail":  "Assertions completed",
+                               "RunAt":  "\/Date(1794678946029)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  17,
+                               "TestCase":  "Operator DENY report",
+                               "ExpectedError":  229,
+                               "ActualError":  229,
+                               "Passed":  true,
+                               "Detail":  "The SELECT permission was denied on the object \u0027DailySalesSummary\u0027, database \u0027FreshVend_QA239_20261115_005521\u0027, schema \u0027report\u0027.",
+                               "RunAt":  "\/Date(1794678946109)\/",
+                               "Status":  "PASS"
+                           },
+                           {
+                               "TestNo":  18,
+                               "TestCase":  "Kiosk cannot add product",
+                               "ExpectedError":  229,
+                               "ActualError":  229,
+                               "Passed":  true,
+                               "Detail":  "The EXECUTE permission was denied on the object \u0027sp_AddProduct\u0027, database \u0027FreshVend_QA239_20261115_005521\u0027, schema \u0027inventory\u0027.",
+                               "RunAt":  "\/Date(1794678946199)\/",
+                               "Status":  "PASS"
+                           }
+                       ],
+                       [
+                           {
+                               "Total":  18,
+                               "Passed":  18,
+                               "Failed":  0
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                         "[tests_auth] 18/18 PASS"
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+                      {
+                          "TestNo":  1,
+                          "TestCase":  "CreateUser valid",
+                          "ExpectedError":  0,
+                          "ActualError":  0,
+                          "Passed":  true,
+                          "Detail":  "Assertions completed",
+                          "RunAt":  "\/Date(1794678944169)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  2,
+                          "TestCase":  "CreateUser short username",
+                          "ExpectedError":  50001,
+                          "ActualError":  50001,
+                          "Passed":  true,
+                          "Detail":  "Tên đăng nhập phải có ít nhất 3 ký tự",
+                          "RunAt":  "\/Date(1794678944259)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  3,
+                          "TestCase":  "CreateUser duplicate",
+                          "ExpectedError":  50003,
+                          "ActualError":  50003,
+                          "Passed":  true,
+                          "Detail":  "Tên đăng nhập đã tồn tại",
+                          "RunAt":  "\/Date(1794678944350)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  4,
+                          "TestCase":  "Login valid",
+                          "ExpectedError":  0,
+                          "ActualError":  0,
+                          "Passed":  true,
+                          "Detail":  "Assertions completed",
+                          "RunAt":  "\/Date(1794678944494)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  5,
+                          "TestCase":  "Login wrong password",
+                          "ExpectedError":  0,
+                          "ActualError":  0,
+                          "Passed":  true,
+                          "Detail":  "Assertions completed",
+                          "RunAt":  "\/Date(1794678944614)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  6,
+                          "TestCase":  "Login unknown username",
+                          "ExpectedError":  0,
+                          "ActualError":  0,
+                          "Passed":  true,
+                          "Detail":  "Assertions completed",
+                          "RunAt":  "\/Date(1794678944753)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  7,
+                          "TestCase":  "ChangePassword valid",
+                          "ExpectedError":  0,
+                          "ActualError":  0,
+                          "Passed":  true,
+                          "Detail":  "Assertions completed",
+                          "RunAt":  "\/Date(1794678944881)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  8,
+                          "TestCase":  "ChangePassword wrong old password",
+                          "ExpectedError":  50011,
+                          "ActualError":  50011,
+                          "Passed":  true,
+                          "Detail":  "Mật khẩu cũ không đúng",
+                          "RunAt":  "\/Date(1794678944997)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  9,
+                          "TestCase":  "ChangePassword short new password",
+                          "ExpectedError":  50002,
+                          "ActualError":  50002,
+                          "Passed":  true,
+                          "Detail":  "Mật khẩu phải có ít nhất 8 ký tự",
+                          "RunAt":  "\/Date(1794678945121)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  10,
+                          "TestCase":  "AssignMachine valid",
+                          "ExpectedError":  0,
+                          "ActualError":  0,
+                          "Passed":  true,
+                          "Detail":  "Assertions completed",
+                          "RunAt":  "\/Date(1794678945239)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  11,
+                          "TestCase":  "AssignMachine unknown user",
+                          "ExpectedError":  50020,
+                          "ActualError":  50020,
+                          "Passed":  true,
+                          "Detail":  "Người dùng không tồn tại",
+                          "RunAt":  "\/Date(1794678945350)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  12,
+                          "TestCase":  "AssignMachine unknown machine",
+                          "ExpectedError":  50022,
+                          "ActualError":  50022,
+                          "Passed":  true,
+                          "Detail":  "Máy không tồn tại",
+                          "RunAt":  "\/Date(1794678945468)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  13,
+                          "TestCase":  "DeactivateUser valid",
+                          "ExpectedError":  0,
+                          "ActualError":  0,
+                          "Passed":  true,
+                          "Detail":  "Assertions completed",
+                          "RunAt":  "\/Date(1794678945622)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  14,
+                          "TestCase":  "DeactivateUser unknown user",
+                          "ExpectedError":  50030,
+                          "ActualError":  50030,
+                          "Passed":  true,
+                          "Detail":  "Người dùng không tồn tại",
+                          "RunAt":  "\/Date(1794678945732)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  15,
+                          "TestCase":  "DeactivateUser self forbidden",
+                          "ExpectedError":  50031,
+                          "ActualError":  50031,
+                          "Passed":  true,
+                          "Detail":  "Không thể tự khóa tài khoản của chính mình",
+                          "RunAt":  "\/Date(1794678945873)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  16,
+                          "TestCase":  "RLS exact three assigned machines",
+                          "ExpectedError":  0,
+                          "ActualError":  0,
+                          "Passed":  true,
+                          "Detail":  "Assertions completed",
+                          "RunAt":  "\/Date(1794678946029)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  17,
+                          "TestCase":  "Operator DENY report",
+                          "ExpectedError":  229,
+                          "ActualError":  229,
+                          "Passed":  true,
+                          "Detail":  "The SELECT permission was denied on the object \u0027DailySalesSummary\u0027, database \u0027FreshVend_QA239_20261115_005521\u0027, schema \u0027report\u0027.",
+                          "RunAt":  "\/Date(1794678946109)\/",
+                          "Status":  "PASS"
+                      },
+                      {
+                          "TestNo":  18,
+                          "TestCase":  "Kiosk cannot add product",
+                          "ExpectedError":  229,
+                          "ActualError":  229,
+                          "Passed":  true,
+                          "Detail":  "The EXECUTE permission was denied on the object \u0027sp_AddProduct\u0027, database \u0027FreshVend_QA239_20261115_005521\u0027, schema \u0027inventory\u0027.",
+                          "RunAt":  "\/Date(1794678946199)\/",
+                          "Status":  "PASS"
+                      }
+                  ],
+        "Name":  "tests_auth.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:49.5697771+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:46.2797351+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "ProductId":  38,
+                               "SKU":  "FV-SP-037",
+                               "ProductName":  "__TEST__ Bưởi da xanh",
+                               "Price":  42000.00
+                           }
+                       ],
+                       [
+                           {
+                               "ProductId":  38,
+                               "SKU":  "FV-SP-037",
+                               "ProductName":  "__TEST__ Bưởi da xanh (hộp lớn)",
+                               "Category":  "Trái cây cắt sẵn",
+                               "Description":  "Hộp 400 g",
+                               "Price":  42000.00,
+                               "ImageUrl":  null,
+                               "ShelfLifeHours":  48,
+                               "IsActive":  true,
+                               "PriceSince":  "2026-11-14T17:55:48.0000000"
+                           }
+                       ],
+                       [
+                           {
+                               "ProductId":  38,
+                               "OldPrice":  42000.00,
+                               "NewPrice":  45000.00
+                           }
+                       ],
+                       [
+                           {
+                               "ColumnId":  10,
+                               "MachineId":  1,
+                               "ColumnNo":  10,
+                               "SlotCode":  "C2",
+                               "ProductId":  38
+                           }
+                       ],
+                       [
+                           {
+                               "BatchId":  55,
+                               "BatchCode":  "LO000055",
+                               "ProductId":  38,
+                               "PreparedAt":  "2026-11-14T17:55:49.0000000",
+                               "ExpiryAt":  "2026-11-16T17:55:49.0000000",
+                               "Quantity":  20
+                           }
+                       ],
+                       [
+                           {
+                               "RestockId":  7,
+                               "Lines":  1,
+                               "TotalQty":  3
+                           }
+                       ],
+                       [
+                           {
+                               "BatchId":  56,
+                               "BatchCode":  "LO000056",
+                               "ProductId":  38,
+                               "PreparedAt":  "2026-11-12T18:25:49.0000000",
+                               "ExpiryAt":  "2026-11-14T18:25:49.0000000",
+                               "Quantity":  5
+                           }
+                       ],
+                       [
+                           {
+                               "BatchId":  57,
+                               "BatchCode":  "LO000057",
+                               "ProductId":  38,
+                               "PreparedAt":  "2026-11-14T17:55:49.0000000",
+                               "ExpiryAt":  "2026-11-16T17:55:49.0000000",
+                               "Quantity":  2
+                           }
+                       ],
+                       [
+                           {
+                               "TestNo":  1,
+                               "TestCase":  "Có cột Product.ShelfLifeHours",
+                               "Expected":  "1",
+                               "Actual":  "1",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  2,
+                               "TestCase":  "Có cột StockBatch.PreparedAt và ExpiryAt",
+                               "Expected":  "1",
+                               "Actual":  "1",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  3,
+                               "TestCase":  "Có bảng SlotStock, RestockEvent, RestockItem",
+                               "Expected":  "3",
+                               "Actual":  "3",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  4,
+                               "TestCase":  "Kiểu TVP RestockItemType có đúng 3 cột ColumnId, BatchId, Qty",
+                               "Expected":  "3",
+                               "Actual":  "3",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  5,
+                               "TestCase":  "Product là Temporal Table (temporal_type = 2)",
+                               "Expected":  "2",
+                               "Actual":  "2",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  6,
+                               "TestCase":  "Cột cũ TV3/TV5 đang dùng vẫn còn (UnitPrice, CurrentStock, ExpiryDate)",
+                               "Expected":  "3",
+                               "Actual":  "3",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  7,
+                               "TestCase":  "Đổi giá → ProductHistory tăng 1 dòng",
+                               "Expected":  "+1",
+                               "Actual":  "+1",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  8,
+                               "TestCase":  "ShelfLifeHours = 0 bị chặn",
+                               "Expected":  "547",
+                               "Actual":  "547",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  9,
+                               "TestCase":  "Lô có ExpiryAt \u003c= PreparedAt bị chặn",
+                               "Expected":  "547",
+                               "Actual":  "547",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  10,
+                               "TestCase":  "Dòng phiếu châm Qty = 0 bị chặn",
+                               "Expected":  "547",
+                               "Actual":  "547",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  11,
+                               "TestCase":  "TVP chặn trùng cặp ColumnId + BatchId",
+                               "Expected":  "2627",
+                               "Actual":  "2627",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  12,
+                               "TestCase":  "Có đủ 36 sản phẩm FV-SP-001…036",
+                               "Expected":  "36",
+                               "Actual":  "36",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  13,
+                               "TestCase":  "5 máy × 12 ngăn A1–C4",
+                               "Expected":  "60",
+                               "Actual":  "60",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  14,
+                               "TestCase":  "Tồn theo lô khớp Slot.CurrentStock (số ngăn lệch)",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  15,
+                               "TestCase":  "Không ngăn nào vượt sức chứa",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  16,
+                               "TestCase":  "Có hàng sắp hết hạn trong 6 giờ (demo cảnh báo)",
+                               "Expected":  "\u003e0",
+                               "Actual":  "17",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  17,
+                               "TestCase":  "Có lô đã hết hạn còn trong ngăn (demo rút hàng)",
+                               "Expected":  "\u003e0",
+                               "Actual":  "1",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  18,
+                               "TestCase":  "FIFO: lô nạp trước hết hạn trước (số cặp sai)",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  19,
+                               "TestCase":  "sp_AddProduct đúng: tạo sản phẩm, SKU FV-SP-…, giá 42000",
+                               "Expected":  "OK",
+                               "Actual":  "OK",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  20,
+                               "TestCase":  "sp_AddProduct trùng tên (khác hoa/thường)",
+                               "Expected":  "50101",
+                               "Actual":  "50101",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  21,
+                               "TestCase":  "sp_AddProduct giá = 0",
+                               "Expected":  "50102",
+                               "Actual":  "50102",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  22,
+                               "TestCase":  "sp_UpdateProduct đúng: đổi tên + hạn dùng",
+                               "Expected":  "OK",
+                               "Actual":  "OK",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  23,
+                               "TestCase":  "sp_UpdateProduct sản phẩm không tồn tại",
+                               "Expected":  "50103",
+                               "Actual":  "50103",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  24,
+                               "TestCase":  "sp_UpdateProduct ngừng bán khi còn gán ở ngăn",
+                               "Expected":  "50109",
+                               "Actual":  "50109",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  25,
+                               "TestCase":  "sp_UpdatePrice đúng: 42000 → 45000, lịch sử +1",
+                               "Expected":  "OK",
+                               "Actual":  "OK",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  26,
+                               "TestCase":  "sp_UpdatePrice giá mới trùng giá hiện tại",
+                               "Expected":  "50104",
+                               "Actual":  "50104",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  27,
+                               "TestCase":  "sp_UpdatePrice sản phẩm không tồn tại",
+                               "Expected":  "50103",
+                               "Actual":  "50103",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  28,
+                               "TestCase":  "sp_AssignColumn đúng: gán sản phẩm vào ngăn rỗng",
+                               "Expected":  "OK",
+                               "Actual":  "OK",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  29,
+                               "TestCase":  "sp_AssignColumn ngăn không tồn tại",
+                               "Expected":  "50105",
+                               "Actual":  "50105",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  30,
+                               "TestCase":  "sp_AssignColumn ngăn còn hàng",
+                               "Expected":  "50106",
+                               "Actual":  "50106",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  31,
+                               "TestCase":  "sp_AddBatch đúng: mã LOxxxxxx, hạn = giờ làm + 48 giờ",
+                               "Expected":  "OK",
+                               "Actual":  "OK",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  32,
+                               "TestCase":  "sp_AddBatch sản phẩm không tồn tại",
+                               "Expected":  "50107",
+                               "Actual":  "50107",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  33,
+                               "TestCase":  "sp_AddBatch số lượng = 0",
+                               "Expected":  "50113",
+                               "Actual":  "50113",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  34,
+                               "TestCase":  "sp_Restock đúng: ngăn +3, SlotStock, phiếu châm, StockMovement IN",
+                               "Expected":  "OK",
+                               "Actual":  "OK",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  35,
+                               "TestCase":  "sp_Restock vượt sức chứa: lỗi + rollback (tồn vẫn 3)",
+                               "Expected":  "50117",
+                               "Actual":  "50117",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  36,
+                               "TestCase":  "sp_Restock lô không đúng sản phẩm của ngăn",
+                               "Expected":  "50114",
+                               "Actual":  "50114",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  37,
+                               "TestCase":  "sp_Restock máy không tồn tại",
+                               "Expected":  "50110",
+                               "Actual":  "50110",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  38,
+                               "TestCase":  "sp_Restock ngăn không thuộc máy",
+                               "Expected":  "50112",
+                               "Actual":  "50112",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  39,
+                               "TestCase":  "sp_Restock lô còn dưới 1 giờ sử dụng",
+                               "Expected":  "50116",
+                               "Actual":  "50116",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  40,
+                               "TestCase":  "sp_Restock lô không đủ số lượng",
+                               "Expected":  "50118",
+                               "Actual":  "50118",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  41,
+                               "TestCase":  "sp_RemoveExpired đúng: rút 3 hộp, ngăn về 0, StockMovement OUT",
+                               "Expected":  "OK",
+                               "Actual":  "OK",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  42,
+                               "TestCase":  "sp_RemoveExpired chạy lần 2 không rút thêm",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  43,
+                               "TestCase":  "sp_RemoveExpired máy không tồn tại: không lỗi, 0 dòng",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  44,
+                               "TestCase":  "Có 4 view + 3 function + 1 trigger",
+                               "Expected":  "8",
+                               "Actual":  "8",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  45,
+                               "TestCase":  "vw_ProductCatalog đủ sản phẩm (chênh lệch)",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  46,
+                               "TestCase":  "vw_StockStatus: tồn khớp SlotStock, ColumnNo không trùng (số dòng sai)",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  47,
+                               "TestCase":  "vw_AvailableBatches / vw_ExpiringBatches lọc đúng (số dòng sai)",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  48,
+                               "TestCase":  "fn_PriceHistory: 2 mốc giá, 45000 là giá hiện tại",
+                               "Expected":  "2",
+                               "Actual":  "1",
+                               "Passed":  false
+                           },
+                           {
+                               "TestNo":  49,
+                               "TestCase":  "fn_GetFifoStock: lô nạp trước đứng đầu, cộng dồn = Remaining",
+                               "Expected":  "OK",
+                               "Actual":  "OK",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  50,
+                               "TestCase":  "trg_Slot_LowStock: ngăn về 0 → 1 cảnh báo LOW_STOCK (HIGH)",
+                               "Expected":  "1",
+                               "Actual":  "1",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  51,
+                               "TestCase":  "trg_Slot_LowStock: không ghi trùng khi cảnh báo còn mở",
+                               "Expected":  "1",
+                               "Actual":  "1",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  52,
+                               "TestCase":  "Có đủ 9 index FV-19",
+                               "Expected":  "9",
+                               "Actual":  "9",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  53,
+                               "TestCase":  "UX tên sản phẩm: chèn thẳng tên trùng bị chặn",
+                               "Expected":  "2601",
+                               "Actual":  "2601",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  54,
+                               "TestCase":  "UX tên sản phẩm: bản đã xóa mềm được trùng tên",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                         "Warning: Null value is eliminated by an aggregate or other SET operation.",
+                         "[tests_inventory] 53/54 PASS"
+                     ],
+        "Status":  "FAIL",
+        "Cases":  [
+                      {
+                          "TestNo":  1,
+                          "TestCase":  "Có cột Product.ShelfLifeHours",
+                          "Expected":  "1",
+                          "Actual":  "1",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  2,
+                          "TestCase":  "Có cột StockBatch.PreparedAt và ExpiryAt",
+                          "Expected":  "1",
+                          "Actual":  "1",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  3,
+                          "TestCase":  "Có bảng SlotStock, RestockEvent, RestockItem",
+                          "Expected":  "3",
+                          "Actual":  "3",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  4,
+                          "TestCase":  "Kiểu TVP RestockItemType có đúng 3 cột ColumnId, BatchId, Qty",
+                          "Expected":  "3",
+                          "Actual":  "3",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  5,
+                          "TestCase":  "Product là Temporal Table (temporal_type = 2)",
+                          "Expected":  "2",
+                          "Actual":  "2",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  6,
+                          "TestCase":  "Cột cũ TV3/TV5 đang dùng vẫn còn (UnitPrice, CurrentStock, ExpiryDate)",
+                          "Expected":  "3",
+                          "Actual":  "3",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  7,
+                          "TestCase":  "Đổi giá → ProductHistory tăng 1 dòng",
+                          "Expected":  "+1",
+                          "Actual":  "+1",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  8,
+                          "TestCase":  "ShelfLifeHours = 0 bị chặn",
+                          "Expected":  "547",
+                          "Actual":  "547",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  9,
+                          "TestCase":  "Lô có ExpiryAt \u003c= PreparedAt bị chặn",
+                          "Expected":  "547",
+                          "Actual":  "547",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  10,
+                          "TestCase":  "Dòng phiếu châm Qty = 0 bị chặn",
+                          "Expected":  "547",
+                          "Actual":  "547",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  11,
+                          "TestCase":  "TVP chặn trùng cặp ColumnId + BatchId",
+                          "Expected":  "2627",
+                          "Actual":  "2627",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  12,
+                          "TestCase":  "Có đủ 36 sản phẩm FV-SP-001…036",
+                          "Expected":  "36",
+                          "Actual":  "36",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  13,
+                          "TestCase":  "5 máy × 12 ngăn A1–C4",
+                          "Expected":  "60",
+                          "Actual":  "60",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  14,
+                          "TestCase":  "Tồn theo lô khớp Slot.CurrentStock (số ngăn lệch)",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  15,
+                          "TestCase":  "Không ngăn nào vượt sức chứa",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  16,
+                          "TestCase":  "Có hàng sắp hết hạn trong 6 giờ (demo cảnh báo)",
+                          "Expected":  "\u003e0",
+                          "Actual":  "17",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  17,
+                          "TestCase":  "Có lô đã hết hạn còn trong ngăn (demo rút hàng)",
+                          "Expected":  "\u003e0",
+                          "Actual":  "1",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  18,
+                          "TestCase":  "FIFO: lô nạp trước hết hạn trước (số cặp sai)",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  19,
+                          "TestCase":  "sp_AddProduct đúng: tạo sản phẩm, SKU FV-SP-…, giá 42000",
+                          "Expected":  "OK",
+                          "Actual":  "OK",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  20,
+                          "TestCase":  "sp_AddProduct trùng tên (khác hoa/thường)",
+                          "Expected":  "50101",
+                          "Actual":  "50101",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  21,
+                          "TestCase":  "sp_AddProduct giá = 0",
+                          "Expected":  "50102",
+                          "Actual":  "50102",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  22,
+                          "TestCase":  "sp_UpdateProduct đúng: đổi tên + hạn dùng",
+                          "Expected":  "OK",
+                          "Actual":  "OK",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  23,
+                          "TestCase":  "sp_UpdateProduct sản phẩm không tồn tại",
+                          "Expected":  "50103",
+                          "Actual":  "50103",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  24,
+                          "TestCase":  "sp_UpdateProduct ngừng bán khi còn gán ở ngăn",
+                          "Expected":  "50109",
+                          "Actual":  "50109",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  25,
+                          "TestCase":  "sp_UpdatePrice đúng: 42000 → 45000, lịch sử +1",
+                          "Expected":  "OK",
+                          "Actual":  "OK",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  26,
+                          "TestCase":  "sp_UpdatePrice giá mới trùng giá hiện tại",
+                          "Expected":  "50104",
+                          "Actual":  "50104",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  27,
+                          "TestCase":  "sp_UpdatePrice sản phẩm không tồn tại",
+                          "Expected":  "50103",
+                          "Actual":  "50103",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  28,
+                          "TestCase":  "sp_AssignColumn đúng: gán sản phẩm vào ngăn rỗng",
+                          "Expected":  "OK",
+                          "Actual":  "OK",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  29,
+                          "TestCase":  "sp_AssignColumn ngăn không tồn tại",
+                          "Expected":  "50105",
+                          "Actual":  "50105",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  30,
+                          "TestCase":  "sp_AssignColumn ngăn còn hàng",
+                          "Expected":  "50106",
+                          "Actual":  "50106",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  31,
+                          "TestCase":  "sp_AddBatch đúng: mã LOxxxxxx, hạn = giờ làm + 48 giờ",
+                          "Expected":  "OK",
+                          "Actual":  "OK",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  32,
+                          "TestCase":  "sp_AddBatch sản phẩm không tồn tại",
+                          "Expected":  "50107",
+                          "Actual":  "50107",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  33,
+                          "TestCase":  "sp_AddBatch số lượng = 0",
+                          "Expected":  "50113",
+                          "Actual":  "50113",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  34,
+                          "TestCase":  "sp_Restock đúng: ngăn +3, SlotStock, phiếu châm, StockMovement IN",
+                          "Expected":  "OK",
+                          "Actual":  "OK",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  35,
+                          "TestCase":  "sp_Restock vượt sức chứa: lỗi + rollback (tồn vẫn 3)",
+                          "Expected":  "50117",
+                          "Actual":  "50117",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  36,
+                          "TestCase":  "sp_Restock lô không đúng sản phẩm của ngăn",
+                          "Expected":  "50114",
+                          "Actual":  "50114",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  37,
+                          "TestCase":  "sp_Restock máy không tồn tại",
+                          "Expected":  "50110",
+                          "Actual":  "50110",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  38,
+                          "TestCase":  "sp_Restock ngăn không thuộc máy",
+                          "Expected":  "50112",
+                          "Actual":  "50112",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  39,
+                          "TestCase":  "sp_Restock lô còn dưới 1 giờ sử dụng",
+                          "Expected":  "50116",
+                          "Actual":  "50116",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  40,
+                          "TestCase":  "sp_Restock lô không đủ số lượng",
+                          "Expected":  "50118",
+                          "Actual":  "50118",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  41,
+                          "TestCase":  "sp_RemoveExpired đúng: rút 3 hộp, ngăn về 0, StockMovement OUT",
+                          "Expected":  "OK",
+                          "Actual":  "OK",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  42,
+                          "TestCase":  "sp_RemoveExpired chạy lần 2 không rút thêm",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  43,
+                          "TestCase":  "sp_RemoveExpired máy không tồn tại: không lỗi, 0 dòng",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  44,
+                          "TestCase":  "Có 4 view + 3 function + 1 trigger",
+                          "Expected":  "8",
+                          "Actual":  "8",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  45,
+                          "TestCase":  "vw_ProductCatalog đủ sản phẩm (chênh lệch)",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  46,
+                          "TestCase":  "vw_StockStatus: tồn khớp SlotStock, ColumnNo không trùng (số dòng sai)",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  47,
+                          "TestCase":  "vw_AvailableBatches / vw_ExpiringBatches lọc đúng (số dòng sai)",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  48,
+                          "TestCase":  "fn_PriceHistory: 2 mốc giá, 45000 là giá hiện tại",
+                          "Expected":  "2",
+                          "Actual":  "1",
+                          "Passed":  false
+                      },
+                      {
+                          "TestNo":  49,
+                          "TestCase":  "fn_GetFifoStock: lô nạp trước đứng đầu, cộng dồn = Remaining",
+                          "Expected":  "OK",
+                          "Actual":  "OK",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  50,
+                          "TestCase":  "trg_Slot_LowStock: ngăn về 0 → 1 cảnh báo LOW_STOCK (HIGH)",
+                          "Expected":  "1",
+                          "Actual":  "1",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  51,
+                          "TestCase":  "trg_Slot_LowStock: không ghi trùng khi cảnh báo còn mở",
+                          "Expected":  "1",
+                          "Actual":  "1",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  52,
+                          "TestCase":  "Có đủ 9 index FV-19",
+                          "Expected":  "9",
+                          "Actual":  "9",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  53,
+                          "TestCase":  "UX tên sản phẩm: chèn thẳng tên trùng bị chặn",
+                          "Expected":  "2601",
+                          "Actual":  "2601",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  54,
+                          "TestCase":  "UX tên sản phẩm: bản đã xóa mềm được trùng tên",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      }
+                  ],
+        "Name":  "tests_inventory.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:51.1635637+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:49.5945962+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "OrderId":  1,
+                               "MachineId":  1,
+                               "Status":  "PENDING",
+                               "TotalAmount":  25000.00,
+                               "CreatedAt":  "2026-11-14T17:55:50.0000000",
+                               "ExpiresAt":  "2026-11-14T18:00:50.0000000"
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  2,
+                               "MachineId":  1,
+                               "Status":  "PENDING",
+                               "TotalAmount":  25000.00,
+                               "CreatedAt":  "2026-11-14T17:55:51.0000000",
+                               "ExpiresAt":  "2026-11-14T18:00:51.0000000"
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  3,
+                               "MachineId":  1,
+                               "Status":  "PENDING",
+                               "TotalAmount":  25000.00,
+                               "CreatedAt":  "2026-11-14T17:55:51.0000000",
+                               "ExpiresAt":  "2026-11-14T18:00:51.0000000"
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  3,
+                               "Status":  "PAID",
+                               "Amount":  25000.00,
+                               "PaidAt":  "2026-11-14T17:55:51.0000000",
+                               "IsDuplicate":  false
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  3,
+                               "OrderItemId":  3,
+                               "AttemptNo":  1,
+                               "Result":  "JAM",
+                               "OrderStatus":  "PAID"
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  3,
+                               "OrderItemId":  3,
+                               "AttemptNo":  2,
+                               "Result":  "JAM",
+                               "OrderStatus":  "PAID"
+                           }
+                       ],
+                       [
+                           {
+                               "RefundId":  1,
+                               "OrderId":  3,
+                               "Amount":  25000.00,
+                               "Status":  "REFUNDED"
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  3,
+                               "OrderItemId":  3,
+                               "AttemptNo":  3,
+                               "Result":  "JAM",
+                               "OrderStatus":  "REFUNDED"
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  4,
+                               "MachineId":  1,
+                               "Status":  "PENDING",
+                               "TotalAmount":  25000.00,
+                               "CreatedAt":  "2026-11-14T17:55:51.0000000",
+                               "ExpiresAt":  "2026-11-14T18:00:51.0000000"
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  4,
+                               "Status":  "PAID",
+                               "Amount":  25000.00,
+                               "PaidAt":  "2026-11-14T17:55:51.0000000",
+                               "IsDuplicate":  false
+                           }
+                       ],
+                       [
+                           {
+                               "OrderId":  4,
+                               "OrderItemId":  4,
+                               "AttemptNo":  1,
+                               "Result":  "SUCCESS",
+                               "OrderStatus":  "DISPENSED"
+                           }
+                       ],
+                       [
+                           {
+                               "TestCode":  "UT01",
+                               "TestName":  "Het hang - sp_CreateOrder vuot ton",
+                               "Passed":  true,
+                               "Detail":  "Err 50201: Sản phẩm đã hết hàng hoặc không đủ số lượng"
+                           },
+                           {
+                               "TestCode":  "UT02",
+                               "TestName":  "Thanh toan sai so tien",
+                               "Passed":  true,
+                               "Detail":  "Err 50208: Số tiền thanh toán không khớp với đơn hàng"
+                           },
+                           {
+                               "TestCode":  "UT03",
+                               "TestName":  "Callback gateway gui 2 lan - lan 2 IsDuplicate",
+                               "Passed":  true,
+                               "Detail":  "IsDuplicate=1"
+                           },
+                           {
+                               "TestCode":  "UT04",
+                               "TestName":  "Ket hang 3 lan - tu hoan tien (REFUNDED)",
+                               "Passed":  true,
+                               "Detail":  "Status=REFUNDED"
+                           },
+                           {
+                               "TestCode":  "UT05",
+                               "TestName":  "Mua thanh cong DISPENSED, ton giam 1",
+                               "Passed":  true,
+                               "Detail":  "Status=DISPENSED stock 10-\u003e9"
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                         "[tests_sales] Index sales: xong.",
+                         "[tests_sales] Unit test TV3 — Pass: 5 | Fail: 0"
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+                      {
+                          "TestCode":  "UT01",
+                          "TestName":  "Het hang - sp_CreateOrder vuot ton",
+                          "Passed":  true,
+                          "Detail":  "Err 50201: Sản phẩm đã hết hàng hoặc không đủ số lượng"
+                      },
+                      {
+                          "TestCode":  "UT02",
+                          "TestName":  "Thanh toan sai so tien",
+                          "Passed":  true,
+                          "Detail":  "Err 50208: Số tiền thanh toán không khớp với đơn hàng"
+                      },
+                      {
+                          "TestCode":  "UT03",
+                          "TestName":  "Callback gateway gui 2 lan - lan 2 IsDuplicate",
+                          "Passed":  true,
+                          "Detail":  "IsDuplicate=1"
+                      },
+                      {
+                          "TestCode":  "UT04",
+                          "TestName":  "Ket hang 3 lan - tu hoan tien (REFUNDED)",
+                          "Passed":  true,
+                          "Detail":  "Status=REFUNDED"
+                      },
+                      {
+                          "TestCode":  "UT05",
+                          "TestName":  "Mua thanh cong DISPENSED, ton giam 1",
+                          "Passed":  true,
+                          "Detail":  "Status=DISPENSED stock 10-\u003e9"
+                      }
+                  ],
+        "Name":  "tests_sales.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:51.7048357+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:51.1757271+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "UserId":  3,
+                               "Username":  "operator02",
+                               "IsActive":  false
+                           }
+                       ],
+                       [
+                           {
+                               "TestNo":  1,
+                               "TestCase":  "Có bảng audit.ChangeLog và audit.AuditLog",
+                               "Expected":  "2",
+                               "Actual":  "2",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  2,
+                               "TestCase":  "Có 2 view + trigger auth.trg_Users_Audit",
+                               "Expected":  "3",
+                               "Actual":  "3",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  3,
+                               "TestCase":  "vw_UserPermissions: 1 dòng / tài khoản (chênh lệch)",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  4,
+                               "TestCase":  "vw_UserPermissions: MachineIds của operator01 khớp UserMachine",
+                               "Expected":  "1,2,3",
+                               "Actual":  "1,2,3",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  5,
+                               "TestCase":  "vw_UserPermissions: admin là Admin, 0 máy",
+                               "Expected":  "Admin/0",
+                               "Actual":  "Admin/0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  6,
+                               "TestCase":  "vw_LoginActivity: tổng đúng + sai = số dòng LoginHistory (chênh lệch)",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  7,
+                               "TestCase":  "Trigger: khóa operator02 → 1 dòng ChangeLog, IsActive true→false",
+                               "Expected":  "1 | true→false",
+                               "Actual":  "1 | true→false",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  8,
+                               "TestCase":  "Trigger: ChangeLog không chứa PasswordHash / Salt",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  9,
+                               "TestCase":  "Trigger: UPDATE 2 tài khoản 1 lệnh → 2 dòng ChangeLog",
+                               "Expected":  "2",
+                               "Actual":  "2",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  10,
+                               "TestCase":  "Trigger: chỉ đổi LastLoginAt thì KHÔNG ghi nhật ký",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                         "[tests_audit] 10/10 PASS"
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+                      {
+                          "TestNo":  1,
+                          "TestCase":  "Có bảng audit.ChangeLog và audit.AuditLog",
+                          "Expected":  "2",
+                          "Actual":  "2",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  2,
+                          "TestCase":  "Có 2 view + trigger auth.trg_Users_Audit",
+                          "Expected":  "3",
+                          "Actual":  "3",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  3,
+                          "TestCase":  "vw_UserPermissions: 1 dòng / tài khoản (chênh lệch)",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  4,
+                          "TestCase":  "vw_UserPermissions: MachineIds của operator01 khớp UserMachine",
+                          "Expected":  "1,2,3",
+                          "Actual":  "1,2,3",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  5,
+                          "TestCase":  "vw_UserPermissions: admin là Admin, 0 máy",
+                          "Expected":  "Admin/0",
+                          "Actual":  "Admin/0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  6,
+                          "TestCase":  "vw_LoginActivity: tổng đúng + sai = số dòng LoginHistory (chênh lệch)",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  7,
+                          "TestCase":  "Trigger: khóa operator02 → 1 dòng ChangeLog, IsActive true→false",
+                          "Expected":  "1 | true→false",
+                          "Actual":  "1 | true→false",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  8,
+                          "TestCase":  "Trigger: ChangeLog không chứa PasswordHash / Salt",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  9,
+                          "TestCase":  "Trigger: UPDATE 2 tài khoản 1 lệnh → 2 dòng ChangeLog",
+                          "Expected":  "2",
+                          "Actual":  "2",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  10,
+                          "TestCase":  "Trigger: chỉ đổi LastLoginAt thì KHÔNG ghi nhật ký",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      }
+                  ],
+        "Name":  "tests_audit.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:52.2214513+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:51.7151760+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "TestNo":  1,
+                               "TestCase":  "Có đủ 4 login fv_*_app",
+                               "Expected":  "4",
+                               "Actual":  "4",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  2,
+                               "TestCase":  "4 user thuộc đúng role (admin = db_owner)",
+                               "Expected":  "4",
+                               "Actual":  "4",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  3,
+                               "TestCase":  "RLS auth.MachinePolicy bật, số bảng được lọc",
+                               "Expected":  "\u003e=2",
+                               "Actual":  "3",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  4,
+                               "TestCase":  "RLS: operator01 chỉ thấy máy được giao (inventory.Machine)",
+                               "Expected":  "3",
+                               "Actual":  "3",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  5,
+                               "TestCase":  "RLS: vw_StockStatus của operator01 chỉ có máy được giao",
+                               "Expected":  "3",
+                               "Actual":  "3",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  6,
+                               "TestCase":  "DENY: Operator xem report (số liệu tài chính)",
+                               "Expected":  "229",
+                               "Actual":  "229 ([report].[vw_ColdChainCompliance])",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  7,
+                               "TestCase":  "RLS: Operator châm hàng máy KHÔNG được giao",
+                               "Expected":  "50110",
+                               "Actual":  "50110",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  8,
+                               "TestCase":  "Kiosk gọi inventory.sp_AddProduct bị từ chối",
+                               "Expected":  "229",
+                               "Actual":  "229",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  9,
+                               "TestCase":  "Kiosk đọc vw_StockStatus được, thấy mọi máy",
+                               "Expected":  "5",
+                               "Actual":  "5",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  10,
+                               "TestCase":  "Device đọc danh mục sản phẩm bị từ chối",
+                               "Expected":  "229",
+                               "Actual":  "229",
+                               "Passed":  true
+                           },
+                           {
+                               "TestNo":  11,
+                               "TestCase":  "RLS: Operator thiếu UserId không thấy máy nào",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                         "[tests_security] 11/11 PASS"
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+                      {
+                          "TestNo":  1,
+                          "TestCase":  "Có đủ 4 login fv_*_app",
+                          "Expected":  "4",
+                          "Actual":  "4",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  2,
+                          "TestCase":  "4 user thuộc đúng role (admin = db_owner)",
+                          "Expected":  "4",
+                          "Actual":  "4",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  3,
+                          "TestCase":  "RLS auth.MachinePolicy bật, số bảng được lọc",
+                          "Expected":  "\u003e=2",
+                          "Actual":  "3",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  4,
+                          "TestCase":  "RLS: operator01 chỉ thấy máy được giao (inventory.Machine)",
+                          "Expected":  "3",
+                          "Actual":  "3",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  5,
+                          "TestCase":  "RLS: vw_StockStatus của operator01 chỉ có máy được giao",
+                          "Expected":  "3",
+                          "Actual":  "3",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  6,
+                          "TestCase":  "DENY: Operator xem report (số liệu tài chính)",
+                          "Expected":  "229",
+                          "Actual":  "229 ([report].[vw_ColdChainCompliance])",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  7,
+                          "TestCase":  "RLS: Operator châm hàng máy KHÔNG được giao",
+                          "Expected":  "50110",
+                          "Actual":  "50110",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  8,
+                          "TestCase":  "Kiosk gọi inventory.sp_AddProduct bị từ chối",
+                          "Expected":  "229",
+                          "Actual":  "229",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  9,
+                          "TestCase":  "Kiosk đọc vw_StockStatus được, thấy mọi máy",
+                          "Expected":  "5",
+                          "Actual":  "5",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  10,
+                          "TestCase":  "Device đọc danh mục sản phẩm bị từ chối",
+                          "Expected":  "229",
+                          "Actual":  "229",
+                          "Passed":  true
+                      },
+                      {
+                          "TestNo":  11,
+                          "TestCase":  "RLS: Operator thiếu UserId không thấy máy nào",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true
+                      }
+                  ],
+        "Name":  "tests_security.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:53.4498054+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:52.2320144+07:00",
+        "Tables":  [
+
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027."
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+
+                  ],
+        "Name":  "fixtures_report.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:54.3190516+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:53.4553593+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "UserId":  29,
+                               "Username":  "qa_7305903e-ed1",
+                               "RoleName":  "Operator"
+                           }
+                       ],
+                       [
+                           {
+                               "Success":  true,
+                               "Message":  "Đăng nhập thành công",
+                               "UserId":  1,
+                               "Username":  "admin",
+                               "FullName":  "Nguyễn Phương Huy",
+                               "RoleName":  "Admin"
+                           }
+                       ],
+                       [
+
+                       ],
+                       [
+                           {
+                               "ProductId":  51,
+                               "SKU":  "FV-SP-037",
+                               "ProductName":  "QA C9A98C65-4576-4AB3-9EEA-88F09256F572",
+                               "Price":  15000.00
+                           }
+                       ],
+                       [
+                           {
+                               "ProductId":  52,
+                               "SKU":  "FV-SP-037",
+                               "ProductName":  "QA 4D8B0D5F-F6A0-469E-BB99-FE6958935213",
+                               "Price":  15000.00
+                           }
+                       ],
+                       [
+                           {
+                               "ProductId":  52,
+                               "OldPrice":  15000.00,
+                               "NewPrice":  16000.00
+                           }
+                       ],
+                       [
+                           {
+                               "RemovedLines":  0,
+                               "RemovedQty":  0
+                           }
+                       ],
+                       [
+                           {
+                               "MachineId":  15,
+                               "Serial":  "QA-3B958857-ECEA-43D6-A85F-91394EF98540",
+                               "MachineName":  "QA rollback",
+                               "Status":  "ACTIVE"
+                           }
+                       ],
+                       [
+                           {
+                               "MachineId":  10,
+                               "Status":  "ACTIVE",
+                               "LastTemp":  5.00
+                           }
+                       ],
+                       [
+                           {
+                               "Module":  "auth",
+                               "Total":  4,
+                               "Passed":  4,
+                               "Failed":  0,
+                               "Blocked":  0
+                           },
+                           {
+                               "Module":  "inventory",
+                               "Total":  8,
+                               "Passed":  7,
+                               "Failed":  0,
+                               "Blocked":  1
+                           },
+                           {
+                               "Module":  "iot",
+                               "Total":  9,
+                               "Passed":  8,
+                               "Failed":  0,
+                               "Blocked":  1
+                           },
+                           {
+                               "Module":  "report",
+                               "Total":  6,
+                               "Passed":  6,
+                               "Failed":  0,
+                               "Blocked":  0
+                           },
+                           {
+                               "Module":  "sales",
+                               "Total":  6,
+                               "Passed":  6,
+                               "Failed":  0,
+                               "Blocked":  0
+                           }
+                       ],
+                       [
+                           {
+                               "TestCase":  "AUTH-create-valid",
+                               "Module":  "auth",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  8,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "AUTH-create-invalid-name",
+                               "Module":  "auth",
+                               "Expected":  "50001",
+                               "Actual":  "50001",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Tên đăng nhập phải có ít nhất 3 ký tự",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "AUTH-create-invalid-password",
+                               "Module":  "auth",
+                               "Expected":  "50002",
+                               "Actual":  "50002",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Mật khẩu phải có ít nhất 8 ký tự",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "AUTH-login-real",
+                               "Module":  "auth",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  18,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "INV-add-valid",
+                               "Module":  "inventory",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  12,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "INV-add-zero-price",
+                               "Module":  "inventory",
+                               "Expected":  "50102",
+                               "Actual":  "50102",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Giá bán phải lớn hơn 0",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "INV-add-empty-name",
+                               "Module":  "inventory",
+                               "Expected":  "50100",
+                               "Actual":  "50100",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  3,
+                               "ErrorDetail":  "Tên sản phẩm không được để trống",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "INV-update-price-valid",
+                               "Module":  "inventory",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  7,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "INV-price-invalid-id",
+                               "Module":  "inventory",
+                               "Expected":  "50103",
+                               "Actual":  "50103",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  2,
+                               "ErrorDetail":  "Sản phẩm không tồn tại",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "INV-batch-zero",
+                               "Module":  "inventory",
+                               "Expected":  "50113",
+                               "Actual":  "50113",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  9,
+                               "ErrorDetail":  "Số lượng phải lớn hơn 0",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "INV-restock-empty",
+                               "Module":  "inventory",
+                               "Expected":  "50111",
+                               "Actual":  "Chưa hợp nhất máy theo #20.",
+                               "Passed":  false,
+                               "Status":  "BLOCKED",
+                               "DurationMs":  0,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "INV-remove-expired-idempotent",
+                               "Module":  "inventory",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  1,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "SALES-empty-cart",
+                               "Module":  "sales",
+                               "Expected":  "50200",
+                               "Actual":  "50200",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  2,
+                               "ErrorDetail":  "Giỏ hàng rỗng",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "SALES-empty-gateway",
+                               "Module":  "sales",
+                               "Expected":  "50210",
+                               "Actual":  "50210",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "GatewayTxnId không được để trống.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "SALES-invalid-dispense-result",
+                               "Module":  "sales",
+                               "Expected":  "50211",
+                               "Actual":  "50211",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Kết quả nhả hàng chỉ nhận SUCCESS hoặc JAM",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "SALES-missing-item",
+                               "Module":  "sales",
+                               "Expected":  "50212",
+                               "Actual":  "50212",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Không tìm thấy dòng đơn hàng",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "SALES-missing-refund",
+                               "Module":  "sales",
+                               "Expected":  "50216",
+                               "Actual":  "50216",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Đơn hàng không tồn tại",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "SALES-invalid-expiry",
+                               "Module":  "sales",
+                               "Expected":  "50216",
+                               "Actual":  "50216",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  14,
+                               "ErrorDetail":  "Thời gian chờ phải lớn hơn 0 phút.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-register-real",
+                               "Module":  "iot",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  84,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-register-invalid-location",
+                               "Module":  "iot",
+                               "Expected":  "50302",
+                               "Actual":  "50302",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Địa điểm đặt máy (LocationId) không tồn tại.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-ingest-invalid-json",
+                               "Module":  "iot",
+                               "Expected":  "50310",
+                               "Actual":  "50310",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  181,
+                               "ErrorDetail":  "Dữ liệu payload truyền lên không phải định dạng JSON hợp lệ.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-ingest-missing-machine",
+                               "Module":  "iot",
+                               "Expected":  "50311",
+                               "Actual":  "50311",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  2,
+                               "ErrorDetail":  "Không tìm thấy máy tương ứng với thiết bị gửi dữ liệu.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-ingest-two-readings",
+                               "Module":  "iot",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  68,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-clear-missing",
+                               "Module":  "iot",
+                               "Expected":  "50330",
+                               "Actual":  "50330",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  45,
+                               "ErrorDetail":  "Mã máy (MachineId) không tồn tại.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-threshold-invalid-machine",
+                               "Module":  "iot",
+                               "Expected":  "50340",
+                               "Actual":  "50340",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  23,
+                               "ErrorDetail":  "Mã máy (MachineId) không tồn tại.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-ack-missing",
+                               "Module":  "iot",
+                               "Expected":  "50320",
+                               "Actual":  "50320",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  24,
+                               "ErrorDetail":  "Mã cảnh báo (AlertId) không tồn tại trong hệ thống.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "IOT-partition-real",
+                               "Module":  "iot",
+                               "Expected":  "0",
+                               "Actual":  "Thiếu dependency: iot.sp_MaintainPartitions",
+                               "Passed":  false,
+                               "Status":  "BLOCKED",
+                               "DurationMs":  0,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "REPORT-growth-12-months",
+                               "Module":  "report",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  74,
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "REPORT-invalid-year",
+                               "Module":  "report",
+                               "Expected":  "50401",
+                               "Actual":  "50401",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Năm báo cáo phải từ 2000 đến 9998.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "REPORT-reversed-peak",
+                               "Module":  "report",
+                               "Expected":  "50401",
+                               "Actual":  "50401",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  43,
+                               "ErrorDetail":  "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "REPORT-invalid-export",
+                               "Module":  "report",
+                               "Expected":  "50402",
+                               "Actual":  "50402",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  66,
+                               "ErrorDetail":  "Khoảng thời gian xuất báo cáo không hợp lệ",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "REPORT-reversed-summary",
+                               "Module":  "report",
+                               "Expected":  "50403",
+                               "Actual":  "50403",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  71,
+                               "ErrorDetail":  "Khoảng ngày tổng hợp không hợp lệ.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           },
+                           {
+                               "TestCase":  "REPORT-empty-runby",
+                               "Module":  "report",
+                               "Expected":  "50404",
+                               "Actual":  "50404",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "DurationMs":  0,
+                               "ErrorDetail":  "Tên người chạy cần 1..100 ký tự.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000",
+                               "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Warning: Null value is eliminated by an aggregate or other SET operation."
+                     ],
+        "Status":  "FAIL",
+        "Cases":  [
+                      {
+                          "TestCase":  "AUTH-create-valid",
+                          "Module":  "auth",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  8,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "AUTH-create-invalid-name",
+                          "Module":  "auth",
+                          "Expected":  "50001",
+                          "Actual":  "50001",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Tên đăng nhập phải có ít nhất 3 ký tự",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "AUTH-create-invalid-password",
+                          "Module":  "auth",
+                          "Expected":  "50002",
+                          "Actual":  "50002",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Mật khẩu phải có ít nhất 8 ký tự",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "AUTH-login-real",
+                          "Module":  "auth",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  18,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "INV-add-valid",
+                          "Module":  "inventory",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  12,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "INV-add-zero-price",
+                          "Module":  "inventory",
+                          "Expected":  "50102",
+                          "Actual":  "50102",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Giá bán phải lớn hơn 0",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "INV-add-empty-name",
+                          "Module":  "inventory",
+                          "Expected":  "50100",
+                          "Actual":  "50100",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  3,
+                          "ErrorDetail":  "Tên sản phẩm không được để trống",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "INV-update-price-valid",
+                          "Module":  "inventory",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  7,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "INV-price-invalid-id",
+                          "Module":  "inventory",
+                          "Expected":  "50103",
+                          "Actual":  "50103",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  2,
+                          "ErrorDetail":  "Sản phẩm không tồn tại",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "INV-batch-zero",
+                          "Module":  "inventory",
+                          "Expected":  "50113",
+                          "Actual":  "50113",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  9,
+                          "ErrorDetail":  "Số lượng phải lớn hơn 0",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "INV-restock-empty",
+                          "Module":  "inventory",
+                          "Expected":  "50111",
+                          "Actual":  "Chưa hợp nhất máy theo #20.",
+                          "Passed":  false,
+                          "Status":  "BLOCKED",
+                          "DurationMs":  0,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "INV-remove-expired-idempotent",
+                          "Module":  "inventory",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  1,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "SALES-empty-cart",
+                          "Module":  "sales",
+                          "Expected":  "50200",
+                          "Actual":  "50200",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  2,
+                          "ErrorDetail":  "Giỏ hàng rỗng",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "SALES-empty-gateway",
+                          "Module":  "sales",
+                          "Expected":  "50210",
+                          "Actual":  "50210",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "GatewayTxnId không được để trống.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "SALES-invalid-dispense-result",
+                          "Module":  "sales",
+                          "Expected":  "50211",
+                          "Actual":  "50211",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Kết quả nhả hàng chỉ nhận SUCCESS hoặc JAM",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "SALES-missing-item",
+                          "Module":  "sales",
+                          "Expected":  "50212",
+                          "Actual":  "50212",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Không tìm thấy dòng đơn hàng",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "SALES-missing-refund",
+                          "Module":  "sales",
+                          "Expected":  "50216",
+                          "Actual":  "50216",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Đơn hàng không tồn tại",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "SALES-invalid-expiry",
+                          "Module":  "sales",
+                          "Expected":  "50216",
+                          "Actual":  "50216",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  14,
+                          "ErrorDetail":  "Thời gian chờ phải lớn hơn 0 phút.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-register-real",
+                          "Module":  "iot",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  84,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-register-invalid-location",
+                          "Module":  "iot",
+                          "Expected":  "50302",
+                          "Actual":  "50302",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Địa điểm đặt máy (LocationId) không tồn tại.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-ingest-invalid-json",
+                          "Module":  "iot",
+                          "Expected":  "50310",
+                          "Actual":  "50310",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  181,
+                          "ErrorDetail":  "Dữ liệu payload truyền lên không phải định dạng JSON hợp lệ.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-ingest-missing-machine",
+                          "Module":  "iot",
+                          "Expected":  "50311",
+                          "Actual":  "50311",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  2,
+                          "ErrorDetail":  "Không tìm thấy máy tương ứng với thiết bị gửi dữ liệu.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-ingest-two-readings",
+                          "Module":  "iot",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  68,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-clear-missing",
+                          "Module":  "iot",
+                          "Expected":  "50330",
+                          "Actual":  "50330",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  45,
+                          "ErrorDetail":  "Mã máy (MachineId) không tồn tại.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-threshold-invalid-machine",
+                          "Module":  "iot",
+                          "Expected":  "50340",
+                          "Actual":  "50340",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  23,
+                          "ErrorDetail":  "Mã máy (MachineId) không tồn tại.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-ack-missing",
+                          "Module":  "iot",
+                          "Expected":  "50320",
+                          "Actual":  "50320",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  24,
+                          "ErrorDetail":  "Mã cảnh báo (AlertId) không tồn tại trong hệ thống.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "IOT-partition-real",
+                          "Module":  "iot",
+                          "Expected":  "0",
+                          "Actual":  "Thiếu dependency: iot.sp_MaintainPartitions",
+                          "Passed":  false,
+                          "Status":  "BLOCKED",
+                          "DurationMs":  0,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "REPORT-growth-12-months",
+                          "Module":  "report",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  74,
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "REPORT-invalid-year",
+                          "Module":  "report",
+                          "Expected":  "50401",
+                          "Actual":  "50401",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Năm báo cáo phải từ 2000 đến 9998.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "REPORT-reversed-peak",
+                          "Module":  "report",
+                          "Expected":  "50401",
+                          "Actual":  "50401",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  43,
+                          "ErrorDetail":  "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "REPORT-invalid-export",
+                          "Module":  "report",
+                          "Expected":  "50402",
+                          "Actual":  "50402",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  66,
+                          "ErrorDetail":  "Khoảng thời gian xuất báo cáo không hợp lệ",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "REPORT-reversed-summary",
+                          "Module":  "report",
+                          "Expected":  "50403",
+                          "Actual":  "50403",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  71,
+                          "ErrorDetail":  "Khoảng ngày tổng hợp không hợp lệ.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      },
+                      {
+                          "TestCase":  "REPORT-empty-runby",
+                          "Module":  "report",
+                          "Expected":  "50404",
+                          "Actual":  "50404",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "DurationMs":  0,
+                          "ErrorDetail":  "Tên người chạy cần 1..100 ký tự.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000",
+                          "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                      }
+                  ],
+        "Name":  "runner"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:54.4457989+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:54.3314276+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "Result":  "PASS: ordered batch, UTC timestamp/heartbeat, correct errors, atomic invalid batch"
+                           }
+                       ],
+                       [
+                           {
+                               "TestCase":  "ordered batch and UTC timestamps",
+                               "Passed":  true,
+                               "RunAt":  "\/Date(1794678954445)\/"
+                           },
+                           {
+                               "TestCase":  "invalid JSON 50310",
+                               "Passed":  true,
+                               "RunAt":  "\/Date(1794678954445)\/"
+                           },
+                           {
+                               "TestCase":  "unknown machine 50311",
+                               "Passed":  true,
+                               "RunAt":  "\/Date(1794678954445)\/"
+                           },
+                           {
+                               "TestCase":  "empty readings 50312",
+                               "Passed":  true,
+                               "RunAt":  "\/Date(1794678954445)\/"
+                           },
+                           {
+                               "TestCase":  "atomic invalid reading 50312",
+                               "Passed":  true,
+                               "RunAt":  "\/Date(1794678954445)\/"
+                           },
+                           {
+                               "TestCase":  "non-object reading 50312",
+                               "Passed":  true,
+                               "RunAt":  "\/Date(1794678954445)\/"
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027."
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+                      {
+                          "TestCase":  "ordered batch and UTC timestamps",
+                          "Passed":  true,
+                          "RunAt":  "\/Date(1794678954445)\/"
+                      },
+                      {
+                          "TestCase":  "invalid JSON 50310",
+                          "Passed":  true,
+                          "RunAt":  "\/Date(1794678954445)\/"
+                      },
+                      {
+                          "TestCase":  "unknown machine 50311",
+                          "Passed":  true,
+                          "RunAt":  "\/Date(1794678954445)\/"
+                      },
+                      {
+                          "TestCase":  "empty readings 50312",
+                          "Passed":  true,
+                          "RunAt":  "\/Date(1794678954445)\/"
+                      },
+                      {
+                          "TestCase":  "atomic invalid reading 50312",
+                          "Passed":  true,
+                          "RunAt":  "\/Date(1794678954445)\/"
+                      },
+                      {
+                          "TestCase":  "non-object reading 50312",
+                          "Passed":  true,
+                          "RunAt":  "\/Date(1794678954445)\/"
+                      }
+                  ],
+        "Name":  "tests_iot.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:54.5226599+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:54.4599709+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "TestCase":  "REPORT-growth-12-months",
+                               "Expected":  "0",
+                               "Actual":  "0",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "ErrorDetail":  null,
+                               "RunAt":  "2026-11-14T17:55:54.2720000"
+                           },
+                           {
+                               "TestCase":  "REPORT-invalid-year",
+                               "Expected":  "50401",
+                               "Actual":  "50401",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "ErrorDetail":  "Năm báo cáo phải từ 2000 đến 9998.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000"
+                           },
+                           {
+                               "TestCase":  "REPORT-reversed-peak",
+                               "Expected":  "50401",
+                               "Actual":  "50401",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "ErrorDetail":  "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000"
+                           },
+                           {
+                               "TestCase":  "REPORT-invalid-export",
+                               "Expected":  "50402",
+                               "Actual":  "50402",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "ErrorDetail":  "Khoảng thời gian xuất báo cáo không hợp lệ",
+                               "RunAt":  "2026-11-14T17:55:54.2720000"
+                           },
+                           {
+                               "TestCase":  "REPORT-reversed-summary",
+                               "Expected":  "50403",
+                               "Actual":  "50403",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "ErrorDetail":  "Khoảng ngày tổng hợp không hợp lệ.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000"
+                           },
+                           {
+                               "TestCase":  "REPORT-empty-runby",
+                               "Expected":  "50404",
+                               "Actual":  "50404",
+                               "Passed":  true,
+                               "Status":  "PASS",
+                               "ErrorDetail":  "Tên người chạy cần 1..100 ký tự.",
+                               "RunAt":  "2026-11-14T17:55:54.2720000"
+                           }
+                       ]
+                   ],
+        "Messages":  [
+                         "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027."
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+                      {
+                          "TestCase":  "REPORT-growth-12-months",
+                          "Expected":  "0",
+                          "Actual":  "0",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "ErrorDetail":  null,
+                          "RunAt":  "2026-11-14T17:55:54.2720000"
+                      },
+                      {
+                          "TestCase":  "REPORT-invalid-year",
+                          "Expected":  "50401",
+                          "Actual":  "50401",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "ErrorDetail":  "Năm báo cáo phải từ 2000 đến 9998.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000"
+                      },
+                      {
+                          "TestCase":  "REPORT-reversed-peak",
+                          "Expected":  "50401",
+                          "Actual":  "50401",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "ErrorDetail":  "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000"
+                      },
+                      {
+                          "TestCase":  "REPORT-invalid-export",
+                          "Expected":  "50402",
+                          "Actual":  "50402",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "ErrorDetail":  "Khoảng thời gian xuất báo cáo không hợp lệ",
+                          "RunAt":  "2026-11-14T17:55:54.2720000"
+                      },
+                      {
+                          "TestCase":  "REPORT-reversed-summary",
+                          "Expected":  "50403",
+                          "Actual":  "50403",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "ErrorDetail":  "Khoảng ngày tổng hợp không hợp lệ.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000"
+                      },
+                      {
+                          "TestCase":  "REPORT-empty-runby",
+                          "Expected":  "50404",
+                          "Actual":  "50404",
+                          "Passed":  true,
+                          "Status":  "PASS",
+                          "ErrorDetail":  "Tên người chạy cần 1..100 ký tự.",
+                          "RunAt":  "2026-11-14T17:55:54.2720000"
+                      }
+                  ],
+        "Name":  "tests_report.sql"
+    },
+    {
+        "CompletedAt":  "2026-11-15T00:55:54.6199223+07:00",
+        "Error":  null,
+        "StartedAt":  "2026-11-15T00:55:54.5297516+07:00",
+        "Tables":  [
+                       [
+                           {
+                               "Version":  "Microsoft SQL Server 2022 (RTM) - 16.0.1000.6 (X64) \n\tOct  8 2022 05:58:25 \n\tCopyright (C) 2022 Microsoft Corporation\n\tExpress Edition (64-bit) on Windows 10 Pro 10.0 \u003cX64\u003e (Build 26200: ) (Hypervisor)\n",
+                               "Database":  "FreshVend_QA239_20261115_005521",
+                               "RunAt":  "\/Date(1794678954612)\/"
+                           }
+                       ],
+                       [
+                           {
+                               "compatibility_level":  160,
+                               "collation_name":  "Vietnamese_CI_AS"
+                           }
+                       ],
+                       [
+                           {
+                               "Kind":  "Orders",
+                               "Total":  54
+                           },
+                           {
+                               "Kind":  "Telemetry",
+                               "Total":  0
+                           }
+                       ]
+                   ],
+        "Messages":  [
+
+                     ],
+        "Status":  "PASS",
+        "Cases":  [
+
+                  ],
+        "Name":  "environment"
+    }
+]

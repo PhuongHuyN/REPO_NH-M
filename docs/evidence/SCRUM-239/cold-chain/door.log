@@ -1,0 +1,13 @@
+FreshVend ESP32 simulator -> http://127.0.0.1:32139 | máy: 2 | chu kỳ 0.2s
+  mở cửa: 2
+[00:59:08] máy  2 | 🌡 4.7°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:08] máy  2 | 🌡 4.9°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:09] máy  2 | 🌡 5°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:09] máy  2 | 🌡 4.9°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:09] máy  2 | 🌡 4.9°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:09] máy  2 | 🌡 4.6°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:09] máy  2 | 🌡 4.7°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:10] máy  2 | 🌡 4.7°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:10] máy  2 | 🌡 4.7°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:10] máy  2 | 🌡 4.7°C 🚪MỞ -> trạng thái ACTIVE
+[00:59:10] máy  2 | 🌡 4.6°C 🚪MỞ -> trạng thái ACTIVE

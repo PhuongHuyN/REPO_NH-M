@@ -1,0 +1,1162 @@
+﻿[
+    {
+        "Ordinal":  1,
+        "Column":  "CategoryId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Category",
+        "Index":  "PK_inventory_Category"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "CategoryName",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Category",
+        "Index":  "UQ_inventory_Category_Name"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Machine",
+        "Index":  "PK_inventory_Machine"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineCode",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Machine",
+        "Index":  "UQ_inventory_Machine_Code"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ProductId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Product",
+        "Index":  "PK_inventory_Product"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "SKU",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Product",
+        "Index":  "UQ_inventory_Product_SKU"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ProductName",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Product",
+        "Index":  "UX_inventory_Product_Name"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "IsActive",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "Product",
+        "Index":  "UX_inventory_Product_Name"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "ValidFrom",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "ProductHistory",
+        "Index":  "ix_ProductHistory"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ValidTo",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "ProductHistory",
+        "Index":  "ix_ProductHistory"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "RestockEvent",
+        "Index":  "IX_inventory_RestockEvent_Machine_At"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "RestockedAt",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "RestockEvent",
+        "Index":  "IX_inventory_RestockEvent_Machine_At"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "UserId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "RestockEvent",
+        "Index":  "IX_inventory_RestockEvent_Machine_At"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "RestockId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "RestockEvent",
+        "Index":  "PK_inventory_RestockEvent"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "BatchId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "RestockItem",
+        "Index":  "IX_inventory_RestockItem_BatchId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "RestockId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "RestockItem",
+        "Index":  "IX_inventory_RestockItem_BatchId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "SlotId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "RestockItem",
+        "Index":  "IX_inventory_RestockItem_BatchId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Qty",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "RestockItem",
+        "Index":  "IX_inventory_RestockItem_BatchId"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "RestockItemId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "RestockItem",
+        "Index":  "PK_inventory_RestockItem"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "RestockId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "RestockItem",
+        "Index":  "UQ_inventory_RestockItem_Line"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "SlotId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "RestockItem",
+        "Index":  "UQ_inventory_RestockItem_Line"
+    },
+    {
+        "Ordinal":  3,
+        "Column":  "BatchId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "RestockItem",
+        "Index":  "UQ_inventory_RestockItem_Line"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ProductId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Slot",
+        "Index":  "IX_inventory_Slot_ProductId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "MachineId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "Slot",
+        "Index":  "IX_inventory_Slot_ProductId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "IsActive",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "Slot",
+        "Index":  "IX_inventory_Slot_ProductId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "CurrentStock",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "Slot",
+        "Index":  "IX_inventory_Slot_ProductId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Capacity",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "Slot",
+        "Index":  "IX_inventory_Slot_ProductId"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "SlotId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Slot",
+        "Index":  "PK_inventory_Slot"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Slot",
+        "Index":  "UQ_inventory_Slot_Code"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "SlotCode",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Slot",
+        "Index":  "UQ_inventory_Slot_Code"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "BatchId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_BatchId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "SlotId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_BatchId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Quantity",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_BatchId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "LoadedAt",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_BatchId"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "SlotId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_FIFO"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "LoadedAt",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_FIFO"
+    },
+    {
+        "Ordinal":  3,
+        "Column":  "StockId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_FIFO"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "BatchId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_FIFO"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Quantity",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "SlotStock",
+        "Index":  "IX_inventory_SlotStock_FIFO"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "StockId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "SlotStock",
+        "Index":  "PK_inventory_SlotStock"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ExpiryAt",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_ExpiryAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "ProductId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_ExpiryAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "BatchCode",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_ExpiryAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Quantity",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_ExpiryAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "PreparedAt",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_ExpiryAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ProductId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_Product_Expiry"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "ExpiryAt",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_Product_Expiry"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "BatchCode",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_Product_Expiry"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Quantity",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_Product_Expiry"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "PreparedAt",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_Product_Expiry"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "SupplierId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockBatch",
+        "Index":  "IX_inventory_StockBatch_Product_Expiry"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "BatchId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockBatch",
+        "Index":  "PK_inventory_StockBatch"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "BatchCode",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockBatch",
+        "Index":  "UQ_inventory_StockBatch_Code"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "BatchId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Batch_Type"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "MovementType",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Batch_Type"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Quantity",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Batch_Type"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Reason",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Batch_Type"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "SlotId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Slot_CreatedAt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "CreatedAt",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Slot_CreatedAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "MovementType",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Slot_CreatedAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Quantity",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Slot_CreatedAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "BatchId",
+        "Schema":  "inventory",
+        "Included":  true,
+        "Table":  "StockMovement",
+        "Index":  "IX_inventory_StockMovement_Slot_CreatedAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MovementId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "StockMovement",
+        "Index":  "PK_inventory_StockMovement"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "SupplierId",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Supplier",
+        "Index":  "PK_inventory_Supplier"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "TaxCode",
+        "Schema":  "inventory",
+        "Included":  false,
+        "Table":  "Supplier",
+        "Index":  "UQ_inventory_Supplier_Tax"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "AlertId",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "Alerts",
+        "Index":  "PK__Alerts__EBB16A8D525B3BF1"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "LocationId",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "Locations",
+        "Index":  "PK__Location__E7FEA497196194B0"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "Machines",
+        "Index":  "PK__Machines__44EE5B3835BED3AF"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "Serial",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "Machines",
+        "Index":  "UQ__Machines__1A00E0933DA22617"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "MachineThresholds",
+        "Index":  "PK__MachineT__44EE5B382F33D9C5"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "Telemetry",
+        "Index":  "IX_Telemetry_Machine_Recorded"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "RecordedAt",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "Telemetry",
+        "Index":  "IX_Telemetry_Machine_Recorded"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ReadingId",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "Telemetry",
+        "Index":  "PK__Telemetr__C80F9C4E2B6B6B0E"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "TelemetryHourly",
+        "Index":  "PK__Telemetr__9FAECE9D1409C011"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "HourStart",
+        "Schema":  "iot",
+        "Included":  false,
+        "Table":  "TelemetryHourly",
+        "Index":  "PK__Telemetr__9FAECE9D1409C011"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_MachineId_SummaryDate"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "SummaryDate",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_MachineId_SummaryDate"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ProductId",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_ProductId_SummaryDate"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "SummaryDate",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_ProductId_SummaryDate"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "SummaryDate",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_SummaryDate"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "MachineId",
+        "Schema":  "report",
+        "Included":  true,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_SummaryDate"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "ProductId",
+        "Schema":  "report",
+        "Included":  true,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_SummaryDate"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "QtySold",
+        "Schema":  "report",
+        "Included":  true,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_SummaryDate"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Revenue",
+        "Schema":  "report",
+        "Included":  true,
+        "Table":  "DailySalesSummary",
+        "Index":  "IX_DailySalesSummary_SummaryDate"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "SummaryDate",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "DailySalesSummary",
+        "Index":  "PK_report_DailySalesSummary"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "MachineId",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "DailySalesSummary",
+        "Index":  "PK_report_DailySalesSummary"
+    },
+    {
+        "Ordinal":  3,
+        "Column":  "ProductId",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "DailySalesSummary",
+        "Index":  "PK_report_DailySalesSummary"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ReportName",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "ExportLogs",
+        "Index":  "IX_ExportLogs_ReportName_ExportedAt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "ExportedAt",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "ExportLogs",
+        "Index":  "IX_ExportLogs_ReportName_ExportedAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "UserId",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "ExportLogs",
+        "Index":  "IX_ExportLogs_UserId_ExportedAt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "ExportedAt",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "ExportLogs",
+        "Index":  "IX_ExportLogs_UserId_ExportedAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ExportId",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "ExportLogs",
+        "Index":  "PK_report_ExportLogs"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "Kind",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "SeedItems",
+        "Index":  "PK_SeedItems"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "ItemKey",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "SeedItems",
+        "Index":  "PK_SeedItems"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "Profile",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "SeedRuns",
+        "Index":  "PK__SeedRuns__97D529706714EA53"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "BatchId",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "TestResults",
+        "Index":  "IX_TestResults_BatchId_RunAt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "RunAt",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "TestResults",
+        "Index":  "IX_TestResults_BatchId_RunAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "Module",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "TestResults",
+        "Index":  "IX_TestResults_Module_RunAt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "RunAt",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "TestResults",
+        "Index":  "IX_TestResults_Module_RunAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "TestCase",
+        "Schema":  "report",
+        "Included":  true,
+        "Table":  "TestResults",
+        "Index":  "IX_TestResults_Module_RunAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Passed",
+        "Schema":  "report",
+        "Included":  true,
+        "Table":  "TestResults",
+        "Index":  "IX_TestResults_Module_RunAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "Passed",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "TestResults",
+        "Index":  "IX_TestResults_Passed_RunAt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "RunAt",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "TestResults",
+        "Index":  "IX_TestResults_Passed_RunAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "TestId",
+        "Schema":  "report",
+        "Included":  false,
+        "Table":  "TestResults",
+        "Index":  "PK_report_TestResults"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "OrderItemId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "DispenseEvents",
+        "Index":  "IX_sales_DispenseEvents_OrderItem"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "AttemptNo",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "DispenseEvents",
+        "Index":  "IX_sales_DispenseEvents_OrderItem"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Result",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "DispenseEvents",
+        "Index":  "IX_sales_DispenseEvents_OrderItem"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "ErrorCode",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "DispenseEvents",
+        "Index":  "IX_sales_DispenseEvents_OrderItem"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "EventAt",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "DispenseEvents",
+        "Index":  "IX_sales_DispenseEvents_OrderItem"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "EventId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "DispenseEvents",
+        "Index":  "PK_sales_DispenseEvents"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "OrderItemId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "DispenseEvents",
+        "Index":  "UQ_sales_DispenseEvents_Attempt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "AttemptNo",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "DispenseEvents",
+        "Index":  "UQ_sales_DispenseEvents_Attempt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "MachineId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Machine_CreatedAt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "CreatedAt",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Machine_CreatedAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "OrderId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Machine_CreatedAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Status",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Machine_CreatedAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "TotalAmount",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Machine_CreatedAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "ExpiresAt",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Pending_ExpiresAt"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "CreatedAt",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Pending_ExpiresAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "OrderId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Pending_ExpiresAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "OrderCode",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Pending_ExpiresAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "MachineId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Pending_ExpiresAt"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "TotalAmount",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Order",
+        "Index":  "IX_sales_Order_Pending_ExpiresAt"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "OrderId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Order",
+        "Index":  "PK_sales_Order"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "OrderCode",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Order",
+        "Index":  "UQ_sales_Order_Code"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "OrderId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "OrderItem",
+        "Index":  "IX_sales_OrderItem_OrderId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "OrderItemId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "OrderItem",
+        "Index":  "IX_sales_OrderItem_OrderId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "SlotId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "OrderItem",
+        "Index":  "IX_sales_OrderItem_OrderId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "ProductId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "OrderItem",
+        "Index":  "IX_sales_OrderItem_OrderId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Quantity",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "OrderItem",
+        "Index":  "IX_sales_OrderItem_OrderId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "LineTotal",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "OrderItem",
+        "Index":  "IX_sales_OrderItem_OrderId"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "StockId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "OrderItem",
+        "Index":  "IX_sales_OrderItem_OrderId"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "OrderItemId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "OrderItem",
+        "Index":  "PK_sales_OrderItem"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "OrderId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Payment",
+        "Index":  "IX_sales_Payment_OrderId_Status"
+    },
+    {
+        "Ordinal":  2,
+        "Column":  "Status",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Payment",
+        "Index":  "IX_sales_Payment_OrderId_Status"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "PaymentId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Payment",
+        "Index":  "IX_sales_Payment_OrderId_Status"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "Amount",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Payment",
+        "Index":  "IX_sales_Payment_OrderId_Status"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "GatewayTxnId",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Payment",
+        "Index":  "IX_sales_Payment_OrderId_Status"
+    },
+    {
+        "Ordinal":  0,
+        "Column":  "PaidAt",
+        "Schema":  "sales",
+        "Included":  true,
+        "Table":  "Payment",
+        "Index":  "IX_sales_Payment_OrderId_Status"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "PaymentId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Payment",
+        "Index":  "PK_sales_Payment"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "GatewayTxnId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Payment",
+        "Index":  "UQ_sales_Payment_GatewayTxnId"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "PromotionId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Promotion",
+        "Index":  "PK_sales_Promotion"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "PromoCode",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Promotion",
+        "Index":  "UQ_sales_Promotion_Code"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "RefundId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Refund",
+        "Index":  "PK_sales_Refund"
+    },
+    {
+        "Ordinal":  1,
+        "Column":  "PaymentId",
+        "Schema":  "sales",
+        "Included":  false,
+        "Table":  "Refund",
+        "Index":  "UQ_sales_Refund_Payment"
+    }
+]

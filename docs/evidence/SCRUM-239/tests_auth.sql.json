@@ -1,0 +1,1359 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:46.2643082+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:43.9932945+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "UserId":  9,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  9,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  9,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  9,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  9,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  9,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  9,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  10,
+                           "Username":  "qa230_new",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  11,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  11,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  11,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  11,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  11,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  11,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  11,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  12,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  12,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  12,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  12,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  12,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  12,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  12,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  13,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  13,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  13,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  13,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  13,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  13,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  13,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:44.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "Success":  true,
+                           "Message":  "Đăng nhập thành công",
+                           "UserId":  13,
+                           "Username":  "qa230_op",
+                           "FullName":  "QA Operator",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "MachineId":  6
+                       },
+                       {
+                           "MachineId":  7
+                       },
+                       {
+                           "MachineId":  8
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  14,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  14,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  14,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  14,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  14,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  14,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  14,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "Success":  false,
+                           "Message":  "Sai tên đăng nhập hoặc mật khẩu (còn 4 lần thử)",
+                           "UserId":  null,
+                           "Username":  null,
+                           "FullName":  null,
+                           "RoleName":  null
+                       }
+                   ],
+                   [
+
+                   ],
+                   [
+                       {
+                           "UserId":  15,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  15,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  15,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  15,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  15,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  15,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  15,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "Success":  false,
+                           "Message":  "Sai tên đăng nhập hoặc mật khẩu",
+                           "UserId":  null,
+                           "Username":  null,
+                           "FullName":  null,
+                           "RoleName":  null
+                       }
+                   ],
+                   [
+
+                   ],
+                   [
+                       {
+                           "UserId":  16,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  16,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  16,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  16,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  16,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  16,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  16,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  16,
+                           "Message":  "Đã đổi mật khẩu"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  17,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  17,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  17,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  17,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  17,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  17,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  17,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  18,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  18,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  18,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  18,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  18,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  18,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  18,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  19,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  19,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  19,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  19,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  19,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  19,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  19,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  19,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  19,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  19,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       },
+                       {
+                           "UserId":  19,
+                           "MachineId":  9,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-9"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  20,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  20,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  20,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  20,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  20,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  20,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  20,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  21,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  21,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  21,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  21,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  21,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  21,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  21,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:45.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  22,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  22,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  22,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  22,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  22,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  22,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  22,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  22,
+                           "Username":  "qa230_op",
+                           "IsActive":  false
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  23,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  23,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  23,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  23,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  23,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  23,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  23,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  24,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  24,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  24,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  24,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  24,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  24,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  24,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  25,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  25,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  25,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  25,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  25,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  25,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  25,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  26,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  26,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  26,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  26,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  26,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  26,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  26,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  27,
+                           "Username":  "qa230_op",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  27,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  27,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  27,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       }
+                   ],
+                   [
+                       {
+                           "UserId":  27,
+                           "MachineId":  6,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-6"
+                       },
+                       {
+                           "UserId":  27,
+                           "MachineId":  7,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-7"
+                       },
+                       {
+                           "UserId":  27,
+                           "MachineId":  8,
+                           "AssignedAt":  "2026-11-14T17:55:46.0000000",
+                           "Serial":  "QA230-8"
+                       }
+                   ],
+                   [
+                       {
+                           "TestNo":  1,
+                           "TestCase":  "CreateUser valid",
+                           "ExpectedError":  0,
+                           "ActualError":  0,
+                           "Passed":  true,
+                           "Detail":  "Assertions completed",
+                           "RunAt":  "\/Date(1794678944169)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  2,
+                           "TestCase":  "CreateUser short username",
+                           "ExpectedError":  50001,
+                           "ActualError":  50001,
+                           "Passed":  true,
+                           "Detail":  "Tên đăng nhập phải có ít nhất 3 ký tự",
+                           "RunAt":  "\/Date(1794678944259)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  3,
+                           "TestCase":  "CreateUser duplicate",
+                           "ExpectedError":  50003,
+                           "ActualError":  50003,
+                           "Passed":  true,
+                           "Detail":  "Tên đăng nhập đã tồn tại",
+                           "RunAt":  "\/Date(1794678944350)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  4,
+                           "TestCase":  "Login valid",
+                           "ExpectedError":  0,
+                           "ActualError":  0,
+                           "Passed":  true,
+                           "Detail":  "Assertions completed",
+                           "RunAt":  "\/Date(1794678944494)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  5,
+                           "TestCase":  "Login wrong password",
+                           "ExpectedError":  0,
+                           "ActualError":  0,
+                           "Passed":  true,
+                           "Detail":  "Assertions completed",
+                           "RunAt":  "\/Date(1794678944614)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  6,
+                           "TestCase":  "Login unknown username",
+                           "ExpectedError":  0,
+                           "ActualError":  0,
+                           "Passed":  true,
+                           "Detail":  "Assertions completed",
+                           "RunAt":  "\/Date(1794678944753)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  7,
+                           "TestCase":  "ChangePassword valid",
+                           "ExpectedError":  0,
+                           "ActualError":  0,
+                           "Passed":  true,
+                           "Detail":  "Assertions completed",
+                           "RunAt":  "\/Date(1794678944881)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  8,
+                           "TestCase":  "ChangePassword wrong old password",
+                           "ExpectedError":  50011,
+                           "ActualError":  50011,
+                           "Passed":  true,
+                           "Detail":  "Mật khẩu cũ không đúng",
+                           "RunAt":  "\/Date(1794678944997)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  9,
+                           "TestCase":  "ChangePassword short new password",
+                           "ExpectedError":  50002,
+                           "ActualError":  50002,
+                           "Passed":  true,
+                           "Detail":  "Mật khẩu phải có ít nhất 8 ký tự",
+                           "RunAt":  "\/Date(1794678945121)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  10,
+                           "TestCase":  "AssignMachine valid",
+                           "ExpectedError":  0,
+                           "ActualError":  0,
+                           "Passed":  true,
+                           "Detail":  "Assertions completed",
+                           "RunAt":  "\/Date(1794678945239)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  11,
+                           "TestCase":  "AssignMachine unknown user",
+                           "ExpectedError":  50020,
+                           "ActualError":  50020,
+                           "Passed":  true,
+                           "Detail":  "Người dùng không tồn tại",
+                           "RunAt":  "\/Date(1794678945350)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  12,
+                           "TestCase":  "AssignMachine unknown machine",
+                           "ExpectedError":  50022,
+                           "ActualError":  50022,
+                           "Passed":  true,
+                           "Detail":  "Máy không tồn tại",
+                           "RunAt":  "\/Date(1794678945468)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  13,
+                           "TestCase":  "DeactivateUser valid",
+                           "ExpectedError":  0,
+                           "ActualError":  0,
+                           "Passed":  true,
+                           "Detail":  "Assertions completed",
+                           "RunAt":  "\/Date(1794678945622)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  14,
+                           "TestCase":  "DeactivateUser unknown user",
+                           "ExpectedError":  50030,
+                           "ActualError":  50030,
+                           "Passed":  true,
+                           "Detail":  "Người dùng không tồn tại",
+                           "RunAt":  "\/Date(1794678945732)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  15,
+                           "TestCase":  "DeactivateUser self forbidden",
+                           "ExpectedError":  50031,
+                           "ActualError":  50031,
+                           "Passed":  true,
+                           "Detail":  "Không thể tự khóa tài khoản của chính mình",
+                           "RunAt":  "\/Date(1794678945873)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  16,
+                           "TestCase":  "RLS exact three assigned machines",
+                           "ExpectedError":  0,
+                           "ActualError":  0,
+                           "Passed":  true,
+                           "Detail":  "Assertions completed",
+                           "RunAt":  "\/Date(1794678946029)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  17,
+                           "TestCase":  "Operator DENY report",
+                           "ExpectedError":  229,
+                           "ActualError":  229,
+                           "Passed":  true,
+                           "Detail":  "The SELECT permission was denied on the object \u0027DailySalesSummary\u0027, database \u0027FreshVend_QA239_20261115_005521\u0027, schema \u0027report\u0027.",
+                           "RunAt":  "\/Date(1794678946109)\/",
+                           "Status":  "PASS"
+                       },
+                       {
+                           "TestNo":  18,
+                           "TestCase":  "Kiosk cannot add product",
+                           "ExpectedError":  229,
+                           "ActualError":  229,
+                           "Passed":  true,
+                           "Detail":  "The EXECUTE permission was denied on the object \u0027sp_AddProduct\u0027, database \u0027FreshVend_QA239_20261115_005521\u0027, schema \u0027inventory\u0027.",
+                           "RunAt":  "\/Date(1794678946199)\/",
+                           "Status":  "PASS"
+                       }
+                   ],
+                   [
+                       {
+                           "Total":  18,
+                           "Passed":  18,
+                           "Failed":  0
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                     "[tests_auth] 18/18 PASS"
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+                  {
+                      "TestNo":  1,
+                      "TestCase":  "CreateUser valid",
+                      "ExpectedError":  0,
+                      "ActualError":  0,
+                      "Passed":  true,
+                      "Detail":  "Assertions completed",
+                      "RunAt":  "\/Date(1794678944169)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  2,
+                      "TestCase":  "CreateUser short username",
+                      "ExpectedError":  50001,
+                      "ActualError":  50001,
+                      "Passed":  true,
+                      "Detail":  "Tên đăng nhập phải có ít nhất 3 ký tự",
+                      "RunAt":  "\/Date(1794678944259)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  3,
+                      "TestCase":  "CreateUser duplicate",
+                      "ExpectedError":  50003,
+                      "ActualError":  50003,
+                      "Passed":  true,
+                      "Detail":  "Tên đăng nhập đã tồn tại",
+                      "RunAt":  "\/Date(1794678944350)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  4,
+                      "TestCase":  "Login valid",
+                      "ExpectedError":  0,
+                      "ActualError":  0,
+                      "Passed":  true,
+                      "Detail":  "Assertions completed",
+                      "RunAt":  "\/Date(1794678944494)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  5,
+                      "TestCase":  "Login wrong password",
+                      "ExpectedError":  0,
+                      "ActualError":  0,
+                      "Passed":  true,
+                      "Detail":  "Assertions completed",
+                      "RunAt":  "\/Date(1794678944614)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  6,
+                      "TestCase":  "Login unknown username",
+                      "ExpectedError":  0,
+                      "ActualError":  0,
+                      "Passed":  true,
+                      "Detail":  "Assertions completed",
+                      "RunAt":  "\/Date(1794678944753)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  7,
+                      "TestCase":  "ChangePassword valid",
+                      "ExpectedError":  0,
+                      "ActualError":  0,
+                      "Passed":  true,
+                      "Detail":  "Assertions completed",
+                      "RunAt":  "\/Date(1794678944881)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  8,
+                      "TestCase":  "ChangePassword wrong old password",
+                      "ExpectedError":  50011,
+                      "ActualError":  50011,
+                      "Passed":  true,
+                      "Detail":  "Mật khẩu cũ không đúng",
+                      "RunAt":  "\/Date(1794678944997)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  9,
+                      "TestCase":  "ChangePassword short new password",
+                      "ExpectedError":  50002,
+                      "ActualError":  50002,
+                      "Passed":  true,
+                      "Detail":  "Mật khẩu phải có ít nhất 8 ký tự",
+                      "RunAt":  "\/Date(1794678945121)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  10,
+                      "TestCase":  "AssignMachine valid",
+                      "ExpectedError":  0,
+                      "ActualError":  0,
+                      "Passed":  true,
+                      "Detail":  "Assertions completed",
+                      "RunAt":  "\/Date(1794678945239)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  11,
+                      "TestCase":  "AssignMachine unknown user",
+                      "ExpectedError":  50020,
+                      "ActualError":  50020,
+                      "Passed":  true,
+                      "Detail":  "Người dùng không tồn tại",
+                      "RunAt":  "\/Date(1794678945350)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  12,
+                      "TestCase":  "AssignMachine unknown machine",
+                      "ExpectedError":  50022,
+                      "ActualError":  50022,
+                      "Passed":  true,
+                      "Detail":  "Máy không tồn tại",
+                      "RunAt":  "\/Date(1794678945468)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  13,
+                      "TestCase":  "DeactivateUser valid",
+                      "ExpectedError":  0,
+                      "ActualError":  0,
+                      "Passed":  true,
+                      "Detail":  "Assertions completed",
+                      "RunAt":  "\/Date(1794678945622)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  14,
+                      "TestCase":  "DeactivateUser unknown user",
+                      "ExpectedError":  50030,
+                      "ActualError":  50030,
+                      "Passed":  true,
+                      "Detail":  "Người dùng không tồn tại",
+                      "RunAt":  "\/Date(1794678945732)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  15,
+                      "TestCase":  "DeactivateUser self forbidden",
+                      "ExpectedError":  50031,
+                      "ActualError":  50031,
+                      "Passed":  true,
+                      "Detail":  "Không thể tự khóa tài khoản của chính mình",
+                      "RunAt":  "\/Date(1794678945873)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  16,
+                      "TestCase":  "RLS exact three assigned machines",
+                      "ExpectedError":  0,
+                      "ActualError":  0,
+                      "Passed":  true,
+                      "Detail":  "Assertions completed",
+                      "RunAt":  "\/Date(1794678946029)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  17,
+                      "TestCase":  "Operator DENY report",
+                      "ExpectedError":  229,
+                      "ActualError":  229,
+                      "Passed":  true,
+                      "Detail":  "The SELECT permission was denied on the object \u0027DailySalesSummary\u0027, database \u0027FreshVend_QA239_20261115_005521\u0027, schema \u0027report\u0027.",
+                      "RunAt":  "\/Date(1794678946109)\/",
+                      "Status":  "PASS"
+                  },
+                  {
+                      "TestNo":  18,
+                      "TestCase":  "Kiosk cannot add product",
+                      "ExpectedError":  229,
+                      "ActualError":  229,
+                      "Passed":  true,
+                      "Detail":  "The EXECUTE permission was denied on the object \u0027sp_AddProduct\u0027, database \u0027FreshVend_QA239_20261115_005521\u0027, schema \u0027inventory\u0027.",
+                      "RunAt":  "\/Date(1794678946199)\/",
+                      "Status":  "PASS"
+                  }
+              ],
+    "Name":  "tests_auth.sql"
+}
