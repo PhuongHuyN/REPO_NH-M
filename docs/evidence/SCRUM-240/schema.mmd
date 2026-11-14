@@ -1,0 +1,103 @@
+flowchart LR
+  subgraph auth["auth"]
+    auth_LoginHistory["auth.LoginHistory"]
+    auth_Permission["auth.Permission"]
+    auth_RefreshToken["auth.RefreshToken"]
+    auth_Role["auth.Role"]
+    auth_RolePermission["auth.RolePermission"]
+    auth_User["auth.User"]
+    auth_UserMachine["auth.UserMachine"]
+    auth_UserRole["auth.UserRole"]
+  end
+  subgraph audit["audit"]
+    audit_AuditLog["audit.AuditLog"]
+    audit_ChangeLog["audit.ChangeLog"]
+  end
+  subgraph inventory["inventory"]
+    inventory_Category["inventory.Category"]
+    inventory_Machine["inventory.Machine"]
+    inventory_Product["inventory.Product"]
+    inventory_RestockEvent["inventory.RestockEvent"]
+    inventory_RestockItem["inventory.RestockItem"]
+    inventory_Slot["inventory.Slot"]
+    inventory_SlotStock["inventory.SlotStock"]
+    inventory_StockBatch["inventory.StockBatch"]
+    inventory_StockMovement["inventory.StockMovement"]
+    inventory_Supplier["inventory.Supplier"]
+  end
+  subgraph sales["sales"]
+    sales_DispenseEvents["sales.DispenseEvents"]
+    sales_Order["sales.Order"]
+    sales_OrderItem["sales.OrderItem"]
+    sales_Payment["sales.Payment"]
+    sales_Promotion["sales.Promotion"]
+    sales_Refund["sales.Refund"]
+  end
+  subgraph iot["iot"]
+    iot_Alerts["iot.Alerts"]
+    iot_Locations["iot.Locations"]
+    iot_Machines["iot.Machines"]
+    iot_MachineThresholds["iot.MachineThresholds"]
+    iot_Telemetry["iot.Telemetry"]
+    iot_TelemetryHourly["iot.TelemetryHourly"]
+  end
+  subgraph report["report"]
+    report_DailySalesSummary["report.DailySalesSummary"]
+    report_ExportLogs["report.ExportLogs"]
+    report_SeedItems["report.SeedItems"]
+    report_SeedRuns["report.SeedRuns"]
+    report_TestResults["report.TestResults"]
+  end
+  iot_Alerts -->|"MachineId"| iot_Machines
+  iot_Machines -->|"LocationId"| iot_Locations
+  iot_MachineThresholds -->|"MachineId"| iot_Machines
+  iot_Telemetry -->|"MachineId"| iot_Machines
+  iot_TelemetryHourly -->|"MachineId"| iot_Machines
+  iot_Alerts -->|"AckBy"| auth_User
+  audit_AuditLog -->|"UserId"| auth_User
+  audit_ChangeLog -->|"UserId"| auth_User
+  auth_LoginHistory -->|"UserId"| auth_User
+  auth_RefreshToken -->|"UserId"| auth_User
+  auth_RolePermission -->|"PermissionId"| auth_Permission
+  auth_RolePermission -->|"RoleId"| auth_Role
+  auth_UserMachine -->|"UserId"| auth_User
+  auth_UserRole -->|"AssignedBy"| auth_User
+  auth_UserRole -->|"RoleId"| auth_Role
+  auth_UserRole -->|"UserId"| auth_User
+  report_DailySalesSummary -->|"MachineId"| iot_Machines
+  report_DailySalesSummary -->|"ProductId"| inventory_Product
+  report_ExportLogs -->|"UserId"| auth_User
+  inventory_Category -->|"ParentId"| inventory_Category
+  inventory_Product -->|"CategoryId"| inventory_Category
+  inventory_Product -->|"SupplierId"| inventory_Supplier
+  inventory_RestockItem -->|"BatchId"| inventory_StockBatch
+  inventory_RestockItem -->|"RestockId"| inventory_RestockEvent
+  inventory_RestockItem -->|"SlotId"| inventory_Slot
+  inventory_Slot -->|"MachineId"| iot_Machines
+  inventory_Slot -->|"ProductId"| inventory_Product
+  inventory_SlotStock -->|"BatchId"| inventory_StockBatch
+  inventory_SlotStock -->|"SlotId"| inventory_Slot
+  inventory_StockBatch -->|"CreatedBy"| auth_User
+  inventory_StockBatch -->|"ProductId"| inventory_Product
+  inventory_StockBatch -->|"SupplierId"| inventory_Supplier
+  inventory_StockMovement -->|"CreatedBy"| auth_User
+  inventory_StockMovement -->|"BatchId"| inventory_StockBatch
+  inventory_StockMovement -->|"SlotId"| inventory_Slot
+  sales_OrderItem -->|"StockId"| inventory_SlotStock
+  sales_OrderItem -->|"BatchId"| inventory_StockBatch
+  inventory_RestockEvent -->|"MachineId"| iot_Machines
+  inventory_RestockEvent -->|"UserId"| auth_User
+  sales_DispenseEvents -->|"OrderItemId"| sales_OrderItem
+  sales_Order -->|"CustomerId"| auth_User
+  sales_Order -->|"MachineId"| iot_Machines
+  sales_Order -->|"PromotionId"| sales_Promotion
+  sales_OrderItem -->|"ProductId"| inventory_Product
+  sales_OrderItem -->|"SlotId"| inventory_Slot
+  sales_OrderItem -->|"OrderId"| sales_Order
+  sales_OrderItem -->|"StockId"| inventory_SlotStock
+  sales_OrderItem -->|"BatchId"| inventory_StockBatch
+  sales_Payment -->|"OrderId"| sales_Order
+  sales_Refund -->|"ProcessedBy"| auth_User
+  sales_Refund -->|"OrderId"| sales_Order
+  sales_Refund -->|"PaymentId"| sales_Payment
+  auth_UserMachine -->|"MachineId"| iot_Machines
