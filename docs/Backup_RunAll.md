@@ -1,25 +1,25 @@
-﻿# SCRUM-217 ? c?i ??t v? sao l?u
+﻿# SCRUM-217 — Cài đặt và sao lưu
 
-Ch?y t?i g?c repo tr?n Windows c? SQL Server 2022 v? Microsoft sqlcmd, b?ng Windows login c? quy?n t?o CSDL, login v? backup:
+Chạy tại gốc repo trên Windows có SQL Server 2022 và Microsoft sqlcmd, bằng Windows login có quyền tạo CSDL, login và backup:
 
 ```bat
 99_run_all.bat .\SQLEXPRESS FreshVendDB
 ```
 
-M?c ??nh server localhost, CSDL FreshVendDB. B? c?i t?o schema, procedure, object, index, quy?n, RLS v? ch?y Full/Diff/Log. Kh?ng t? x?a CSDL; ch?y l?i c?p nh?t object. T?n CSDL tham s? ch? nh?n ch?, s? v? g?ch d??i. M?i file ???c ch?y ri?ng v?i `sqlcmd -I -b -V 11`; l?i tr? exit code 1 v? t?n file, kh?ng in HOAN TAT. Log UTF-16 v? manifest ? `.local-test/install/`.
+Mặc định server localhost, database FreshVendDB. Bộ cài chạy riêng từng file SQL với `-I -b -V 11`, dựng schema, procedure, object, index, RBAC/RLS và Full/Diff/Log. Không tự xóa CSDL; chạy lại cập nhật object. Lỗi trả exit 1, tên file và log; chỉ in HOAN TAT khi toàn bộ thành công. Log UTF-16 và manifest tại `.local-test/install/`.
 
-M?c ??nh kh?ng th?m d? li?u nghi?p v?. Tham s? th? ba `Small` ho?c `Large` y?u c?u seed; hi?n `80_seed_small` d?ng 50410 v? Q?-1 (inventory.Machine ch?a th?nh view) v? sp_RegisterMachine ch?a t?o ng?n. ??y l? ph? thu?c #20, kh?ng coi seed ?? ho?n th?nh. Kh?ng ch?y 08_seed_inventory v? seed n?y c?n t?o m?y legacy ??c l?p v?i IoT. Kh?ng ??a 45_jobs v?o manifest v? file ?? ch?a ???c ch? module cung c?p.
+Tham số thứ ba `Small` hoặc `Large` yêu cầu seed. Mặc định `None`: không thêm dữ liệu nghiệp vụ. Hiện seed bị chặn 50410 do QĐ-1: inventory.Machine chưa thành view và RegisterMachine chưa tạo ngăn. Không coi seed đã nghiệm thu. Không chạy 08_seed_inventory vì còn tạo máy legacy độc lập với IoT; 45_jobs chưa có trong repo nên không đưa vào manifest.
 
-## Backup
+## Backup và phục hồi
 
-Ch?y ri?ng `sqlcmd -S .\SQLEXPRESS -E -C -I -b -i sql/50_backup.sql`. File ??t recovery FULL, t?o full kh?ng COPY_ONLY ?? c? differential baseline, differential v? log, CHECKSUM + VERIFYONLY t?ng file. T?n ch?a th?i gian v? UUID, kh?ng ghi ?? b?n c?. ???ng d?n l?y t? InstanceDefaultBackupPath tr?n m?y SQL Server, t?i kho?n d?ch v? SQL c?n quy?n ghi v? ?? dung l??ng. Express kh?ng h? tr? n?n backup n?n script kh?ng d?ng COMPRESSION.
+Chạy riêng `sqlcmd -S .\SQLEXPRESS -E -C -I -b -i sql/50_backup.sql`. Script đặt recovery FULL, tạo full (không COPY_ONLY), differential và log, CHECKSUM và VERIFYONLY cho từng file. Tên file chứa thời gian và UUID, không ghi đè bản cũ. Đường dẫn lấy từ InstanceDefaultBackupPath trên máy SQL Server; tài khoản dịch vụ cần quyền ghi và đủ dung lượng. Express không hỗ trợ backup compression nên không dùng COMPRESSION.
 
-L?ch ?? xu?t: full Ch? nh?t, diff m?i ng?y, log m?i 15 ph?t. D?ng Task Scheduler tr?n Express; t?c v? ??nh k? c?n t?ch ri?ng t?ng lo?i l?nh BACKUP t? script (kh?ng ch?y to?n b? ba lo?i m?i 15 ph?t). Theo d?i job th?t b?i, dung l??ng, b?n sao ngo?i m?y, retention v? t?p kh?i ph?c tr??c khi x?a b?t k? file n?o. VERIFYONLY ki?m tra b?n sao l?u ??c ???c; demo STOPAT c?a SCRUM-230 m?i ki?m tra restore th?c.
+Đề xuất full Chủ nhật, diff hằng ngày, log mỗi 15 phút. Express dùng Task Scheduler; tách từng loại lệnh BACKUP từ script cho lịch tương ứng, không chạy cả ba loại mỗi 15 phút. Theo dõi tác vụ lỗi, dung lượng và bản sao ngoài máy; kiểm tra chuỗi khôi phục trước khi áp retention. VERIFYONLY chưa chứng minh restore; tests/demo_security.sql của SCRUM-230 kiểm tra restore thực.
 
-RPO theo l?ch log l? t?i ?a 15 ph?t n?u m?t c? m?y v? kh?ng l?y ???c tail-log. Kh?ng suy ra ?kh?ng m?t d? li?u? hay uptime 99,9% ch? t? script backup; c?n HA, gi?m s?t v? di?n t?p ?o RTO ri?ng. Kh?ng t? c?u h?nh/x?a l?ch backup hi?n h?u.
+RPO theo lịch log là tối đa 15 phút nếu mất máy và không lấy được tail-log. Backup không tự chứng minh không mất dữ liệu hoặc uptime 99,9%; cần HA, giám sát và diễn tập đo RTO riêng. Script không tự cấu hình hoặc xóa lịch backup hiện hữu.
 
-## Nghi?m thu th?c
+## Kết quả chạy thật
 
-M?i tr??ng SQL Express 2022 16.0.1000.6, Windows, Vietnamese_CI_AS, compatibility 160. Ng?y gi? v? ???ng d?n server n?m trong log v? manifest ??nh k?m. CSDL th? FreshVend_S217_Clean_20261115 t?o m?i th?nh c?ng; ba backup checksum v? VERIFYONLY th?nh c?ng. Th? l?i ch? ??ng tr?n b?n sao script/CSDL FreshVend_S217_Fault_20261115: THROW 50499 ? 14_procs_report, exit 1, kh?ng ch?y object/security/backup ph?a sau. Ch?y l?i ?? ph?t hi?n v? s?a l?i unique index/constraint ? 10_procs_auth; xem b?ng ch?ng ch?y l?i sau s?a.
+SQL Express 2022 16.0.1000.6, Windows, Vietnamese_CI_AS, compatibility 160. Ngày giờ thật nằm trong manifest và backup log ở evidence/SCRUM-217. FreshVend_S217_Clean_20261115: cài mới PASS; cả ba backup checksum và VERIFYONLY PASS. Chạy lại sau sửa unique index/constraint trong 10_procs_auth PASS. Bản sao script cố ý THROW 50499 tại 14_procs_report trên FreshVend_S217_Fault_20261115: exit 1, dừng đúng file, không chạy object/security/backup tiếp theo.
 
-Nh?nh n?y ph? thu?c b?n s?a FK SCRUM-201 (PR #46). C?n Huy review v? merge; ch?a ??nh d?u ti?u ch? PR merge ho?n th?nh.
+Phụ thuộc sửa khóa ngoại SCRUM-201 (PR #46, có trong nhánh). Cần Huy review và merge; tiêu chí PR merge chưa hoàn tất.
