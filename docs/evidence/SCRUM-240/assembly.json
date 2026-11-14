@@ -1,5 +1,5 @@
 {
-  "assembledAt": "2026-11-15T01:05:03.712196+07:00",
+  "assembledAt": "2026-11-15T01:14:55.093464+07:00",
   "schemaCapturedAt": "2026-11-15T01:02:58.1366268+07:00",
   "tableCountIncludingHistory": 38,
   "foreignKeyColumnCount": 53,
@@ -8,7 +8,7 @@
     "docs/DetailedDesign.md": "4f14c885935c15be50a0a09c37fb6931fa6205999d58a5093eac5220c2e22de3",
     "docs/UserStories_Sales.md": "9ddaedce7875dfa182c80cb8445f275606541ff3083314ff38719cf50861f6f7",
     "docs/TestPlan.md": "5244d66d8732a1b12519ad207759795371d77824d6e64d8ebad67445b4f91239",
-    "docs/TestReport.md": "d71c3325f9c4e474a45d61641b95cf5b8842afb8c5bad7539ca7faa1bf560e24",
+    "docs/TestReport.md": "cc32a1a4fb214ece8f81e8ba209126fb3f4d4aa12e63039c365e8440522248e2",
     "docs/UserManual_Admin.md": "e8344a1333ee214b0a190bdb9b2e823fe1a0fe1d92ac1a6c7af64c25028a1df4",
     "docs/Backup_RunAll.md": "a32fbc15e8edb7cd761d226ecb48adc5ec41cabb3f96019748aef026b32e2d77",
     "app/README.md": "534da3a2a86d1517912a260a5c2233a42b08e4b2f4b439164344738a5bb13e06",
@@ -25,7 +25,7 @@
   "reviewer": "PhuongHuyN",
   "reviewStatus": "PENDING",
   "outputHashes": {
-    "BaoCao.md": "5a827b8cf6baefb87986021d5b2370effdc71717e4107f8926e28603d90125b0",
+    "BaoCao.md": "69040608099b942780a6d97d1d26c78583fcde3ee1677c97c2f641b6eb283505",
     "BaoCao_DataDictionary.md": "7ea6efb2ebed9215fdda19ecd12e4131aa662f11a814966d8b3766fbd98daa0d",
     "UserManual_Admin.md": "e8344a1333ee214b0a190bdb9b2e823fe1a0fe1d92ac1a6c7af64c25028a1df4"
   }

@@ -885,7 +885,7 @@ Luồng ghi end-to-end mười bước FV-32: **0 PASS / 10 BLOCKED**, [manifest
 
 ## 5. Hiệu năng
 
-Chạy lúc **00:56:30 ngày 15/11/2026 (+07:00)**. Một lượt đầu + năm lượt warm, một client, không tạo tải cạnh tranh. Có STATISTICS XML/TIME/IO và 60 plan, [samples](evidence/SCRUM-239/perf-control/samples.json), [TIME/IO](evidence/SCRUM-239/perf-control/statistics-time-io.txt), sáu plan đại diện và snapshot index trong cùng thư mục. Manifest ghi tên và SHA-256 của cả 60 plan gốc để đối chiếu log local.
+Chạy lúc **00:56:30 ngày 15/11/2026 (+07:00)**. Một lượt đầu + năm lượt warm, một client, không tạo tải cạnh tranh. Có STATISTICS XML/TIME/IO và 60 plan, [samples](evidence/SCRUM-239/perf-control/samples.json), [TIME/IO](evidence/SCRUM-239/perf-control/statistics-time-io.txt), đủ 60 plan và snapshot index trong cùng thư mục. Manifest ghi tên và SHA-256 của cả 60 plan gốc; toàn bộ plan được bàn giao trong thư mục bằng chứng.
 
 **Đây là đo đối chứng trên tập nhỏ**, chưa là nghiệm thu SLA <500 ms hoặc so sánh trước/sau index. Ledger LARGE chưa có; lệnh strict chạy thật lúc 00:59:30 dừng **BLOCKED** trước khi đo, [lý do](evidence/SCRUM-239/perf-strict.json). AFTER chưa chạy vì chưa có index mới của owner. Các số dưới là elapsed phía SQL, không phải HTTP P95, cũng không tương đương cold buffer sau restart.
 
