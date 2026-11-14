@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- FILE        : 02_tables_auth.sql
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
 -- DESCRIPTION : TV1 — Tạo các bảng thuộc schema [auth]
@@ -217,4 +217,17 @@ PRINT N'';
 PRINT N'============================================================';
 PRINT N'  TV1 (auth) hoàn tất. Tiếp theo: 02_tables_inventory.sql  ';
 PRINT N'============================================================';
+GO
+
+-- SCRUM-201: the assignment table must exist BEFORE cross-schema FK installation.
+-- 10_procs_auth.sql keeps its IF OBJECT_ID guard for older installations.
+IF OBJECT_ID(N'auth.UserMachine',N'U') IS NULL
+BEGIN
+ CREATE TABLE auth.UserMachine (
+  UserId INT NOT NULL, MachineId INT NOT NULL,
+  AssignedAt DATETIME2(0) NOT NULL CONSTRAINT DF_auth_UserMachine_At DEFAULT SYSUTCDATETIME(),
+  CONSTRAINT PK_auth_UserMachine PRIMARY KEY(UserId,MachineId),
+  CONSTRAINT FK_auth_UserMachine_User FOREIGN KEY(UserId) REFERENCES auth.[User](UserId)
+ );
+END;
 GO
