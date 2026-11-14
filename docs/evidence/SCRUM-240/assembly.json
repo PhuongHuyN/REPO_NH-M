@@ -1,0 +1,32 @@
+{
+  "assembledAt": "2026-11-15T01:14:55.093464+07:00",
+  "schemaCapturedAt": "2026-11-15T01:02:58.1366268+07:00",
+  "tableCountIncludingHistory": 38,
+  "foreignKeyColumnCount": 53,
+  "sources": {
+    "docs/SRS.md": "d33606dbd6a17ef86afcde1234e9023a35d9e7be7e3ebff855d1678723d0b170",
+    "docs/DetailedDesign.md": "4f14c885935c15be50a0a09c37fb6931fa6205999d58a5093eac5220c2e22de3",
+    "docs/UserStories_Sales.md": "9ddaedce7875dfa182c80cb8445f275606541ff3083314ff38719cf50861f6f7",
+    "docs/TestPlan.md": "5244d66d8732a1b12519ad207759795371d77824d6e64d8ebad67445b4f91239",
+    "docs/TestReport.md": "cc32a1a4fb214ece8f81e8ba209126fb3f4d4aa12e63039c365e8440522248e2",
+    "docs/UserManual_Admin.md": "e8344a1333ee214b0a190bdb9b2e823fe1a0fe1d92ac1a6c7af64c25028a1df4",
+    "docs/Backup_RunAll.md": "a32fbc15e8edb7cd761d226ecb48adc5ec41cabb3f96019748aef026b32e2d77",
+    "app/README.md": "534da3a2a86d1517912a260a5c2233a42b08e4b2f4b439164344738a5bb13e06",
+    "docs/component_diagram.png": "d0d54e0adb5bdcc3d5cfac87c91a6d6ff75e82da0dc7496d6b6e84b616afee36",
+    "docs/deployment_diagram.png": "820762aadb4df3b66c08a7f5d52f267909c7c26b1fe6a8d80fc1811c714d30d9"
+  },
+  "missingOwnerHandoffs": [
+    "URS/SRS final (FV-34)",
+    "Architecture final (FV-42)",
+    "ERD/DataDictionary approved (FV-37)",
+    "Customer manual (FV-39)",
+    "Operator manual (FV-34/FV-43)"
+  ],
+  "reviewer": "PhuongHuyN",
+  "reviewStatus": "PENDING",
+  "outputHashes": {
+    "BaoCao.md": "69040608099b942780a6d97d1d26c78583fcde3ee1677c97c2f641b6eb283505",
+    "BaoCao_DataDictionary.md": "7ea6efb2ebed9215fdda19ecd12e4131aa662f11a814966d8b3766fbd98daa0d",
+    "UserManual_Admin.md": "e8344a1333ee214b0a190bdb9b2e823fe1a0fe1d92ac1a6c7af64c25028a1df4"
+  }
+}
