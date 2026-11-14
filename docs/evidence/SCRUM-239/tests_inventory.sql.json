@@ -1,0 +1,849 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:49.5697771+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:46.2797351+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "ProductId":  38,
+                           "SKU":  "FV-SP-037",
+                           "ProductName":  "__TEST__ Bưởi da xanh",
+                           "Price":  42000.00
+                       }
+                   ],
+                   [
+                       {
+                           "ProductId":  38,
+                           "SKU":  "FV-SP-037",
+                           "ProductName":  "__TEST__ Bưởi da xanh (hộp lớn)",
+                           "Category":  "Trái cây cắt sẵn",
+                           "Description":  "Hộp 400 g",
+                           "Price":  42000.00,
+                           "ImageUrl":  null,
+                           "ShelfLifeHours":  48,
+                           "IsActive":  true,
+                           "PriceSince":  "2026-11-14T17:55:48.0000000"
+                       }
+                   ],
+                   [
+                       {
+                           "ProductId":  38,
+                           "OldPrice":  42000.00,
+                           "NewPrice":  45000.00
+                       }
+                   ],
+                   [
+                       {
+                           "ColumnId":  10,
+                           "MachineId":  1,
+                           "ColumnNo":  10,
+                           "SlotCode":  "C2",
+                           "ProductId":  38
+                       }
+                   ],
+                   [
+                       {
+                           "BatchId":  55,
+                           "BatchCode":  "LO000055",
+                           "ProductId":  38,
+                           "PreparedAt":  "2026-11-14T17:55:49.0000000",
+                           "ExpiryAt":  "2026-11-16T17:55:49.0000000",
+                           "Quantity":  20
+                       }
+                   ],
+                   [
+                       {
+                           "RestockId":  7,
+                           "Lines":  1,
+                           "TotalQty":  3
+                       }
+                   ],
+                   [
+                       {
+                           "BatchId":  56,
+                           "BatchCode":  "LO000056",
+                           "ProductId":  38,
+                           "PreparedAt":  "2026-11-12T18:25:49.0000000",
+                           "ExpiryAt":  "2026-11-14T18:25:49.0000000",
+                           "Quantity":  5
+                       }
+                   ],
+                   [
+                       {
+                           "BatchId":  57,
+                           "BatchCode":  "LO000057",
+                           "ProductId":  38,
+                           "PreparedAt":  "2026-11-14T17:55:49.0000000",
+                           "ExpiryAt":  "2026-11-16T17:55:49.0000000",
+                           "Quantity":  2
+                       }
+                   ],
+                   [
+                       {
+                           "TestNo":  1,
+                           "TestCase":  "Có cột Product.ShelfLifeHours",
+                           "Expected":  "1",
+                           "Actual":  "1",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  2,
+                           "TestCase":  "Có cột StockBatch.PreparedAt và ExpiryAt",
+                           "Expected":  "1",
+                           "Actual":  "1",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  3,
+                           "TestCase":  "Có bảng SlotStock, RestockEvent, RestockItem",
+                           "Expected":  "3",
+                           "Actual":  "3",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  4,
+                           "TestCase":  "Kiểu TVP RestockItemType có đúng 3 cột ColumnId, BatchId, Qty",
+                           "Expected":  "3",
+                           "Actual":  "3",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  5,
+                           "TestCase":  "Product là Temporal Table (temporal_type = 2)",
+                           "Expected":  "2",
+                           "Actual":  "2",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  6,
+                           "TestCase":  "Cột cũ TV3/TV5 đang dùng vẫn còn (UnitPrice, CurrentStock, ExpiryDate)",
+                           "Expected":  "3",
+                           "Actual":  "3",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  7,
+                           "TestCase":  "Đổi giá → ProductHistory tăng 1 dòng",
+                           "Expected":  "+1",
+                           "Actual":  "+1",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  8,
+                           "TestCase":  "ShelfLifeHours = 0 bị chặn",
+                           "Expected":  "547",
+                           "Actual":  "547",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  9,
+                           "TestCase":  "Lô có ExpiryAt \u003c= PreparedAt bị chặn",
+                           "Expected":  "547",
+                           "Actual":  "547",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  10,
+                           "TestCase":  "Dòng phiếu châm Qty = 0 bị chặn",
+                           "Expected":  "547",
+                           "Actual":  "547",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  11,
+                           "TestCase":  "TVP chặn trùng cặp ColumnId + BatchId",
+                           "Expected":  "2627",
+                           "Actual":  "2627",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  12,
+                           "TestCase":  "Có đủ 36 sản phẩm FV-SP-001…036",
+                           "Expected":  "36",
+                           "Actual":  "36",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  13,
+                           "TestCase":  "5 máy × 12 ngăn A1–C4",
+                           "Expected":  "60",
+                           "Actual":  "60",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  14,
+                           "TestCase":  "Tồn theo lô khớp Slot.CurrentStock (số ngăn lệch)",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  15,
+                           "TestCase":  "Không ngăn nào vượt sức chứa",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  16,
+                           "TestCase":  "Có hàng sắp hết hạn trong 6 giờ (demo cảnh báo)",
+                           "Expected":  "\u003e0",
+                           "Actual":  "17",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  17,
+                           "TestCase":  "Có lô đã hết hạn còn trong ngăn (demo rút hàng)",
+                           "Expected":  "\u003e0",
+                           "Actual":  "1",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  18,
+                           "TestCase":  "FIFO: lô nạp trước hết hạn trước (số cặp sai)",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  19,
+                           "TestCase":  "sp_AddProduct đúng: tạo sản phẩm, SKU FV-SP-…, giá 42000",
+                           "Expected":  "OK",
+                           "Actual":  "OK",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  20,
+                           "TestCase":  "sp_AddProduct trùng tên (khác hoa/thường)",
+                           "Expected":  "50101",
+                           "Actual":  "50101",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  21,
+                           "TestCase":  "sp_AddProduct giá = 0",
+                           "Expected":  "50102",
+                           "Actual":  "50102",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  22,
+                           "TestCase":  "sp_UpdateProduct đúng: đổi tên + hạn dùng",
+                           "Expected":  "OK",
+                           "Actual":  "OK",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  23,
+                           "TestCase":  "sp_UpdateProduct sản phẩm không tồn tại",
+                           "Expected":  "50103",
+                           "Actual":  "50103",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  24,
+                           "TestCase":  "sp_UpdateProduct ngừng bán khi còn gán ở ngăn",
+                           "Expected":  "50109",
+                           "Actual":  "50109",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  25,
+                           "TestCase":  "sp_UpdatePrice đúng: 42000 → 45000, lịch sử +1",
+                           "Expected":  "OK",
+                           "Actual":  "OK",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  26,
+                           "TestCase":  "sp_UpdatePrice giá mới trùng giá hiện tại",
+                           "Expected":  "50104",
+                           "Actual":  "50104",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  27,
+                           "TestCase":  "sp_UpdatePrice sản phẩm không tồn tại",
+                           "Expected":  "50103",
+                           "Actual":  "50103",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  28,
+                           "TestCase":  "sp_AssignColumn đúng: gán sản phẩm vào ngăn rỗng",
+                           "Expected":  "OK",
+                           "Actual":  "OK",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  29,
+                           "TestCase":  "sp_AssignColumn ngăn không tồn tại",
+                           "Expected":  "50105",
+                           "Actual":  "50105",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  30,
+                           "TestCase":  "sp_AssignColumn ngăn còn hàng",
+                           "Expected":  "50106",
+                           "Actual":  "50106",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  31,
+                           "TestCase":  "sp_AddBatch đúng: mã LOxxxxxx, hạn = giờ làm + 48 giờ",
+                           "Expected":  "OK",
+                           "Actual":  "OK",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  32,
+                           "TestCase":  "sp_AddBatch sản phẩm không tồn tại",
+                           "Expected":  "50107",
+                           "Actual":  "50107",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  33,
+                           "TestCase":  "sp_AddBatch số lượng = 0",
+                           "Expected":  "50113",
+                           "Actual":  "50113",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  34,
+                           "TestCase":  "sp_Restock đúng: ngăn +3, SlotStock, phiếu châm, StockMovement IN",
+                           "Expected":  "OK",
+                           "Actual":  "OK",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  35,
+                           "TestCase":  "sp_Restock vượt sức chứa: lỗi + rollback (tồn vẫn 3)",
+                           "Expected":  "50117",
+                           "Actual":  "50117",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  36,
+                           "TestCase":  "sp_Restock lô không đúng sản phẩm của ngăn",
+                           "Expected":  "50114",
+                           "Actual":  "50114",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  37,
+                           "TestCase":  "sp_Restock máy không tồn tại",
+                           "Expected":  "50110",
+                           "Actual":  "50110",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  38,
+                           "TestCase":  "sp_Restock ngăn không thuộc máy",
+                           "Expected":  "50112",
+                           "Actual":  "50112",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  39,
+                           "TestCase":  "sp_Restock lô còn dưới 1 giờ sử dụng",
+                           "Expected":  "50116",
+                           "Actual":  "50116",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  40,
+                           "TestCase":  "sp_Restock lô không đủ số lượng",
+                           "Expected":  "50118",
+                           "Actual":  "50118",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  41,
+                           "TestCase":  "sp_RemoveExpired đúng: rút 3 hộp, ngăn về 0, StockMovement OUT",
+                           "Expected":  "OK",
+                           "Actual":  "OK",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  42,
+                           "TestCase":  "sp_RemoveExpired chạy lần 2 không rút thêm",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  43,
+                           "TestCase":  "sp_RemoveExpired máy không tồn tại: không lỗi, 0 dòng",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  44,
+                           "TestCase":  "Có 4 view + 3 function + 1 trigger",
+                           "Expected":  "8",
+                           "Actual":  "8",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  45,
+                           "TestCase":  "vw_ProductCatalog đủ sản phẩm (chênh lệch)",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  46,
+                           "TestCase":  "vw_StockStatus: tồn khớp SlotStock, ColumnNo không trùng (số dòng sai)",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  47,
+                           "TestCase":  "vw_AvailableBatches / vw_ExpiringBatches lọc đúng (số dòng sai)",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  48,
+                           "TestCase":  "fn_PriceHistory: 2 mốc giá, 45000 là giá hiện tại",
+                           "Expected":  "2",
+                           "Actual":  "1",
+                           "Passed":  false
+                       },
+                       {
+                           "TestNo":  49,
+                           "TestCase":  "fn_GetFifoStock: lô nạp trước đứng đầu, cộng dồn = Remaining",
+                           "Expected":  "OK",
+                           "Actual":  "OK",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  50,
+                           "TestCase":  "trg_Slot_LowStock: ngăn về 0 → 1 cảnh báo LOW_STOCK (HIGH)",
+                           "Expected":  "1",
+                           "Actual":  "1",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  51,
+                           "TestCase":  "trg_Slot_LowStock: không ghi trùng khi cảnh báo còn mở",
+                           "Expected":  "1",
+                           "Actual":  "1",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  52,
+                           "TestCase":  "Có đủ 9 index FV-19",
+                           "Expected":  "9",
+                           "Actual":  "9",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  53,
+                           "TestCase":  "UX tên sản phẩm: chèn thẳng tên trùng bị chặn",
+                           "Expected":  "2601",
+                           "Actual":  "2601",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  54,
+                           "TestCase":  "UX tên sản phẩm: bản đã xóa mềm được trùng tên",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                     "Warning: Null value is eliminated by an aggregate or other SET operation.",
+                     "[tests_inventory] 53/54 PASS"
+                 ],
+    "Status":  "FAIL",
+    "Cases":  [
+                  {
+                      "TestNo":  1,
+                      "TestCase":  "Có cột Product.ShelfLifeHours",
+                      "Expected":  "1",
+                      "Actual":  "1",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  2,
+                      "TestCase":  "Có cột StockBatch.PreparedAt và ExpiryAt",
+                      "Expected":  "1",
+                      "Actual":  "1",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  3,
+                      "TestCase":  "Có bảng SlotStock, RestockEvent, RestockItem",
+                      "Expected":  "3",
+                      "Actual":  "3",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  4,
+                      "TestCase":  "Kiểu TVP RestockItemType có đúng 3 cột ColumnId, BatchId, Qty",
+                      "Expected":  "3",
+                      "Actual":  "3",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  5,
+                      "TestCase":  "Product là Temporal Table (temporal_type = 2)",
+                      "Expected":  "2",
+                      "Actual":  "2",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  6,
+                      "TestCase":  "Cột cũ TV3/TV5 đang dùng vẫn còn (UnitPrice, CurrentStock, ExpiryDate)",
+                      "Expected":  "3",
+                      "Actual":  "3",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  7,
+                      "TestCase":  "Đổi giá → ProductHistory tăng 1 dòng",
+                      "Expected":  "+1",
+                      "Actual":  "+1",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  8,
+                      "TestCase":  "ShelfLifeHours = 0 bị chặn",
+                      "Expected":  "547",
+                      "Actual":  "547",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  9,
+                      "TestCase":  "Lô có ExpiryAt \u003c= PreparedAt bị chặn",
+                      "Expected":  "547",
+                      "Actual":  "547",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  10,
+                      "TestCase":  "Dòng phiếu châm Qty = 0 bị chặn",
+                      "Expected":  "547",
+                      "Actual":  "547",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  11,
+                      "TestCase":  "TVP chặn trùng cặp ColumnId + BatchId",
+                      "Expected":  "2627",
+                      "Actual":  "2627",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  12,
+                      "TestCase":  "Có đủ 36 sản phẩm FV-SP-001…036",
+                      "Expected":  "36",
+                      "Actual":  "36",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  13,
+                      "TestCase":  "5 máy × 12 ngăn A1–C4",
+                      "Expected":  "60",
+                      "Actual":  "60",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  14,
+                      "TestCase":  "Tồn theo lô khớp Slot.CurrentStock (số ngăn lệch)",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  15,
+                      "TestCase":  "Không ngăn nào vượt sức chứa",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  16,
+                      "TestCase":  "Có hàng sắp hết hạn trong 6 giờ (demo cảnh báo)",
+                      "Expected":  "\u003e0",
+                      "Actual":  "17",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  17,
+                      "TestCase":  "Có lô đã hết hạn còn trong ngăn (demo rút hàng)",
+                      "Expected":  "\u003e0",
+                      "Actual":  "1",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  18,
+                      "TestCase":  "FIFO: lô nạp trước hết hạn trước (số cặp sai)",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  19,
+                      "TestCase":  "sp_AddProduct đúng: tạo sản phẩm, SKU FV-SP-…, giá 42000",
+                      "Expected":  "OK",
+                      "Actual":  "OK",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  20,
+                      "TestCase":  "sp_AddProduct trùng tên (khác hoa/thường)",
+                      "Expected":  "50101",
+                      "Actual":  "50101",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  21,
+                      "TestCase":  "sp_AddProduct giá = 0",
+                      "Expected":  "50102",
+                      "Actual":  "50102",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  22,
+                      "TestCase":  "sp_UpdateProduct đúng: đổi tên + hạn dùng",
+                      "Expected":  "OK",
+                      "Actual":  "OK",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  23,
+                      "TestCase":  "sp_UpdateProduct sản phẩm không tồn tại",
+                      "Expected":  "50103",
+                      "Actual":  "50103",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  24,
+                      "TestCase":  "sp_UpdateProduct ngừng bán khi còn gán ở ngăn",
+                      "Expected":  "50109",
+                      "Actual":  "50109",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  25,
+                      "TestCase":  "sp_UpdatePrice đúng: 42000 → 45000, lịch sử +1",
+                      "Expected":  "OK",
+                      "Actual":  "OK",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  26,
+                      "TestCase":  "sp_UpdatePrice giá mới trùng giá hiện tại",
+                      "Expected":  "50104",
+                      "Actual":  "50104",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  27,
+                      "TestCase":  "sp_UpdatePrice sản phẩm không tồn tại",
+                      "Expected":  "50103",
+                      "Actual":  "50103",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  28,
+                      "TestCase":  "sp_AssignColumn đúng: gán sản phẩm vào ngăn rỗng",
+                      "Expected":  "OK",
+                      "Actual":  "OK",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  29,
+                      "TestCase":  "sp_AssignColumn ngăn không tồn tại",
+                      "Expected":  "50105",
+                      "Actual":  "50105",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  30,
+                      "TestCase":  "sp_AssignColumn ngăn còn hàng",
+                      "Expected":  "50106",
+                      "Actual":  "50106",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  31,
+                      "TestCase":  "sp_AddBatch đúng: mã LOxxxxxx, hạn = giờ làm + 48 giờ",
+                      "Expected":  "OK",
+                      "Actual":  "OK",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  32,
+                      "TestCase":  "sp_AddBatch sản phẩm không tồn tại",
+                      "Expected":  "50107",
+                      "Actual":  "50107",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  33,
+                      "TestCase":  "sp_AddBatch số lượng = 0",
+                      "Expected":  "50113",
+                      "Actual":  "50113",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  34,
+                      "TestCase":  "sp_Restock đúng: ngăn +3, SlotStock, phiếu châm, StockMovement IN",
+                      "Expected":  "OK",
+                      "Actual":  "OK",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  35,
+                      "TestCase":  "sp_Restock vượt sức chứa: lỗi + rollback (tồn vẫn 3)",
+                      "Expected":  "50117",
+                      "Actual":  "50117",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  36,
+                      "TestCase":  "sp_Restock lô không đúng sản phẩm của ngăn",
+                      "Expected":  "50114",
+                      "Actual":  "50114",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  37,
+                      "TestCase":  "sp_Restock máy không tồn tại",
+                      "Expected":  "50110",
+                      "Actual":  "50110",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  38,
+                      "TestCase":  "sp_Restock ngăn không thuộc máy",
+                      "Expected":  "50112",
+                      "Actual":  "50112",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  39,
+                      "TestCase":  "sp_Restock lô còn dưới 1 giờ sử dụng",
+                      "Expected":  "50116",
+                      "Actual":  "50116",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  40,
+                      "TestCase":  "sp_Restock lô không đủ số lượng",
+                      "Expected":  "50118",
+                      "Actual":  "50118",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  41,
+                      "TestCase":  "sp_RemoveExpired đúng: rút 3 hộp, ngăn về 0, StockMovement OUT",
+                      "Expected":  "OK",
+                      "Actual":  "OK",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  42,
+                      "TestCase":  "sp_RemoveExpired chạy lần 2 không rút thêm",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  43,
+                      "TestCase":  "sp_RemoveExpired máy không tồn tại: không lỗi, 0 dòng",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  44,
+                      "TestCase":  "Có 4 view + 3 function + 1 trigger",
+                      "Expected":  "8",
+                      "Actual":  "8",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  45,
+                      "TestCase":  "vw_ProductCatalog đủ sản phẩm (chênh lệch)",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  46,
+                      "TestCase":  "vw_StockStatus: tồn khớp SlotStock, ColumnNo không trùng (số dòng sai)",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  47,
+                      "TestCase":  "vw_AvailableBatches / vw_ExpiringBatches lọc đúng (số dòng sai)",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  48,
+                      "TestCase":  "fn_PriceHistory: 2 mốc giá, 45000 là giá hiện tại",
+                      "Expected":  "2",
+                      "Actual":  "1",
+                      "Passed":  false
+                  },
+                  {
+                      "TestNo":  49,
+                      "TestCase":  "fn_GetFifoStock: lô nạp trước đứng đầu, cộng dồn = Remaining",
+                      "Expected":  "OK",
+                      "Actual":  "OK",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  50,
+                      "TestCase":  "trg_Slot_LowStock: ngăn về 0 → 1 cảnh báo LOW_STOCK (HIGH)",
+                      "Expected":  "1",
+                      "Actual":  "1",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  51,
+                      "TestCase":  "trg_Slot_LowStock: không ghi trùng khi cảnh báo còn mở",
+                      "Expected":  "1",
+                      "Actual":  "1",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  52,
+                      "TestCase":  "Có đủ 9 index FV-19",
+                      "Expected":  "9",
+                      "Actual":  "9",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  53,
+                      "TestCase":  "UX tên sản phẩm: chèn thẳng tên trùng bị chặn",
+                      "Expected":  "2601",
+                      "Actual":  "2601",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  54,
+                      "TestCase":  "UX tên sản phẩm: bản đã xóa mềm được trùng tên",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  }
+              ],
+    "Name":  "tests_inventory.sql"
+}

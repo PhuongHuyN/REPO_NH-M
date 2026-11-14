@@ -1,0 +1,66 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:43.1998713+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:42.1496972+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "Bảng":  "Supplier",
+                           "Số dòng":  4
+                       },
+                       {
+                           "Bảng":  "Category",
+                           "Số dòng":  4
+                       },
+                       {
+                           "Bảng":  "Product",
+                           "Số dòng":  36
+                       },
+                       {
+                           "Bảng":  "Machine",
+                           "Số dòng":  5
+                       },
+                       {
+                           "Bảng":  "Slot",
+                           "Số dòng":  60
+                       },
+                       {
+                           "Bảng":  "StockBatch",
+                           "Số dòng":  52
+                       },
+                       {
+                           "Bảng":  "SlotStock",
+                           "Số dòng":  81
+                       },
+                       {
+                           "Bảng":  "StockMovement",
+                           "Số dòng":  81
+                       },
+                       {
+                           "Bảng":  "RestockEvent",
+                           "Số dòng":  5
+                       },
+                       {
+                           "Bảng":  "RestockItem",
+                           "Số dòng":  55
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                     "[08-inv] ── Bắt đầu nạp dữ liệu inventory ──────────────────────────────",
+                     "[08-inv] 1. Supplier: xong (4 nhà cung cấp).",
+                     "[08-inv] 2. Category: xong (4 danh mục).",
+                     "[08-inv] 3. Product: xong (36 sản phẩm, 35 đang bán).",
+                     "[08-inv] 4. Machine: xong (5 máy).",
+                     "[08-inv] 5. Slot: xong (5 máy × 12 ngăn, sức chứa 8).",
+                     "[08-inv] 6. StockBatch / SlotStock / StockMovement: xong (60 ngăn được nạp).",
+                     "[08-inv] 7. RestockEvent/RestockItem: xong (5 phiếu mới).",
+                     "[08-inv] ── Hoàn tất dữ liệu inventory ────────────────────────────────"
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+
+              ],
+    "Name":  "08_seed_inventory.sql"
+}

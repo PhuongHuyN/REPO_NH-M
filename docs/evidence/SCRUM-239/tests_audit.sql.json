@@ -1,0 +1,164 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:51.7048357+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:51.1757271+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "UserId":  3,
+                           "Username":  "operator02",
+                           "IsActive":  false
+                       }
+                   ],
+                   [
+                       {
+                           "TestNo":  1,
+                           "TestCase":  "Có bảng audit.ChangeLog và audit.AuditLog",
+                           "Expected":  "2",
+                           "Actual":  "2",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  2,
+                           "TestCase":  "Có 2 view + trigger auth.trg_Users_Audit",
+                           "Expected":  "3",
+                           "Actual":  "3",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  3,
+                           "TestCase":  "vw_UserPermissions: 1 dòng / tài khoản (chênh lệch)",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  4,
+                           "TestCase":  "vw_UserPermissions: MachineIds của operator01 khớp UserMachine",
+                           "Expected":  "1,2,3",
+                           "Actual":  "1,2,3",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  5,
+                           "TestCase":  "vw_UserPermissions: admin là Admin, 0 máy",
+                           "Expected":  "Admin/0",
+                           "Actual":  "Admin/0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  6,
+                           "TestCase":  "vw_LoginActivity: tổng đúng + sai = số dòng LoginHistory (chênh lệch)",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  7,
+                           "TestCase":  "Trigger: khóa operator02 → 1 dòng ChangeLog, IsActive true→false",
+                           "Expected":  "1 | true→false",
+                           "Actual":  "1 | true→false",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  8,
+                           "TestCase":  "Trigger: ChangeLog không chứa PasswordHash / Salt",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  9,
+                           "TestCase":  "Trigger: UPDATE 2 tài khoản 1 lệnh → 2 dòng ChangeLog",
+                           "Expected":  "2",
+                           "Actual":  "2",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  10,
+                           "TestCase":  "Trigger: chỉ đổi LastLoginAt thì KHÔNG ghi nhật ký",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                     "[tests_audit] 10/10 PASS"
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+                  {
+                      "TestNo":  1,
+                      "TestCase":  "Có bảng audit.ChangeLog và audit.AuditLog",
+                      "Expected":  "2",
+                      "Actual":  "2",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  2,
+                      "TestCase":  "Có 2 view + trigger auth.trg_Users_Audit",
+                      "Expected":  "3",
+                      "Actual":  "3",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  3,
+                      "TestCase":  "vw_UserPermissions: 1 dòng / tài khoản (chênh lệch)",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  4,
+                      "TestCase":  "vw_UserPermissions: MachineIds của operator01 khớp UserMachine",
+                      "Expected":  "1,2,3",
+                      "Actual":  "1,2,3",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  5,
+                      "TestCase":  "vw_UserPermissions: admin là Admin, 0 máy",
+                      "Expected":  "Admin/0",
+                      "Actual":  "Admin/0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  6,
+                      "TestCase":  "vw_LoginActivity: tổng đúng + sai = số dòng LoginHistory (chênh lệch)",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  7,
+                      "TestCase":  "Trigger: khóa operator02 → 1 dòng ChangeLog, IsActive true→false",
+                      "Expected":  "1 | true→false",
+                      "Actual":  "1 | true→false",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  8,
+                      "TestCase":  "Trigger: ChangeLog không chứa PasswordHash / Salt",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  9,
+                      "TestCase":  "Trigger: UPDATE 2 tài khoản 1 lệnh → 2 dòng ChangeLog",
+                      "Expected":  "2",
+                      "Actual":  "2",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  10,
+                      "TestCase":  "Trigger: chỉ đổi LastLoginAt thì KHÔNG ghi nhật ký",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  }
+              ],
+    "Name":  "tests_audit.sql"
+}

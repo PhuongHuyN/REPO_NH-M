@@ -1,0 +1,38 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:54.6199223+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:54.5297516+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "Version":  "Microsoft SQL Server 2022 (RTM) - 16.0.1000.6 (X64) \n\tOct  8 2022 05:58:25 \n\tCopyright (C) 2022 Microsoft Corporation\n\tExpress Edition (64-bit) on Windows 10 Pro 10.0 \u003cX64\u003e (Build 26200: ) (Hypervisor)\n",
+                           "Database":  "FreshVend_QA239_20261115_005521",
+                           "RunAt":  "\/Date(1794678954612)\/"
+                       }
+                   ],
+                   [
+                       {
+                           "compatibility_level":  160,
+                           "collation_name":  "Vietnamese_CI_AS"
+                       }
+                   ],
+                   [
+                       {
+                           "Kind":  "Orders",
+                           "Total":  54
+                       },
+                       {
+                           "Kind":  "Telemetry",
+                           "Total":  0
+                       }
+                   ]
+               ],
+    "Messages":  [
+
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+
+              ],
+    "Name":  "environment"
+}

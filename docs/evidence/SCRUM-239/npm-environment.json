@@ -1,0 +1,8 @@
+﻿{
+    "ExitCode":  0,
+    "Source":  "fakeDb and fake mssql driver, not real SQL E2E",
+    "Node":  "v26.4.0",
+    "StartedAt":  "2026-11-15T00:54:19.4798347+07:00",
+    "CompletedAt":  "2026-11-15T00:54:23.6021973+07:00",
+    "Npm":  "12.2.1"
+}

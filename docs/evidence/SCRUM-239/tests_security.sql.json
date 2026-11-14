@@ -1,0 +1,171 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:52.2214513+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:51.7151760+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "TestNo":  1,
+                           "TestCase":  "Có đủ 4 login fv_*_app",
+                           "Expected":  "4",
+                           "Actual":  "4",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  2,
+                           "TestCase":  "4 user thuộc đúng role (admin = db_owner)",
+                           "Expected":  "4",
+                           "Actual":  "4",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  3,
+                           "TestCase":  "RLS auth.MachinePolicy bật, số bảng được lọc",
+                           "Expected":  "\u003e=2",
+                           "Actual":  "3",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  4,
+                           "TestCase":  "RLS: operator01 chỉ thấy máy được giao (inventory.Machine)",
+                           "Expected":  "3",
+                           "Actual":  "3",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  5,
+                           "TestCase":  "RLS: vw_StockStatus của operator01 chỉ có máy được giao",
+                           "Expected":  "3",
+                           "Actual":  "3",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  6,
+                           "TestCase":  "DENY: Operator xem report (số liệu tài chính)",
+                           "Expected":  "229",
+                           "Actual":  "229 ([report].[vw_ColdChainCompliance])",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  7,
+                           "TestCase":  "RLS: Operator châm hàng máy KHÔNG được giao",
+                           "Expected":  "50110",
+                           "Actual":  "50110",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  8,
+                           "TestCase":  "Kiosk gọi inventory.sp_AddProduct bị từ chối",
+                           "Expected":  "229",
+                           "Actual":  "229",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  9,
+                           "TestCase":  "Kiosk đọc vw_StockStatus được, thấy mọi máy",
+                           "Expected":  "5",
+                           "Actual":  "5",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  10,
+                           "TestCase":  "Device đọc danh mục sản phẩm bị từ chối",
+                           "Expected":  "229",
+                           "Actual":  "229",
+                           "Passed":  true
+                       },
+                       {
+                           "TestNo":  11,
+                           "TestCase":  "RLS: Operator thiếu UserId không thấy máy nào",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                     "[tests_security] 11/11 PASS"
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+                  {
+                      "TestNo":  1,
+                      "TestCase":  "Có đủ 4 login fv_*_app",
+                      "Expected":  "4",
+                      "Actual":  "4",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  2,
+                      "TestCase":  "4 user thuộc đúng role (admin = db_owner)",
+                      "Expected":  "4",
+                      "Actual":  "4",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  3,
+                      "TestCase":  "RLS auth.MachinePolicy bật, số bảng được lọc",
+                      "Expected":  "\u003e=2",
+                      "Actual":  "3",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  4,
+                      "TestCase":  "RLS: operator01 chỉ thấy máy được giao (inventory.Machine)",
+                      "Expected":  "3",
+                      "Actual":  "3",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  5,
+                      "TestCase":  "RLS: vw_StockStatus của operator01 chỉ có máy được giao",
+                      "Expected":  "3",
+                      "Actual":  "3",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  6,
+                      "TestCase":  "DENY: Operator xem report (số liệu tài chính)",
+                      "Expected":  "229",
+                      "Actual":  "229 ([report].[vw_ColdChainCompliance])",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  7,
+                      "TestCase":  "RLS: Operator châm hàng máy KHÔNG được giao",
+                      "Expected":  "50110",
+                      "Actual":  "50110",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  8,
+                      "TestCase":  "Kiosk gọi inventory.sp_AddProduct bị từ chối",
+                      "Expected":  "229",
+                      "Actual":  "229",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  9,
+                      "TestCase":  "Kiosk đọc vw_StockStatus được, thấy mọi máy",
+                      "Expected":  "5",
+                      "Actual":  "5",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  10,
+                      "TestCase":  "Device đọc danh mục sản phẩm bị từ chối",
+                      "Expected":  "229",
+                      "Actual":  "229",
+                      "Passed":  true
+                  },
+                  {
+                      "TestNo":  11,
+                      "TestCase":  "RLS: Operator thiếu UserId không thấy máy nào",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true
+                  }
+              ],
+    "Name":  "tests_security.sql"
+}

@@ -1,0 +1,9 @@
+﻿{
+    "Output":  "D:\\VSC\\REPO_NH-M\\.local-test\\scrum239-worktree\\.local-test\\perf\\20261115_005630",
+    "PlanCount":  60,
+    "Reason":  "Chưa có index script của owner",
+    "After":  "BLOCKED",
+    "Before":  "MEASURED",
+    "ControlOnly":  true,
+    "Database":  "FreshVend_QA239_20261115_005521"
+}

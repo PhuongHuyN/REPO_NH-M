@@ -1,0 +1,81 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:54.4457989+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:54.3314276+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "Result":  "PASS: ordered batch, UTC timestamp/heartbeat, correct errors, atomic invalid batch"
+                       }
+                   ],
+                   [
+                       {
+                           "TestCase":  "ordered batch and UTC timestamps",
+                           "Passed":  true,
+                           "RunAt":  "\/Date(1794678954445)\/"
+                       },
+                       {
+                           "TestCase":  "invalid JSON 50310",
+                           "Passed":  true,
+                           "RunAt":  "\/Date(1794678954445)\/"
+                       },
+                       {
+                           "TestCase":  "unknown machine 50311",
+                           "Passed":  true,
+                           "RunAt":  "\/Date(1794678954445)\/"
+                       },
+                       {
+                           "TestCase":  "empty readings 50312",
+                           "Passed":  true,
+                           "RunAt":  "\/Date(1794678954445)\/"
+                       },
+                       {
+                           "TestCase":  "atomic invalid reading 50312",
+                           "Passed":  true,
+                           "RunAt":  "\/Date(1794678954445)\/"
+                       },
+                       {
+                           "TestCase":  "non-object reading 50312",
+                           "Passed":  true,
+                           "RunAt":  "\/Date(1794678954445)\/"
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027."
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+                  {
+                      "TestCase":  "ordered batch and UTC timestamps",
+                      "Passed":  true,
+                      "RunAt":  "\/Date(1794678954445)\/"
+                  },
+                  {
+                      "TestCase":  "invalid JSON 50310",
+                      "Passed":  true,
+                      "RunAt":  "\/Date(1794678954445)\/"
+                  },
+                  {
+                      "TestCase":  "unknown machine 50311",
+                      "Passed":  true,
+                      "RunAt":  "\/Date(1794678954445)\/"
+                  },
+                  {
+                      "TestCase":  "empty readings 50312",
+                      "Passed":  true,
+                      "RunAt":  "\/Date(1794678954445)\/"
+                  },
+                  {
+                      "TestCase":  "atomic invalid reading 50312",
+                      "Passed":  true,
+                      "RunAt":  "\/Date(1794678954445)\/"
+                  },
+                  {
+                      "TestCase":  "non-object reading 50312",
+                      "Passed":  true,
+                      "RunAt":  "\/Date(1794678954445)\/"
+                  }
+              ],
+    "Name":  "tests_iot.sql"
+}
