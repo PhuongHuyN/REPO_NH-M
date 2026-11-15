@@ -67,6 +67,89 @@ ELSE
 
 GO
 -- =============================================================================
+-- QĐ-1. Hợp nhất inventory.Machine vào iot.Machines
+-- Gỡ các FK đã biết trỏ tới bảng cũ; 03_foreign_keys.sql sẽ tạo lại chúng
+-- trỏ trực tiếp tới iot.Machines.
+-- =============================================================================
+IF OBJECT_ID(N'inventory.Machine', N'U') IS NOT NULL
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_inventory_Slot_Machine')
+            EXEC sys.sp_executesql N'ALTER TABLE inventory.Slot DROP CONSTRAINT FK_inventory_Slot_Machine;';
+        IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_sales_Order_inventory_Machine')
+            EXEC sys.sp_executesql N'ALTER TABLE sales.[Order] DROP CONSTRAINT FK_sales_Order_inventory_Machine;';
+        IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_iot_Device_inventory_Machine')
+            EXEC sys.sp_executesql N'ALTER TABLE iot.Device DROP CONSTRAINT FK_iot_Device_inventory_Machine;';
+        IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_DailySalesSummary_MachineId')
+            EXEC sys.sp_executesql N'ALTER TABLE report.DailySalesSummary DROP CONSTRAINT FK_DailySalesSummary_MachineId;';
+        IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_report_MachineStockSnapshot_inventory_Machine')
+            EXEC sys.sp_executesql N'ALTER TABLE report.MachineStockSnapshot DROP CONSTRAINT FK_report_MachineStockSnapshot_inventory_Machine;';
+
+        IF EXISTS (
+            SELECT 1 FROM sys.foreign_keys
+            WHERE referenced_object_id = OBJECT_ID(N'inventory.Machine', N'U')
+        )
+        BEGIN
+            ;THROW 50380, N'Không thể thay inventory.Machine vì vẫn còn FK chưa được nhận diện trỏ tới bảng này.', 1;
+        END;
+
+        DROP TABLE inventory.Machine;
+        COMMIT TRANSACTION;
+        PRINT N'[02-iot] Bảng vật lý inventory.Machine rỗng đã được gỡ bỏ.';
+    END TRY
+    BEGIN CATCH
+        IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
+
+CREATE OR ALTER VIEW inventory.Machine
+AS
+SELECT m.MachineId,
+       m.Serial AS MachineCode,
+       m.MachineName,
+       CONVERT(NVARCHAR(200), l.LocationName) AS Location,
+       CONVERT(DECIMAL(10,7), NULL) AS Latitude,
+       CONVERT(DECIMAL(10,7), NULL) AS Longitude,
+       CONVERT(NVARCHAR(20), CASE m.Status
+           WHEN N'ACTIVE' THEN N'online'
+           WHEN N'DEGRADED' THEN N'maintenance'
+           WHEN N'OFFLINE' THEN N'offline'
+           WHEN N'FAULT' THEN N'error'
+       END) AS Status,
+       CONVERT(BIT, 1) AS IsActive,
+       m.LocationId,
+       CONVERT(DATE, m.InstalledAt) AS InstallDate,
+       CONVERT(DATE, NULL) AS LastServiceDate,
+       m.InstalledAt AS CreatedAt,
+       m.LastHeartbeat AS UpdatedAt,
+       m.FirmwareVersion,
+       m.LastHeartbeat,
+       m.InstalledAt
+FROM iot.Machines AS m
+LEFT JOIN iot.Locations AS l ON l.LocationId = m.LocationId;
+GO
+PRINT N'[02-iot] View inventory.Machine đã được tạo từ iot.Machines.';
+GO
+
+-- 2b. iot.Device — Quản lý thiết bị phần cứng IoT
+IF OBJECT_ID(N'iot.Device', N'U') IS NULL
+BEGIN
+    CREATE TABLE iot.Device (
+        DeviceId   INT IDENTITY(1,1) NOT NULL CONSTRAINT PK_iot_Device PRIMARY KEY,
+        MachineId  INT NOT NULL,
+        DeviceCode NVARCHAR(50) NOT NULL,
+        DeviceType NVARCHAR(50) NOT NULL,
+        Status     NVARCHAR(20) NOT NULL CONSTRAINT DF_iot_Device_Status DEFAULT (N'ACTIVE'),
+        CreatedAt  DATETIME2(0) NOT NULL CONSTRAINT DF_iot_Device_CreatedAt DEFAULT (SYSUTCDATETIME()),
+        CONSTRAINT FK_iot_Device_Machines FOREIGN KEY (MachineId) REFERENCES iot.Machines(MachineId)
+    );
+END;
+GO
+
+-- =============================================================================
 -- 3. iot.MachineThresholds  — Cấu hình ngưỡng cảnh báo theo từng máy
 -- =============================================================================
 IF NOT EXISTS (SELECT 1
@@ -107,8 +190,6 @@ IF NOT EXISTS (SELECT 1
             Humidity    DECIMAL (5, 2),
             DoorOpen    BIT           
         );
-        CREATE NONCLUSTERED INDEX IX_Telemetry_Machine_Recorded
-            ON iot.Telemetry(MachineId, RecordedAt DESC);
         PRINT N'[02-iot] Bảng iot.Telemetry đã được tạo.';
     END
 ELSE
@@ -116,6 +197,12 @@ ELSE
 
 
 GO
+DROP INDEX IF EXISTS IX_Telemetry_Machine_Recorded ON iot.Telemetry;
+GO
+CREATE NONCLUSTERED INDEX IX_Telemetry_Machine_Recorded
+    ON iot.Telemetry(MachineId, RecordedAt DESC);
+GO
+
 -- =============================================================================
 -- 5. iot.TelemetryHourly  — Tổng hợp dữ liệu cảm biến theo giờ (phục vụ báo cáo)[cite: 6]
 -- =============================================================================
@@ -147,11 +234,20 @@ GO
 -- =============================================================================
 -- 6. iot.Alert  — Lịch sử cảnh báo được sinh ra
 -- =============================================================================
+IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL
+BEGIN
+    IF OBJECT_ID(N'iot.Alert') IS NOT NULL
+    BEGIN
+        ;THROW 50382, N'Cả iot.Alerts và iot.Alert cùng tồn tại; cần hợp nhất dữ liệu trước khi cài đặt.', 1;
+    END;
+    EXEC sys.sp_rename N'iot.Alerts', N'Alert';
+END;
+
 IF NOT EXISTS (SELECT 1
                FROM   sys.tables
-               WHERE  object_id = OBJECT_ID(N'iot.Alerts'))
+               WHERE  object_id = OBJECT_ID(N'iot.Alert', N'U'))
     BEGIN
-        CREATE TABLE iot.Alerts (
+        CREATE TABLE iot.Alert (
             AlertId    INT            IDENTITY (1, 1) PRIMARY KEY,
             MachineId  INT            FOREIGN KEY REFERENCES iot.Machines (MachineId),
             AlertType  NVARCHAR (50)  NOT NULL,
@@ -167,6 +263,43 @@ IF NOT EXISTS (SELECT 1
     END
 ELSE
     PRINT N'[02-iot] Bảng iot.Alert đã tồn tại — bỏ qua.';
+
+
+GO
+CREATE OR ALTER VIEW iot.Alerts
+AS
+SELECT AlertId, MachineId, AlertType, Severity, Message, RefKey,
+       CreatedAt, AckBy, AckAt, ResolvedAt
+FROM iot.Alert;
+GO
+
+-- =============================================================================
+-- 7. COMPATIBILITY VIEW: inventory.Machine
+-- Nguồn dữ liệu chính: iot.Machines
+-- Mục đích: Tương thích với module Inventory cũ
+-- =============================================================================
+-- Đảm bảo schema inventory tồn tại
+IF SCHEMA_ID(N'inventory') IS NULL
+    BEGIN
+        EXECUTE (N'CREATE SCHEMA inventory');
+    END
+
+
+GO
+-- Tạo View tương thích
+CREATE OR ALTER VIEW inventory.Machine
+AS
+SELECT m.MachineId,
+       m.Serial AS MachineCode,
+       m.MachineName,
+       l.LocationName AS Location,
+       m.Status,
+       CAST (CASE WHEN m.Status = N'ACTIVE' THEN 1 ELSE 0 END AS BIT) AS IsActive,
+       m.LocationId
+FROM   iot.Machines AS m
+       LEFT OUTER JOIN
+       iot.Locations AS l
+       ON l.LocationId = m.LocationId;
 
 
 GO
