@@ -1,0 +1,47 @@
+{
+  "acceptance": false,
+  "controlOnly": true,
+  "database": "FreshVendTV5_Week2_20261110_170803",
+  "rows": [
+    {
+      "Query": "ColdChainCompliance",
+      "ColdMs": 15.536,
+      "WarmMaxMs": 21.757,
+      "CpuMs": 0,
+      "LogicalReads": 24,
+      "After": "BLOCKED"
+    },
+    {
+      "Query": "ExportSales30Days",
+      "ColdMs": 75.735,
+      "WarmMaxMs": 52.314,
+      "CpuMs": 3,
+      "LogicalReads": 410,
+      "After": "BLOCKED"
+    },
+    {
+      "Query": "PeakHours",
+      "ColdMs": 106.896,
+      "WarmMaxMs": 85.169,
+      "CpuMs": 2,
+      "LogicalReads": 72,
+      "After": "BLOCKED"
+    },
+    {
+      "Query": "ProductRanking",
+      "ColdMs": 29.511,
+      "WarmMaxMs": 10.574,
+      "CpuMs": 2,
+      "LogicalReads": 359,
+      "After": "BLOCKED"
+    },
+    {
+      "Query": "RevenueByLocation",
+      "ColdMs": 25.134,
+      "WarmMaxMs": 115.552,
+      "CpuMs": 2,
+      "LogicalReads": 345,
+      "After": "BLOCKED"
+    }
+  ]
+}

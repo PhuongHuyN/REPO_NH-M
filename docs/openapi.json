@@ -1,0 +1,2687 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "FreshVend API",
+    "version": "1.0.0",
+    "description": "API trung tâm của hệ thống máy bán trái cây FreshVend. Mọi thao tác ghi gọi Stored Procedure trên SQL Server; phân quyền 2 lớp: kiểm tra vai trò ở API và GRANT/DENY + Row-Level Security trong CSDL."
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "deviceKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Device-Key"
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth (TV1)"
+        ],
+        "summary": "Đăng nhập – trả JWT + danh sách máy được giao",
+        "description": "Không cần đăng nhập.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "username": "admin",
+                "password": "Admin@2026"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": [
+          "Auth (TV1)"
+        ],
+        "summary": "Thông tin người dùng hiện tại (từ JWT)",
+        "description": "Cần **Bearer JWT**.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/auth/password": {
+      "put": {
+        "tags": [
+          "Auth (TV1)"
+        ],
+        "summary": "Đổi mật khẩu",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator, Kiosk.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "oldPassword": "Operator@2026",
+                "newPassword": "Operator@2027"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users": {
+      "get": {
+        "tags": [
+          "Auth (TV1)"
+        ],
+        "summary": "Danh sách tài khoản + máy được giao",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Auth (TV1)"
+        ],
+        "summary": "Tạo tài khoản",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "username": "operator03",
+                "password": "Operator@2026",
+                "fullName": "Lê Văn Cường",
+                "role": "Operator",
+                "email": "cuong@freshvend.vn"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/{id}/active": {
+      "put": {
+        "tags": [
+          "Auth (TV1)"
+        ],
+        "summary": "Khóa / mở khóa tài khoản",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "active": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/{id}/machines": {
+      "post": {
+        "tags": [
+          "Auth (TV1)"
+        ],
+        "summary": "Giao / gỡ máy cho Operator hoặc Kiosk",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "machineId": 1,
+                "unassign": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login-activity": {
+      "get": {
+        "tags": [
+          "Auth (TV1)"
+        ],
+        "summary": "Thống kê đăng nhập theo ngày",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/inventory/products": {
+      "get": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Danh mục sản phẩm",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Thêm sản phẩm",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "productName": "Sầu riêng Ri6",
+                "price": 59000,
+                "shelfLifeHours": 24,
+                "category": "Trái cây cắt sẵn",
+                "description": "Hộp 200g"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/products/{id}": {
+      "put": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Sửa thông tin sản phẩm / ngừng bán",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "productName": "Dưa hấu cắt sẵn",
+                "category": "Trái cây cắt sẵn",
+                "description": "Hộp 250g",
+                "shelfLifeHours": 24,
+                "isActive": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/products/{id}/image": {
+      "post": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Tải ảnh sản phẩm (JPG/PNG/WebP ≤ 2 MB, base64)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "dataUrl": "data:image/jpeg;base64,/9j/4AAQ..."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/products/{id}/price": {
+      "put": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Đổi giá (Temporal Table lưu lịch sử)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "price": 28000
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/products/{id}/price-history": {
+      "get": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Lịch sử giá (FOR SYSTEM_TIME ALL)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/inventory/stock": {
+      "get": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Tồn kho theo cột (lọc ?machineId=)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/inventory/columns/{id}": {
+      "put": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Đổi sản phẩm cho cột (chỉ khi cột rỗng)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "productId": 3
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/batches": {
+      "get": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Lô hàng còn có thể châm",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Nhập lô hàng mới từ bếp trung tâm",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "productId": 1,
+                "quantity": 40,
+                "supplier": "Bếp trung tâm Quận 7"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/restock": {
+      "post": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Châm hàng nhiều dòng trong 1 giao dịch (TVP)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "machineId": 1,
+                "note": "Châm ca sáng",
+                "items": [
+                  {
+                    "columnId": 1,
+                    "batchId": 1,
+                    "qty": 2
+                  },
+                  {
+                    "columnId": 2,
+                    "batchId": 2,
+                    "qty": 1
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/expiring": {
+      "get": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Lô sắp hết hạn (6 giờ) / đã hết hạn",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/inventory/remove-expired": {
+      "post": {
+        "tags": [
+          "Inventory (TV2)"
+        ],
+        "summary": "Rút hàng hết hạn (thủ công, job chạy hằng giờ)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "machineId": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/kiosk/menu": {
+      "get": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Thực đơn của máy: cột, sản phẩm, giá, tồn + tình trạng máy",
+        "description": "Cần **Bearer JWT**. Vai trò: Kiosk, Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Tạo đơn + giữ hàng theo FIFO (TVP giỏ hàng)",
+        "description": "Cần **Bearer JWT**. Vai trò: Kiosk, Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "machineId": 1,
+                "items": [
+                  {
+                    "columnId": 1,
+                    "qty": 1
+                  },
+                  {
+                    "columnId": 3,
+                    "qty": 2
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Danh sách đơn gần đây (lọc status, machineId)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/orders/pending": {
+      "get": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Đơn đang chờ thanh toán",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Chi tiết đơn hàng",
+        "description": "Cần **Bearer JWT**. Vai trò: Kiosk, Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/orders/{id}/cancel": {
+      "post": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Khách hủy đơn đang chờ thanh toán",
+        "description": "Cần **Bearer JWT**. Vai trò: Kiosk, Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/orders/{id}/refund": {
+      "post": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Hoàn tiền thủ công",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "reason": "Khách phản ánh sản phẩm dập"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/dispense-queue": {
+      "get": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Hàng chờ nhả của máy",
+        "description": "Cần **Bearer JWT**. Vai trò: Kiosk, Admin. Hoặc header X-Device-Key.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "deviceKey": []
+          }
+        ]
+      }
+    },
+    "/api/orders/items/{itemId}/dispense": {
+      "post": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Bộ điều khiển máy báo kết quả nhả hàng (kẹt 3 lần -> tự hoàn tiền)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin. Hoặc header X-Device-Key.",
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "deviceKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "result": "SUCCESS",
+                "errorCode": null
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/payments/qr": {
+      "post": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Sinh mã VietQR (EMVCo/NAPAS) cho đơn đang chờ thanh toán",
+        "description": "Cần **Bearer JWT**. Vai trò: Kiosk, Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "orderId": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/payments/sepay-webhook": {
+      "post": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Webhook giao dịch ngân hàng (SePay) – tự xác nhận đơn",
+        "description": "Không cần đăng nhập.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "id": 92704,
+                "gateway": "Vietcombank",
+                "transferType": "in",
+                "transferAmount": 25000,
+                "content": "FV1024 chuyen tien",
+                "referenceCode": "FT2603..."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/payments/callback": {
+      "post": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Webhook cổng thanh toán (chữ ký HMAC-SHA256)",
+        "description": "Không cần đăng nhập.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "orderId": 1,
+                "method": "VIETQR",
+                "gatewayTxnId": "VIETQR-1-ABCD",
+                "amount": 25000,
+                "signature": "hex(HMAC(secret, \"orderId|txn|amount\"))"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/demo/orders/{id}/pay": {
+      "post": {
+        "tags": [
+          "Demo"
+        ],
+        "summary": "(Chỉ DB_MODE=demo) Giả lập khách đã chuyển khoản",
+        "description": "Cần **Bearer JWT**. Vai trò: Kiosk, Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/orders/{id}/confirm-payment": {
+      "post": {
+        "tags": [
+          "Sales (TV3)"
+        ],
+        "summary": "Xác nhận thủ công đã nhận tiền chuyển khoản",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "reference": "FT26032...",
+                "note": "Đối chiếu sao kê"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/iot/telemetry": {
+      "post": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "ESP32 gửi gói dữ liệu cảm biến (JSON)",
+        "description": "Header **X-Device-Key** (thiết bị ESP32).",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "deviceKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "machineId": 3,
+                "readings": [
+                  {
+                    "t": "2026-11-02T08:00:00",
+                    "temp": 4.5,
+                    "hum": 80,
+                    "door": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/iot/machines": {
+      "get": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "Tình trạng đội máy (RLS: Operator chỉ thấy máy được giao)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "Đăng ký máy mới (tự tạo cột + ngưỡng mặc định)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "serial": "FV-HCM-021",
+                "machineName": "Bitexco – Tầng 5",
+                "locationId": 1,
+                "columnCount": 6,
+                "capacity": 10
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/iot/locations": {
+      "get": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "Danh sách địa điểm (từ vw_MachineHealth)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/iot/machines/{id}/telemetry": {
+      "get": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "Dữ liệu cảm biến N giờ gần nhất (?hours=6)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/iot/machines/{id}/thresholds": {
+      "put": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "Cấu hình ngưỡng nhiệt độ & thông điệp graceful degradation",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "minTemp": 2,
+                "maxTemp": 8,
+                "doorOpenMaxMinutes": 2,
+                "consecutiveBreaches": 3,
+                "degradedMessage": "Máy đang bảo trì làm lạnh"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/iot/machines/{id}/clear-fault": {
+      "put": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "Xóa trạng thái lỗi sau khi sửa máy",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "note": "Đã thay motor"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/iot/alerts": {
+      "get": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "Cảnh báo chưa xử lý",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/iot/alerts/{id}/ack": {
+      "put": {
+        "tags": [
+          "IoT (TV4)"
+        ],
+        "summary": "Xác nhận / đóng cảnh báo",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin, Operator.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "resolve": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/kpi": {
+      "get": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "KPI tổng quan + doanh thu 14 ngày + top sản phẩm",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/reports/revenue-growth": {
+      "get": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Doanh thu theo tháng, tăng trưởng (LAG), lũy kế",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/reports/peak-hours": {
+      "get": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Ma trận giờ × thứ (PIVOT)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/reports/ranking": {
+      "get": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Xếp hạng sản phẩm theo địa điểm (RANK)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/reports/cold-chain": {
+      "get": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Tỷ lệ tuân thủ chuỗi lạnh 30 ngày",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/reports/revenue-by-location": {
+      "get": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Doanh thu theo địa điểm (inline TVF)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/reports/export.csv": {
+      "get": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Xuất CSV bán hàng (ghi ExportLogs)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/reports/refresh": {
+      "post": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Cập nhật bảng tổng hợp (MERGE)",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "date": "2026-11-01",
+                "toDate": "2026-11-02"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/run-tests": {
+      "post": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Chạy toàn bộ unit test trong CSDL",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/reports/test-results": {
+      "get": {
+        "tags": [
+          "Reports (TV5)"
+        ],
+        "summary": "Kết quả lần chạy test gần nhất",
+        "description": "Cần **Bearer JWT**. Vai trò: Admin.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [
+          "He thong"
+        ],
+        "summary": "health",
+        "description": "Không cần đăng nhập.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        }
+      }
+    },
+    "/api/openapi.json": {
+      "get": {
+        "tags": [
+          "He thong"
+        ],
+        "summary": "openapi",
+        "description": "Không cần đăng nhập.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Thành công"
+          },
+          "201": {
+            "description": "Đã tạo"
+          },
+          "400": {
+            "description": "Dữ liệu không hợp lệ"
+          },
+          "401": {
+            "description": "Chưa đăng nhập"
+          },
+          "403": {
+            "description": "Không đủ quyền (API hoặc CSDL)"
+          },
+          "404": {
+            "description": "Không tìm thấy"
+          },
+          "409": {
+            "description": "Xung đột nghiệp vụ (hết hàng, trạng thái sai...)"
+          }
+        }
+      }
+    }
+  }
+}

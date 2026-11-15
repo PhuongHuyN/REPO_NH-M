@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- FILE        : 02_tables_report.sql
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
 -- DESCRIPTION : Tạo các bảng thuộc schema [report]
@@ -75,16 +75,16 @@ BEGIN
     );
 
     -- Index hỗ trợ truy vấn theo ngày (dải thời gian)
-    CREATE NONCLUSTERED INDEX IX_report_DSS_Date
+    CREATE NONCLUSTERED INDEX IX_DailySalesSummary_SummaryDate
         ON report.DailySalesSummary (SummaryDate DESC)
         INCLUDE (MachineId, ProductId, QtySold, Revenue);
 
     -- Index hỗ trợ truy vấn theo máy + ngày
-    CREATE NONCLUSTERED INDEX IX_report_DSS_Machine_Date
+    CREATE NONCLUSTERED INDEX IX_DailySalesSummary_MachineId_SummaryDate
         ON report.DailySalesSummary (MachineId, SummaryDate DESC);
 
     -- Index hỗ trợ truy vấn theo sản phẩm + ngày
-    CREATE NONCLUSTERED INDEX IX_report_DSS_Product_Date
+    CREATE NONCLUSTERED INDEX IX_DailySalesSummary_ProductId_SummaryDate
         ON report.DailySalesSummary (ProductId, SummaryDate DESC);
 
     PRINT N'[02-report] Bảng report.DailySalesSummary đã được tạo.';
@@ -95,7 +95,7 @@ GO
 -- 2. report.ExportLogs
 -- =============================================================================
 -- Ghi nhật ký mỗi lần người dùng xuất báo cáo (PDF, Excel, CSV…).
--- FK sang auth.User: ExportLogs.UserId → auth.User.UserId.
+-- Cross-schema FK ExportLogs.UserId is owned by TV1 in 03_foreign_keys.sql.
 
 IF OBJECT_ID(N'report.ExportLogs', N'U') IS NOT NULL
     PRINT N'[02-report] report.ExportLogs đã tồn tại — bỏ qua.';
@@ -115,7 +115,7 @@ BEGIN
             CONSTRAINT DF_report_ExportLogs_Format  DEFAULT (N'EXCEL'),
         FilePath        NVARCHAR(500)       NULL,   -- đường dẫn file trên server (nếu lưu file)
         FileSizeBytes   BIGINT              NULL,   -- kích thước file (bytes)
-        RowCount        INT                 NULL,   -- số dòng dữ liệu được xuất
+        [RowCount]        INT                 NULL,   -- số dòng dữ liệu được xuất
         DurationMs      INT                 NULL,   -- thời gian xử lý (milliseconds)
         Status          NVARCHAR(10)    NOT NULL    -- 'SUCCESS','FAILED','PENDING'
             CONSTRAINT DF_report_ExportLogs_Status  DEFAULT (N'PENDING'),
@@ -131,22 +131,15 @@ BEGIN
         CONSTRAINT CK_report_ExportLogs_Format
             CHECK (FileFormat IN (N'PDF', N'EXCEL', N'CSV', N'JSON')),
         CONSTRAINT CK_report_ExportLogs_Status
-            CHECK (Status IN (N'SUCCESS', N'FAILED', N'PENDING')),
-        CONSTRAINT FK_report_ExportLogs_User
-            FOREIGN KEY (UserId) REFERENCES auth.[User](UserId)
-            ON DELETE NO ACTION
-            ON UPDATE NO ACTION
-        -- Ghi chú: FK tới auth.User tạo trực tiếp ở đây vì auth.User
-        --          đã được tạo ở bước trước (02_tables_auth.sql).
-        --          Nếu muốn tập trung tất cả FK, di chuyển vào 03_foreign_keys.sql.
+            CHECK (Status IN (N'SUCCESS', N'FAILED', N'PENDING'))
     );
 
     -- Index hỗ trợ tra lịch sử xuất của từng user
-    CREATE NONCLUSTERED INDEX IX_report_ExportLogs_User_Time
+    CREATE NONCLUSTERED INDEX IX_ExportLogs_UserId_ExportedAt
         ON report.ExportLogs (UserId, ExportedAt DESC);
 
     -- Index hỗ trợ lọc theo tên báo cáo + thời gian
-    CREATE NONCLUSTERED INDEX IX_report_ExportLogs_Report_Time
+    CREATE NONCLUSTERED INDEX IX_ExportLogs_ReportName_ExportedAt
         ON report.ExportLogs (ReportName, ExportedAt DESC);
 
     PRINT N'[02-report] Bảng report.ExportLogs đã được tạo.';
@@ -199,17 +192,17 @@ BEGIN
     );
 
     -- Index hỗ trợ xem kết quả theo module + thời gian chạy
-    CREATE NONCLUSTERED INDEX IX_report_TestResults_Module_RunAt
+    CREATE NONCLUSTERED INDEX IX_TestResults_Module_RunAt
         ON report.TestResults (Module, RunAt DESC)
         INCLUDE (TestCase, Passed);
 
     -- Index hỗ trợ lọc nhanh các test FAIL
-    CREATE NONCLUSTERED INDEX IX_report_TestResults_Passed_RunAt
+    CREATE NONCLUSTERED INDEX IX_TestResults_Passed_RunAt
         ON report.TestResults (Passed, RunAt DESC)
         WHERE Passed = 0;   -- filtered index — chỉ đánh index dòng FAIL
 
     -- Index hỗ trợ nhóm theo BatchId
-    CREATE NONCLUSTERED INDEX IX_report_TestResults_Batch
+    CREATE NONCLUSTERED INDEX IX_TestResults_BatchId_RunAt
         ON report.TestResults (BatchId, RunAt DESC);
 
     PRINT N'[02-report] Bảng report.TestResults đã được tạo.';
@@ -250,4 +243,29 @@ PRINT N'';
 PRINT N'================================================================';
 PRINT N'  02_tables_report.sql hoàn tất. Tiếp theo: 03_foreign_keys.sql';
 PRINT N'================================================================';
+GO
+
+-- SCRUM-224: explicit status; BIT Passed remains backward compatible.
+IF COL_LENGTH(N'report.TestResults',N'Status') IS NULL
+ ALTER TABLE report.TestResults ADD Status NVARCHAR(10) NULL;
+GO
+UPDATE report.TestResults SET Status=CASE WHEN Passed=1 THEN N'PASS' ELSE N'FAIL' END WHERE Status IS NULL;
+ALTER TABLE report.TestResults ALTER COLUMN Status NVARCHAR(10) NOT NULL;
+IF NOT EXISTS(SELECT 1 FROM sys.default_constraints WHERE parent_object_id=OBJECT_ID(N'report.TestResults') AND name=N'DF_TestResults_Status')
+ ALTER TABLE report.TestResults ADD CONSTRAINT DF_TestResults_Status DEFAULT N'FAIL' FOR Status;
+IF NOT EXISTS(SELECT 1 FROM sys.check_constraints WHERE name=N'CK_TestResults_Status')
+ ALTER TABLE report.TestResults ADD CONSTRAINT CK_TestResults_Status CHECK(Status IN(N'PASS',N'FAIL',N'BLOCKED'));
+GO
+IF OBJECT_ID(N'report.SeedItems',N'U') IS NULL
+CREATE TABLE report.SeedItems (
+ Kind NVARCHAR(30) NOT NULL, ItemKey NVARCHAR(100) NOT NULL, ObjectId BIGINT NOT NULL,
+ CreatedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(),
+ CONSTRAINT PK_SeedItems PRIMARY KEY(Kind,ItemKey)
+);
+IF OBJECT_ID(N'report.SeedRuns',N'U') IS NULL
+CREATE TABLE report.SeedRuns (
+ Profile NVARCHAR(10) NOT NULL PRIMARY KEY, HistoryEnd DATE NOT NULL,
+ CompletedAt DATETIME2(0) NOT NULL DEFAULT SYSUTCDATETIME(),
+ OrdersCreated INT NOT NULL, TelemetryCreated INT NOT NULL
+);
 GO

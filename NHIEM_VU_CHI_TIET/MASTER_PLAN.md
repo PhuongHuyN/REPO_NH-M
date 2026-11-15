@@ -28,6 +28,7 @@
 | 7 | `02_tables_report.sql` | TV5 Anh | Có |
 | 8 | `02_tables_sales.sql` | TV3 Ân | Có |
 | 9 | `03_foreign_keys.sql` | TV1 Toàn | Có, đang lỗi – FV-07 |
+| 9a | `08_seed_inventory.sql` (danh mục 36 sản phẩm, 5 máy × 12 ngăn, lô, tồn theo lô) | TV2 Huy | Mới – FV-02; chạy trước `12_procs_sales.sql` và seed 80/81 |
 | 10 | `10_procs_auth.sql` | TV1 Toàn | Chưa – FV-08 |
 | 11 | `11_procs_inventory.sql` | TV2 Huy | Chưa – FV-03, FV-04 |
 | 12 | `12_procs_sales.sql` | TV3 Ân | Có |

@@ -1,0 +1,21 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+  api:
+    build: ./app
+    env_file: ./app/api/.env
+    environment:
+      DB_SERVER: db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+volumes:
+  mssql-data:

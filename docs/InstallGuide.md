@@ -1,35 +1,13 @@
-# InstallGuide — Hướng dẫn Cài đặt Chi tiết
+﻿# Cài đặt FreshVend — trạng thái Tuần 1
 
-> **Dự án:** FreshVend  
-> **Phiên bản:** 0.1 (draft)  
+SQL Server 2022 (16.x), compatibility 160, Vietnamese_CI_AS. Node.js 20+. Chạy SSMS với QUOTED_IDENTIFIER ON hoặc sqlcmd -I -b.
 
----
+Thứ tự chuẩn theo QĐ-3 và trạng thái từng file nằm trong README.md. Không tự bỏ qua các mục chưa có hoặc lỗi rồi coi hệ thống cài thành công. Không có FreshVend_FULL.sql. 99_run_all.bat do Toàn bàn giao ở FV-23; hiện chưa có, dùng danh sách manual trong README sau khi các phụ thuộc sẵn sàng.
 
-## Yêu cầu môi trường
+Report được tạo bằng 02_tables_report.sql, 14_procs_report.sql và 24_objects_report.sql. Chỉ một bộ seed 80_seed_small.sql/81_seed_large.sql; các entry point 05/06/09 cũ đã bỏ. Seed cần view inventory.Machine theo QĐ-1 và dừng 50400 nếu FV-13 chưa hoàn thành.
 
-- SQL Server 2019+ (Developer / Express / Standard)
-- SSMS 18+ hoặc Azure Data Studio
-- Quyền `sysadmin` hoặc `dbcreator`
+Full install hiện BLOCKED: #19 file FK cũ, #20 hợp nhất máy và #21 hợp đồng MinutesOutOfRange. Chủ module sửa các phần đó; TV5 không tạo bảng khác để bù.
 
-## Các bước cài đặt
+Kiểm tra riêng report bằng powershell -NoProfile -File tests/run-tv5.ps1 -Server '.\SQLEXPRESS'. Muốn dùng như cổng kiểm thử tích hợp bắt buộc thì thêm -RequireIntegration: mọi trạng thái BLOCKED làm lệnh thất bại sau khi lưu đủ kết quả. CSDL riêng và log giữ ở .local-test/tv5-week1; không chạy runner trên production.
 
-```
-1. Kết nối SQL Server bằng SSMS
-2. Mở file sql/00_database.sql → Execute (F5)
-3. Mở file sql/01_schemas.sql  → Execute
-4. Chạy lần lượt 02_tables_auth.sql → _inventory → _sales → _iot → _audit
-5. Chạy sql/03_foreign_keys.sql
-6. Chạy sql/04_indexes.sql (nếu có)
-7. Chạy sql/09_seed_data.sql để nạp dữ liệu mẫu
-```
-
-## Kiểm tra sau cài đặt
-
-```sql
-USE FreshVendDB;
-SELECT TABLE_SCHEMA, TABLE_NAME
-FROM INFORMATION_SCHEMA.TABLES
-ORDER BY TABLE_SCHEMA, TABLE_NAME;
-```
-
-Kết quả kỳ vọng: 20+ bảng thuộc 5 schema (auth, inventory, sales, iot, audit, report).
+00_database.sql của TV1 bật READ_COMMITTED_SNAPSHOT với ROLLBACK IMMEDIATE; không chạy trên CSDL có giao dịch cần giữ. Runner tự tạo DB riêng, không chạm CSDL ứng dụng. Tài khoản fixture bị vô hiệu hóa và không là tài khoản đăng nhập thật; chủ module auth cấp tài khoản demo và cấu hình quyền DB khi tích hợp.

@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- FILE        : 03_foreign_keys.sql
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
 -- DESCRIPTION : Gom toàn bộ Foreign Key tham chiếu CHÉO SCHEMA.
@@ -23,6 +23,21 @@ GO
 -- =============================================================================
 -- A. inventory → auth
 -- =============================================================================
+
+-- inventory.Slot.MachineId → iot.Machines (bảng máy chuẩn theo QĐ-1)
+IF NOT EXISTS (
+    SELECT 1 FROM sys.foreign_keys fk
+    WHERE fk.name = N'FK_inventory_Slot_Machine'
+      AND fk.referenced_object_id = OBJECT_ID(N'iot.Machines', N'U')
+)
+BEGIN
+    IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_inventory_Slot_Machine')
+        ALTER TABLE inventory.Slot DROP CONSTRAINT FK_inventory_Slot_Machine;
+    ALTER TABLE inventory.Slot
+        ADD CONSTRAINT FK_inventory_Slot_Machine
+            FOREIGN KEY (MachineId) REFERENCES iot.Machines(MachineId);
+END
+GO
 
 -- inventory.StockBatch.CreatedBy → auth.User
 IF NOT EXISTS (
@@ -54,16 +69,19 @@ GO
 -- B. sales → inventory
 -- =============================================================================
 
--- sales.Order.MachineId → inventory.Machine
+-- sales.Order.MachineId → iot.Machines
 IF NOT EXISTS (
-    SELECT 1 FROM sys.foreign_keys
-    WHERE name = N'FK_sales_Order_inventory_Machine'
+    SELECT 1 FROM sys.foreign_keys fk
+    WHERE fk.name = N'FK_sales_Order_inventory_Machine'
+      AND fk.referenced_object_id = OBJECT_ID(N'iot.Machines', N'U')
 )
 BEGIN
+    IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_sales_Order_inventory_Machine')
+        ALTER TABLE sales.[Order] DROP CONSTRAINT FK_sales_Order_inventory_Machine;
     ALTER TABLE sales.[Order]
         ADD CONSTRAINT FK_sales_Order_inventory_Machine
-            FOREIGN KEY (MachineId) REFERENCES inventory.Machine(MachineId);
-    PRINT N'[03] FK: sales.Order.MachineId → inventory.Machine';
+            FOREIGN KEY (MachineId) REFERENCES iot.Machines(MachineId);
+    PRINT N'[03] FK: sales.Order.MachineId → iot.Machines';
 END
 GO
 
@@ -124,36 +142,32 @@ END
 GO
 
 -- =============================================================================
--- D. iot → inventory
+-- D. iot → iot
 -- =============================================================================
 
--- iot.Device.MachineId → inventory.Machine
-IF NOT EXISTS (
-    SELECT 1 FROM sys.foreign_keys
-    WHERE name = N'FK_iot_Device_inventory_Machine'
-)
-BEGIN
-    ALTER TABLE iot.Device
-        ADD CONSTRAINT FK_iot_Device_inventory_Machine
-            FOREIGN KEY (MachineId) REFERENCES inventory.Machine(MachineId);
-    PRINT N'[03] FK: iot.Device.MachineId → inventory.Machine';
-END
+-- FK iot.Device.MachineId đã được tạo cùng bảng trong 02_tables_iot.sql.
 GO
 
 -- =============================================================================
 -- E. iot → auth
 -- =============================================================================
 
--- iot.Alert.ResolvedBy → auth.User
+-- iot.Alert.AckBy → auth.User
 IF NOT EXISTS (
-    SELECT 1 FROM sys.foreign_keys
-    WHERE name = N'FK_iot_Alert_auth_User'
+    SELECT 1 FROM sys.foreign_keys fk
+    JOIN sys.foreign_key_columns fkc ON fkc.constraint_object_id = fk.object_id
+    WHERE fk.name = N'FK_iot_Alert_auth_User'
+      AND fk.parent_object_id = OBJECT_ID(N'iot.Alert', N'U')
+      AND fkc.parent_column_id = COLUMNPROPERTY(OBJECT_ID(N'iot.Alert', N'U'), N'AckBy', 'ColumnId')
+      AND fk.referenced_object_id = OBJECT_ID(N'auth.User', N'U')
 )
 BEGIN
+    IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_iot_Alert_auth_User')
+        ALTER TABLE iot.Alert DROP CONSTRAINT FK_iot_Alert_auth_User;
     ALTER TABLE iot.Alert
         ADD CONSTRAINT FK_iot_Alert_auth_User
-            FOREIGN KEY (ResolvedBy) REFERENCES auth.[User](UserId);
-    PRINT N'[03] FK: iot.Alert.ResolvedBy → auth.User';
+            FOREIGN KEY (AckBy) REFERENCES auth.[User](UserId);
+    PRINT N'[03] FK: iot.Alert.AckBy → auth.User';
 END
 GO
 
@@ -162,7 +176,7 @@ GO
 -- =============================================================================
 
 -- audit.AuditLog.UserId → auth.User
-IF NOT EXISTS (
+IF OBJECT_ID(N'audit.AuditLog',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_audit_AuditLog_auth_User'
 )
@@ -175,7 +189,7 @@ END
 GO
 
 -- audit.ChangeLog.UserId → auth.User
-IF NOT EXISTS (
+IF OBJECT_ID(N'audit.ChangeLog',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_audit_ChangeLog_auth_User'
 )
@@ -191,34 +205,40 @@ GO
 -- G. report → inventory
 -- =============================================================================
 
--- report.DailySalesSummary.MachineId → inventory.Machine
+-- report.DailySalesSummary.MachineId → iot.Machines
 IF NOT EXISTS (
-    SELECT 1 FROM sys.foreign_keys
-    WHERE name = N'FK_report_DailySalesSummary_inventory_Machine'
+    SELECT 1 FROM sys.foreign_keys fk
+    WHERE fk.name = N'FK_DailySalesSummary_MachineId'
+      AND fk.referenced_object_id = OBJECT_ID(N'iot.Machines', N'U')
 )
 BEGIN
+    IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_DailySalesSummary_MachineId')
+        ALTER TABLE report.DailySalesSummary DROP CONSTRAINT FK_DailySalesSummary_MachineId;
     ALTER TABLE report.DailySalesSummary
-        ADD CONSTRAINT FK_report_DailySalesSummary_inventory_Machine
-            FOREIGN KEY (MachineId) REFERENCES inventory.Machine(MachineId);
-    PRINT N'[03] FK: report.DailySalesSummary.MachineId → inventory.Machine';
+        ADD CONSTRAINT FK_DailySalesSummary_MachineId
+            FOREIGN KEY (MachineId) REFERENCES iot.Machines(MachineId);
+    PRINT N'[03] FK: report.DailySalesSummary.MachineId → iot.Machines';
 END
 GO
 
--- report.MachineStockSnapshot.MachineId → inventory.Machine
-IF NOT EXISTS (
-    SELECT 1 FROM sys.foreign_keys
-    WHERE name = N'FK_report_MachineStockSnapshot_inventory_Machine'
+-- report.MachineStockSnapshot.MachineId → iot.Machines
+IF OBJECT_ID(N'report.MachineStockSnapshot',N'U') IS NOT NULL AND NOT EXISTS (
+    SELECT 1 FROM sys.foreign_keys fk
+    WHERE fk.name = N'FK_report_MachineStockSnapshot_inventory_Machine'
+      AND fk.referenced_object_id = OBJECT_ID(N'iot.Machines', N'U')
 )
 BEGIN
+    IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = N'FK_report_MachineStockSnapshot_inventory_Machine')
+        ALTER TABLE report.MachineStockSnapshot DROP CONSTRAINT FK_report_MachineStockSnapshot_inventory_Machine;
     ALTER TABLE report.MachineStockSnapshot
         ADD CONSTRAINT FK_report_MachineStockSnapshot_inventory_Machine
-            FOREIGN KEY (MachineId) REFERENCES inventory.Machine(MachineId);
-    PRINT N'[03] FK: report.MachineStockSnapshot.MachineId → inventory.Machine';
+            FOREIGN KEY (MachineId) REFERENCES iot.Machines(MachineId);
+    PRINT N'[03] FK: report.MachineStockSnapshot.MachineId → iot.Machines';
 END
 GO
 
 -- report.MachineStockSnapshot.ProductId → inventory.Product
-IF NOT EXISTS (
+IF OBJECT_ID(N'report.MachineStockSnapshot',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_report_MachineStockSnapshot_inventory_Product'
 )
@@ -231,7 +251,7 @@ END
 GO
 
 -- report.MachineStockSnapshot.SlotId → inventory.Slot
-IF NOT EXISTS (
+IF OBJECT_ID(N'report.MachineStockSnapshot',N'U') IS NOT NULL AND NOT EXISTS (
     SELECT 1 FROM sys.foreign_keys
     WHERE name = N'FK_report_MachineStockSnapshot_inventory_Slot'
 )

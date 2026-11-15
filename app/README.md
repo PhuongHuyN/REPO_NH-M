@@ -44,7 +44,7 @@ Màn hình đăng nhập **không** hiện sẵn tài khoản mẫu – nhập t
 
 ## 1. Cài đặt (một lần)
 1. Cài **Node.js LTS** (https://nodejs.org), khởi động lại VS Code. Kiểm tra: `node -v`.
-2. Đã tạo CSDL từ thư mục `sql/` trong repo **REPO_NH-M** — chạy lần lượt trong SSMS: `00_database.sql` → `01_schemas.sql` → các file `02_tables_*.sql` → `03_foreign_keys.sql` → `05_views_report.sql` → `06_functions_report.sql` → `07_procs_report.sql` → `09_seed_small.sql` (hoặc `09_seed_large.sql`). Xem chi tiết thứ tự tại **`sql/README`** (README.md gốc, mục Hướng dẫn cài đặt nhanh).
+2. Tạo CSDL theo bảng thứ tự **[README gốc](../README.md#thứ-tự-sql-theo-qđ-3)**: 00/01 → 02_tables_* → 03_foreign_keys → 08_seed_inventory → procedure 10–14 → object 20–24 → index/security/jobs/backup khi có → 80_seed_small.sql hoặc 81_seed_large.sql (sau cùng). Chỉ có một bộ seed 80/81; report ở 14_procs_report.sql và 24_objects_report.sql. **Hiện full install còn bị chặn bởi FK và hợp nhất máy (#19/#20); không coi test demo là SQL thật.** Sau khi Toàn bàn giao `99_run_all.bat` (FV-23), có thể chạy file đó từ gốc repo để tự động hóa cùng danh sách. File batch hiện chưa có; không dùng FreshVend_FULL.sql hay đường dẫn sql/README không tồn tại.
 3. Mở thư mục `FreshVend_App` trong VS Code → **Terminal → New Terminal**:
    ```powershell
    npm install
@@ -59,7 +59,7 @@ Màn hình đăng nhập **không** hiện sẵn tài khoản mẫu – nhập t
 |---|---|---|
 | Chế độ | `DB_MODE` | `demo` (mặc định – dữ liệu giả lập) · `sqlserver` (kết nối CSDL thật) |
 | SQL Server | `DB_SERVER`, `DB_PORT` / `DB_INSTANCE` | Bản Express: `DB_INSTANCE=SQLEXPRESS`, để trống `DB_PORT` |
-| | `DB_*_USER`, `DB_*_PASSWORD` | Phải trùng 4 login tạo trong `26_security.sql` |
+| | `DB_*_USER`, `DB_*_PASSWORD` | Phải trùng 4 login tạo trong `40_security.sql (FV-22, chưa có trên main)` |
 | Bảo mật | `JWT_SECRET`, `DEVICE_API_KEY`, `PAYMENT_WEBHOOK_SECRET` | Đổi thành chuỗi ngẫu nhiên dài |
 | Nhận tiền | `PAYMENT_BANK_BIN`, `PAYMENT_BANK_NAME`, `PAYMENT_ACCOUNT_NO`, `PAYMENT_ACCOUNT_NAME` | Tài khoản ngân hàng nhận tiền. Thiếu thì kiosk báo "chưa sẵn sàng nhận thanh toán" |
 | | `SEPAY_API_KEY` | Khóa webhook để tự xác nhận khi tiền về (tùy chọn) |
@@ -86,6 +86,29 @@ Terminal thứ hai – chạy bộ điều khiển máy (5 máy, gửi cảm bi�
 npm run simulator
 ```
 Tùy chọn: `node simulator/esp32.js --overheat 3` (máy 3 nóng dần), `--door 2` (mở cửa), `--jam 1` (kẹt motor), `--offline 4` (mất mạng).
+
+## 3b. Docker (SQL Server + API)
+
+Cần Docker Desktop (WSL 2). Mật khẩu SA **không** commit: tạo file `.env` ở **gốc repo** (cùng cấp `docker-compose.yml`):
+
+```
+SA_PASSWORD=DatMatKhauManh@2026
+```
+
+SQL Server bắt buộc mật khẩu đủ phức tạp. Sao chép `app/api/.env.example` thành `app/api/.env` (compose đọc file này). Để chạy giao diện không cần CSDL thật, trong `.env` đặt `DB_MODE=demo`.
+
+Từ gốc repo:
+
+```powershell
+docker compose build
+docker compose up -d api
+```
+
+- Demo: http://localhost:3000 (API trong container, `DB_MODE=demo`).
+- SQL Server: `docker compose up -d db` rồi nạp script thư mục `sql/` vào container (hoặc SSMS `localhost,1433`, user `sa`). Sau đó `DB_MODE=sqlserver`, `DB_SERVER=db` (đã gán trong compose), `docker compose up -d api`.
+- Kiểm tra: http://localhost:3000/api/health
+
+Tắt: `docker compose down`. Volume `mssql-data` giữ dữ liệu SQL.
 
 ## 4. Quy trình bán hàng
 1. Lần đầu mở `/kiosk`, kỹ thuật viên nhập **mã thiết bị** và **mã kích hoạt** (tài khoản vai trò Kiosk, tạo ở trang *Người dùng*, gắn máy bằng nút *Giao máy*).

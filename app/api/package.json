@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "test": "node --test test/api.test.js test/db.test.js test/inventory.test.js",
+    "test": "node --test test/api.test.js test/db.test.js test/inventory.test.js test/report-status.test.js",
     "simulator": "node ../simulator/esp32.js"
   },
   "engines": {

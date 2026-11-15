@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- FILE        : 13_procs_iot.sql
 -- PROJECT     : FreshVend — Hệ thống máy bán trái cây tự động
 -- DESCRIPTION : TV4 — Stored Procedures cho module IoT & Chuỗi lạnh
@@ -11,7 +11,7 @@ USE FreshVendDB;
 GO
 -- 1. Đăng ký máy mới (sp_RegisterMachine)
 CREATE OR ALTER PROCEDURE iot.sp_RegisterMachine
-@Serial NVARCHAR (50), @MachineName NVARCHAR (100), @LocationId INT, @FirmwareVersion NVARCHAR (20)='1.0.0', @ColumnCount INT=6, @Capacity INT=10
+@Serial NVARCHAR (50), @MachineName NVARCHAR (100), @LocationId INT, @FirmwareVersion NVARCHAR (20)='1.0.0', @ColumnCount INT=4, @Capacity INT=10
 AS
 BEGIN
   SET NOCOUNT ON;
@@ -19,8 +19,12 @@ BEGIN
   BEGIN TRY
     BEGIN TRANSACTION;
     -- Kiểm tra dữ liệu đầu vào
-    IF LTRIM(RTRIM(@Serial)) = ''
+    IF @Serial IS NULL OR LTRIM(RTRIM(@Serial)) = ''
       THROW 50300, N'Mã Serial của máy không được để trống.', 1;
+    IF @ColumnCount IS NULL OR @ColumnCount <> 4
+      THROW 50303, N'Sơ đồ slot chuẩn yêu cầu @ColumnCount = 4 để tạo đủ A1 đến C4.', 1;
+    IF @Capacity IS NULL OR @Capacity < 1 OR @Capacity > 32767
+      THROW 50304, N'Sức chứa mỗi slot phải nằm trong khoảng 1 đến 32767.', 1;
     IF EXISTS (SELECT 1
                FROM   iot.Machines
                WHERE  Serial = @Serial)
@@ -50,6 +54,10 @@ BEGIN
       DegradedMessage
     )
     VALUES                             (@NewMachineId, 2.00, 8.00, 2, 3, N'Nhiệt độ tủ lạnh vượt ngưỡng an toàn, vui lòng kiểm tra.');
+    INSERT INTO inventory.Slot (MachineId, SlotCode, Capacity, CurrentStock, IsActive)
+    SELECT @NewMachineId, CONCAT(r.RowCode, n.SlotNumber), @Capacity, 0, 1
+    FROM (VALUES (N'A'), (N'B'), (N'C')) AS r(RowCode)
+    CROSS JOIN (VALUES (1), (2), (3), (4)) AS n(SlotNumber);
     COMMIT TRANSACTION;
     -- Trả về thông tin máy vừa tạo
     SELECT MachineId,
@@ -78,64 +86,51 @@ USE FreshVendDB;
 
 
 GO
-CREATE OR ALTER PROCEDURE iot.sp_IngestTelemetry
-@Payload NVARCHAR (MAX)
+CREATE OR ALTER PROCEDURE iot.sp_IngestTelemetry @Payload NVARCHAR(MAX)
 AS
 BEGIN
-  SET NOCOUNT ON;
-  SET XACT_ABORT ON;
-  BEGIN TRY
-    -- 1. Kiểm tra định dạng JSON hợp lệ
-    IF @Payload IS NULL
-       OR ISJSON(@Payload) <> 1
-      THROW 50310, N'Dữ liệu payload truyền lên không phải định dạng JSON hợp lệ.', 1;
-    -- 2. Đọc MachineId (Ưu tiên machineId từ API/Simulator, nếu không thì đọc serial)
-    DECLARE @MachineId AS INT = TRY_CAST (JSON_VALUE(@Payload, '$.machineId') AS INT);
-    IF @MachineId IS NULL
-      SELECT @MachineId = MachineId
-      FROM   iot.Machines
-      WHERE  Serial = JSON_VALUE(@Payload, '$.serial');
-    IF @MachineId IS NULL
-       OR NOT EXISTS (SELECT 1
-                      FROM   iot.Machines
-                      WHERE  MachineId = @MachineId)
-      THROW 50311, N'Không tìm thấy máy tương ứng với thiết bị gửi dữ liệu.', 1;
-    -- 3. Đọc dữ liệu Telemetry từ JSON
-    DECLARE @Temp AS DECIMAL (5, 2), @Hum AS DECIMAL (5, 2), @Door AS BIT;
-    SELECT TOP 1 @Temp = TRY_CAST (JSON_VALUE(value, '$.temp') AS DECIMAL (5, 2)),
-                 @Hum = TRY_CAST (JSON_VALUE(value, '$.hum') AS DECIMAL (5, 2)),
-                 @Door = TRY_CAST (JSON_VALUE(value, '$.door') AS BIT)
-    FROM   OPENJSON (@Payload, '$.readings');
-    -- 4. Ghi dữ liệu vào bảng iot.Telemetry
-    INSERT  INTO iot.Telemetry (
-      MachineId,
-      Temperature,
-      Humidity,
-      DoorOpen,
-      RecordedAt
-    )
-    VALUES                     (@MachineId, @Temp, @Hum, ISNULL(@Door, 0), SYSDATETIME());
-    -- 5. Cập nhật thời gian Heartbeat
-    UPDATE iot.Machines
-    SET    LastHeartbeat = SYSDATETIME()
-    WHERE  MachineId = @MachineId;
-    -- 6. Trả về thông tin kết quả (yêu cầu API đọc r1.recordset[0])
-    SELECT m.MachineId,
-           m.Status,
-           @Temp AS LastTemp
-    FROM   iot.Machines AS m
-    WHERE  m.MachineId = @MachineId;
-  END TRY
-  BEGIN CATCH
-    IF @@TRANCOUNT > 0
-      ROLLBACK;
-    THROW;
-  END CATCH
-END
-
-
+ SET NOCOUNT ON;
+ SET XACT_ABORT ON;
+ BEGIN TRY
+  IF @Payload IS NULL OR ISJSON(@Payload)<>1
+   THROW 50310,N'Dữ liệu payload truyền lên không phải định dạng JSON hợp lệ.',1;
+  DECLARE @MachineId INT=TRY_CAST(JSON_VALUE(@Payload, '$.machineId') AS INT);
+  IF @MachineId IS NULL SELECT @MachineId=MachineId FROM iot.Machines WHERE Serial=JSON_VALUE(@Payload, '$.serial');
+  IF @MachineId IS NULL OR NOT EXISTS(SELECT 1 FROM iot.Machines WHERE MachineId=@MachineId)
+   THROW 50311,N'Không tìm thấy máy tương ứng với thiết bị gửi dữ liệu.',1;
+  DECLARE @Array NVARCHAR(MAX)=JSON_QUERY(@Payload,'$.readings'),@Now DATETIME2(0)=SYSUTCDATETIME();
+  IF @Array IS NULL OR ISJSON(@Array)<>1 OR LEFT(LTRIM(@Array),1)<>N'['
+   THROW 50312,N'readings phải là mảng có ít nhất một bản đọc hợp lệ.',1;
+  DECLARE @Readings TABLE(Ordinal INT PRIMARY KEY,Temperature DECIMAL(5,2),Humidity DECIMAL(5,2),DoorOpen BIT,RecordedAt DATETIME2(0),Valid BIT);
+  INSERT @Readings
+  SELECT TRY_CONVERT(INT,j.[key]),TRY_CONVERT(DECIMAL(5,2),v.Temp),TRY_CONVERT(DECIMAL(5,2),v.Hum),
+   CASE WHEN v.Door IN(N'1',N'true') THEN 1 ELSE 0 END,
+   CASE WHEN v.AtUtc IS NULL THEN @Now ELSE CONVERT(DATETIME2(0),SWITCHOFFSET(TRY_CONVERT(DATETIMEOFFSET(0),v.AtUtc,127),'+00:00')) END,
+   CASE WHEN j.type=5 AND TRY_CONVERT(DECIMAL(5,2),v.Temp) IS NOT NULL
+    AND (v.Hum IS NULL OR TRY_CONVERT(DECIMAL(5,2),v.Hum) BETWEEN 0 AND 100)
+    AND (v.Door IS NULL OR v.Door IN(N'0',N'1',N'true',N'false'))
+    AND (v.AtUtc IS NULL OR TRY_CONVERT(DATETIMEOFFSET(0),v.AtUtc,127) IS NOT NULL) THEN 1 ELSE 0 END
+  FROM OPENJSON(@Array) j
+  CROSS APPLY(VALUES(CASE WHEN j.type=5 THEN j.value ELSE N'{}' END)) safe(Value)
+  CROSS APPLY(VALUES(JSON_VALUE(safe.Value,'$.temp'),JSON_VALUE(safe.Value,'$.hum'),JSON_VALUE(safe.Value,'$.door'),JSON_VALUE(safe.Value,'$.t'))) v(Temp,Hum,Door,AtUtc);
+  IF NOT EXISTS(SELECT 1 FROM @Readings) OR EXISTS(SELECT 1 FROM @Readings WHERE Valid=0)
+   THROW 50312,N'Mảng readings rỗng hoặc có dữ liệu cảm biến không hợp lệ.',1;
+  BEGIN TRAN;
+  INSERT iot.Telemetry(MachineId,Temperature,Humidity,DoorOpen,RecordedAt)
+  SELECT @MachineId,Temperature,Humidity,DoorOpen,RecordedAt FROM @Readings;
+  UPDATE iot.Machines SET LastHeartbeat=@Now WHERE MachineId=@MachineId;
+  COMMIT;
+  SELECT m.MachineId, m.Serial AS MachineCode, m.Status
+  FROM iot.Machines AS m
+  WHERE m.MachineId = @MachineId;
+ END TRY
+ BEGIN CATCH
+  IF XACT_STATE()<>0 ROLLBACK;
+  THROW;
+ END CATCH;
+END;
 GO
--- 3. Xác nhận xử lý cảnh báo (sp_AcknowledgeAlert)
+-- 3. Acknowledge an existing alert.
 CREATE OR ALTER PROCEDURE iot.sp_AcknowledgeAlert
 @AlertId INT, @UserId INT, @Resolve BIT=0
 AS
@@ -143,15 +138,15 @@ BEGIN
   SET NOCOUNT ON;
   BEGIN TRY
     IF NOT EXISTS (SELECT 1
-                   FROM   iot.Alerts
+                   FROM   iot.Alert
                    WHERE  AlertId = @AlertId)
       THROW 50320, N'Mã cảnh báo (AlertId) không tồn tại trong hệ thống.', 1;
     IF EXISTS (SELECT 1
-               FROM   iot.Alerts
+               FROM   iot.Alert
                WHERE  AlertId = @AlertId
                       AND ResolvedAt IS NOT NULL)
       THROW 50321, N'Cảnh báo này đã được xử lý trước đó rồi.', 1;
-    UPDATE iot.Alerts
+    UPDATE iot.Alert
     SET    AckBy      = @UserId,
            AckAt      = SYSDATETIME(),
            ResolvedAt = CASE WHEN @Resolve = 1 THEN SYSDATETIME() ELSE ResolvedAt END
@@ -161,7 +156,7 @@ BEGIN
            AckBy,
            AckAt,
            ResolvedAt
-    FROM   iot.Alerts
+    FROM   iot.Alert
     WHERE  AlertId = @AlertId;
   END TRY
   BEGIN CATCH
@@ -191,7 +186,7 @@ BEGIN
     UPDATE iot.Machines
     SET    Status = 'ACTIVE'
     WHERE  MachineId = @MachineId;
-    UPDATE iot.Alerts
+    UPDATE iot.Alert
     SET    ResolvedAt = SYSDATETIME(),
            AckBy      = @UserId,
            AckAt      = SYSDATETIME()
@@ -256,7 +251,7 @@ BEGIN
            AND (LastHeartbeat IS NULL
                 OR DATEDIFF(MINUTE, LastHeartbeat, SYSDATETIME()) >= @Minutes);
     -- Tự động sinh cảnh báo OFFLINE cho các máy vừa mất kết nối (nếu chưa có cảnh báo mở)
-    INSERT INTO iot.Alerts (
+    INSERT INTO iot.Alert (
       MachineId,
       AlertType,
       Severity,
@@ -271,7 +266,7 @@ BEGIN
     FROM   iot.Machines AS m
     WHERE  m.Status = 'OFFLINE'
            AND NOT EXISTS (SELECT 1
-                           FROM   iot.Alerts AS a
+                           FROM   iot.Alert AS a
                            WHERE  a.MachineId = m.MachineId
                                   AND a.AlertType = 'OFFLINE'
                                   AND a.ResolvedAt IS NULL);
