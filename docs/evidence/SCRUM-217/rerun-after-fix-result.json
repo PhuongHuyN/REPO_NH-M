@@ -1,0 +1,31 @@
+﻿{
+    "Seed":  "None",
+    "Files":  [
+                  "00_database",
+                  "01_schemas",
+                  "02_tables_audit",
+                  "02_tables_auth",
+                  "02_tables_inventory",
+                  "02_tables_iot",
+                  "02_tables_report",
+                  "02_tables_sales",
+                  "03_foreign_keys",
+                  "10_procs_auth",
+                  "11_procs_inventory",
+                  "12_procs_sales",
+                  "13_procs_iot",
+                  "14_procs_report",
+                  "20_objects_auth",
+                  "21_objects_inventory",
+                  "22_objects_sales",
+                  "23_objects_iot",
+                  "24_objects_report",
+                  "30_index_inventory",
+                  "40_security",
+                  "50_backup"
+              ],
+    "Server":  ".\\SQLEXPRESS",
+    "CompletedAt":  "2026-11-15T00:40:06.7291291+07:00",
+    "Database":  "FreshVend_S217_Clean_20261115",
+    "Status":  "PASS"
+}

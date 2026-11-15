@@ -1,0 +1,16 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:42.0299906+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:41.1292507+07:00",
+    "Tables":  [
+
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027."
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+
+              ],
+    "Name":  "239_inventory_fixture.sql"
+}

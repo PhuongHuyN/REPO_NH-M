@@ -1,0 +1,909 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:54.3190516+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:53.4553593+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "UserId":  29,
+                           "Username":  "qa_7305903e-ed1",
+                           "RoleName":  "Operator"
+                       }
+                   ],
+                   [
+                       {
+                           "Success":  true,
+                           "Message":  "Đăng nhập thành công",
+                           "UserId":  1,
+                           "Username":  "admin",
+                           "FullName":  "Nguyễn Phương Huy",
+                           "RoleName":  "Admin"
+                       }
+                   ],
+                   [
+
+                   ],
+                   [
+                       {
+                           "ProductId":  51,
+                           "SKU":  "FV-SP-037",
+                           "ProductName":  "QA C9A98C65-4576-4AB3-9EEA-88F09256F572",
+                           "Price":  15000.00
+                       }
+                   ],
+                   [
+                       {
+                           "ProductId":  52,
+                           "SKU":  "FV-SP-037",
+                           "ProductName":  "QA 4D8B0D5F-F6A0-469E-BB99-FE6958935213",
+                           "Price":  15000.00
+                       }
+                   ],
+                   [
+                       {
+                           "ProductId":  52,
+                           "OldPrice":  15000.00,
+                           "NewPrice":  16000.00
+                       }
+                   ],
+                   [
+                       {
+                           "RemovedLines":  0,
+                           "RemovedQty":  0
+                       }
+                   ],
+                   [
+                       {
+                           "MachineId":  15,
+                           "Serial":  "QA-3B958857-ECEA-43D6-A85F-91394EF98540",
+                           "MachineName":  "QA rollback",
+                           "Status":  "ACTIVE"
+                       }
+                   ],
+                   [
+                       {
+                           "MachineId":  10,
+                           "Status":  "ACTIVE",
+                           "LastTemp":  5.00
+                       }
+                   ],
+                   [
+                       {
+                           "Module":  "auth",
+                           "Total":  4,
+                           "Passed":  4,
+                           "Failed":  0,
+                           "Blocked":  0
+                       },
+                       {
+                           "Module":  "inventory",
+                           "Total":  8,
+                           "Passed":  7,
+                           "Failed":  0,
+                           "Blocked":  1
+                       },
+                       {
+                           "Module":  "iot",
+                           "Total":  9,
+                           "Passed":  8,
+                           "Failed":  0,
+                           "Blocked":  1
+                       },
+                       {
+                           "Module":  "report",
+                           "Total":  6,
+                           "Passed":  6,
+                           "Failed":  0,
+                           "Blocked":  0
+                       },
+                       {
+                           "Module":  "sales",
+                           "Total":  6,
+                           "Passed":  6,
+                           "Failed":  0,
+                           "Blocked":  0
+                       }
+                   ],
+                   [
+                       {
+                           "TestCase":  "AUTH-create-valid",
+                           "Module":  "auth",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  8,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "AUTH-create-invalid-name",
+                           "Module":  "auth",
+                           "Expected":  "50001",
+                           "Actual":  "50001",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Tên đăng nhập phải có ít nhất 3 ký tự",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "AUTH-create-invalid-password",
+                           "Module":  "auth",
+                           "Expected":  "50002",
+                           "Actual":  "50002",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Mật khẩu phải có ít nhất 8 ký tự",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "AUTH-login-real",
+                           "Module":  "auth",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  18,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "INV-add-valid",
+                           "Module":  "inventory",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  12,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "INV-add-zero-price",
+                           "Module":  "inventory",
+                           "Expected":  "50102",
+                           "Actual":  "50102",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Giá bán phải lớn hơn 0",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "INV-add-empty-name",
+                           "Module":  "inventory",
+                           "Expected":  "50100",
+                           "Actual":  "50100",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  3,
+                           "ErrorDetail":  "Tên sản phẩm không được để trống",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "INV-update-price-valid",
+                           "Module":  "inventory",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  7,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "INV-price-invalid-id",
+                           "Module":  "inventory",
+                           "Expected":  "50103",
+                           "Actual":  "50103",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  2,
+                           "ErrorDetail":  "Sản phẩm không tồn tại",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "INV-batch-zero",
+                           "Module":  "inventory",
+                           "Expected":  "50113",
+                           "Actual":  "50113",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  9,
+                           "ErrorDetail":  "Số lượng phải lớn hơn 0",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "INV-restock-empty",
+                           "Module":  "inventory",
+                           "Expected":  "50111",
+                           "Actual":  "Chưa hợp nhất máy theo #20.",
+                           "Passed":  false,
+                           "Status":  "BLOCKED",
+                           "DurationMs":  0,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "INV-remove-expired-idempotent",
+                           "Module":  "inventory",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  1,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "SALES-empty-cart",
+                           "Module":  "sales",
+                           "Expected":  "50200",
+                           "Actual":  "50200",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  2,
+                           "ErrorDetail":  "Giỏ hàng rỗng",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "SALES-empty-gateway",
+                           "Module":  "sales",
+                           "Expected":  "50210",
+                           "Actual":  "50210",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "GatewayTxnId không được để trống.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "SALES-invalid-dispense-result",
+                           "Module":  "sales",
+                           "Expected":  "50211",
+                           "Actual":  "50211",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Kết quả nhả hàng chỉ nhận SUCCESS hoặc JAM",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "SALES-missing-item",
+                           "Module":  "sales",
+                           "Expected":  "50212",
+                           "Actual":  "50212",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Không tìm thấy dòng đơn hàng",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "SALES-missing-refund",
+                           "Module":  "sales",
+                           "Expected":  "50216",
+                           "Actual":  "50216",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Đơn hàng không tồn tại",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "SALES-invalid-expiry",
+                           "Module":  "sales",
+                           "Expected":  "50216",
+                           "Actual":  "50216",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  14,
+                           "ErrorDetail":  "Thời gian chờ phải lớn hơn 0 phút.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-register-real",
+                           "Module":  "iot",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  84,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-register-invalid-location",
+                           "Module":  "iot",
+                           "Expected":  "50302",
+                           "Actual":  "50302",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Địa điểm đặt máy (LocationId) không tồn tại.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-ingest-invalid-json",
+                           "Module":  "iot",
+                           "Expected":  "50310",
+                           "Actual":  "50310",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  181,
+                           "ErrorDetail":  "Dữ liệu payload truyền lên không phải định dạng JSON hợp lệ.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-ingest-missing-machine",
+                           "Module":  "iot",
+                           "Expected":  "50311",
+                           "Actual":  "50311",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  2,
+                           "ErrorDetail":  "Không tìm thấy máy tương ứng với thiết bị gửi dữ liệu.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-ingest-two-readings",
+                           "Module":  "iot",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  68,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-clear-missing",
+                           "Module":  "iot",
+                           "Expected":  "50330",
+                           "Actual":  "50330",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  45,
+                           "ErrorDetail":  "Mã máy (MachineId) không tồn tại.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-threshold-invalid-machine",
+                           "Module":  "iot",
+                           "Expected":  "50340",
+                           "Actual":  "50340",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  23,
+                           "ErrorDetail":  "Mã máy (MachineId) không tồn tại.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-ack-missing",
+                           "Module":  "iot",
+                           "Expected":  "50320",
+                           "Actual":  "50320",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  24,
+                           "ErrorDetail":  "Mã cảnh báo (AlertId) không tồn tại trong hệ thống.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "IOT-partition-real",
+                           "Module":  "iot",
+                           "Expected":  "0",
+                           "Actual":  "Thiếu dependency: iot.sp_MaintainPartitions",
+                           "Passed":  false,
+                           "Status":  "BLOCKED",
+                           "DurationMs":  0,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "REPORT-growth-12-months",
+                           "Module":  "report",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  74,
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "REPORT-invalid-year",
+                           "Module":  "report",
+                           "Expected":  "50401",
+                           "Actual":  "50401",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Năm báo cáo phải từ 2000 đến 9998.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "REPORT-reversed-peak",
+                           "Module":  "report",
+                           "Expected":  "50401",
+                           "Actual":  "50401",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  43,
+                           "ErrorDetail":  "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "REPORT-invalid-export",
+                           "Module":  "report",
+                           "Expected":  "50402",
+                           "Actual":  "50402",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  66,
+                           "ErrorDetail":  "Khoảng thời gian xuất báo cáo không hợp lệ",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "REPORT-reversed-summary",
+                           "Module":  "report",
+                           "Expected":  "50403",
+                           "Actual":  "50403",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  71,
+                           "ErrorDetail":  "Khoảng ngày tổng hợp không hợp lệ.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       },
+                       {
+                           "TestCase":  "REPORT-empty-runby",
+                           "Module":  "report",
+                           "Expected":  "50404",
+                           "Actual":  "50404",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "DurationMs":  0,
+                           "ErrorDetail":  "Tên người chạy cần 1..100 ký tự.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000",
+                           "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Warning: Null value is eliminated by an aggregate or other SET operation."
+                 ],
+    "Status":  "FAIL",
+    "Cases":  [
+                  {
+                      "TestCase":  "AUTH-create-valid",
+                      "Module":  "auth",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  8,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "AUTH-create-invalid-name",
+                      "Module":  "auth",
+                      "Expected":  "50001",
+                      "Actual":  "50001",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Tên đăng nhập phải có ít nhất 3 ký tự",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "AUTH-create-invalid-password",
+                      "Module":  "auth",
+                      "Expected":  "50002",
+                      "Actual":  "50002",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Mật khẩu phải có ít nhất 8 ký tự",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "AUTH-login-real",
+                      "Module":  "auth",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  18,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "INV-add-valid",
+                      "Module":  "inventory",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  12,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "INV-add-zero-price",
+                      "Module":  "inventory",
+                      "Expected":  "50102",
+                      "Actual":  "50102",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Giá bán phải lớn hơn 0",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "INV-add-empty-name",
+                      "Module":  "inventory",
+                      "Expected":  "50100",
+                      "Actual":  "50100",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  3,
+                      "ErrorDetail":  "Tên sản phẩm không được để trống",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "INV-update-price-valid",
+                      "Module":  "inventory",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  7,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "INV-price-invalid-id",
+                      "Module":  "inventory",
+                      "Expected":  "50103",
+                      "Actual":  "50103",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  2,
+                      "ErrorDetail":  "Sản phẩm không tồn tại",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "INV-batch-zero",
+                      "Module":  "inventory",
+                      "Expected":  "50113",
+                      "Actual":  "50113",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  9,
+                      "ErrorDetail":  "Số lượng phải lớn hơn 0",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "INV-restock-empty",
+                      "Module":  "inventory",
+                      "Expected":  "50111",
+                      "Actual":  "Chưa hợp nhất máy theo #20.",
+                      "Passed":  false,
+                      "Status":  "BLOCKED",
+                      "DurationMs":  0,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "INV-remove-expired-idempotent",
+                      "Module":  "inventory",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  1,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "SALES-empty-cart",
+                      "Module":  "sales",
+                      "Expected":  "50200",
+                      "Actual":  "50200",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  2,
+                      "ErrorDetail":  "Giỏ hàng rỗng",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "SALES-empty-gateway",
+                      "Module":  "sales",
+                      "Expected":  "50210",
+                      "Actual":  "50210",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "GatewayTxnId không được để trống.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "SALES-invalid-dispense-result",
+                      "Module":  "sales",
+                      "Expected":  "50211",
+                      "Actual":  "50211",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Kết quả nhả hàng chỉ nhận SUCCESS hoặc JAM",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "SALES-missing-item",
+                      "Module":  "sales",
+                      "Expected":  "50212",
+                      "Actual":  "50212",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Không tìm thấy dòng đơn hàng",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "SALES-missing-refund",
+                      "Module":  "sales",
+                      "Expected":  "50216",
+                      "Actual":  "50216",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Đơn hàng không tồn tại",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "SALES-invalid-expiry",
+                      "Module":  "sales",
+                      "Expected":  "50216",
+                      "Actual":  "50216",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  14,
+                      "ErrorDetail":  "Thời gian chờ phải lớn hơn 0 phút.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-register-real",
+                      "Module":  "iot",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  84,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-register-invalid-location",
+                      "Module":  "iot",
+                      "Expected":  "50302",
+                      "Actual":  "50302",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Địa điểm đặt máy (LocationId) không tồn tại.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-ingest-invalid-json",
+                      "Module":  "iot",
+                      "Expected":  "50310",
+                      "Actual":  "50310",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  181,
+                      "ErrorDetail":  "Dữ liệu payload truyền lên không phải định dạng JSON hợp lệ.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-ingest-missing-machine",
+                      "Module":  "iot",
+                      "Expected":  "50311",
+                      "Actual":  "50311",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  2,
+                      "ErrorDetail":  "Không tìm thấy máy tương ứng với thiết bị gửi dữ liệu.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-ingest-two-readings",
+                      "Module":  "iot",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  68,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-clear-missing",
+                      "Module":  "iot",
+                      "Expected":  "50330",
+                      "Actual":  "50330",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  45,
+                      "ErrorDetail":  "Mã máy (MachineId) không tồn tại.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-threshold-invalid-machine",
+                      "Module":  "iot",
+                      "Expected":  "50340",
+                      "Actual":  "50340",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  23,
+                      "ErrorDetail":  "Mã máy (MachineId) không tồn tại.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-ack-missing",
+                      "Module":  "iot",
+                      "Expected":  "50320",
+                      "Actual":  "50320",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  24,
+                      "ErrorDetail":  "Mã cảnh báo (AlertId) không tồn tại trong hệ thống.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "IOT-partition-real",
+                      "Module":  "iot",
+                      "Expected":  "0",
+                      "Actual":  "Thiếu dependency: iot.sp_MaintainPartitions",
+                      "Passed":  false,
+                      "Status":  "BLOCKED",
+                      "DurationMs":  0,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "REPORT-growth-12-months",
+                      "Module":  "report",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  74,
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "REPORT-invalid-year",
+                      "Module":  "report",
+                      "Expected":  "50401",
+                      "Actual":  "50401",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Năm báo cáo phải từ 2000 đến 9998.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "REPORT-reversed-peak",
+                      "Module":  "report",
+                      "Expected":  "50401",
+                      "Actual":  "50401",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  43,
+                      "ErrorDetail":  "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "REPORT-invalid-export",
+                      "Module":  "report",
+                      "Expected":  "50402",
+                      "Actual":  "50402",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  66,
+                      "ErrorDetail":  "Khoảng thời gian xuất báo cáo không hợp lệ",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "REPORT-reversed-summary",
+                      "Module":  "report",
+                      "Expected":  "50403",
+                      "Actual":  "50403",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  71,
+                      "ErrorDetail":  "Khoảng ngày tổng hợp không hợp lệ.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  },
+                  {
+                      "TestCase":  "REPORT-empty-runby",
+                      "Module":  "report",
+                      "Expected":  "50404",
+                      "Actual":  "50404",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "DurationMs":  0,
+                      "ErrorDetail":  "Tên người chạy cần 1..100 ký tự.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000",
+                      "BatchId":  "177cd599-9a60-4006-8a39-8da154b06318"
+                  }
+              ],
+    "Name":  "runner"
+}

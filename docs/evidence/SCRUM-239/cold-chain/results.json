@@ -1,0 +1,79 @@
+{
+  "database": "FreshVend_QA239_20261115_005521",
+  "source": "actual app/simulator/esp32.js + real SQL; simulated sensors, no physical hardware",
+  "rows": [
+    {
+      "name": "KB1-normal",
+      "startedAt": "2026-11-14T17:59:00.703Z",
+      "status": "PASS",
+      "passed": true,
+      "before": {
+        "n": 0
+      },
+      "after": {
+        "n": 5,
+        "lo": 4.3,
+        "hi": 4.7
+      },
+      "machine": {
+        "Status": "ACTIVE"
+      },
+      "completedAt": "2026-11-14T17:59:03.466Z"
+    },
+    {
+      "name": "KB2-overheat",
+      "startedAt": "2026-11-14T17:59:03.467Z",
+      "status": "FAIL",
+      "passed": false,
+      "actual": [
+        {
+          "Status": "ACTIVE",
+          "Alerts": 0,
+          "HotSamples": 3
+        }
+      ],
+      "expected": "3 hot readings -> DEGRADED and open temperature alert",
+      "completedAt": "2026-11-14T17:59:08.137Z"
+    },
+    {
+      "name": "KB3-door",
+      "startedAt": "2026-11-14T17:59:08.138Z",
+      "status": "FAIL",
+      "passed": false,
+      "actual": [
+        {
+          "Alerts": 0
+        }
+      ],
+      "expected": "DOOR_OPEN alert",
+      "acceleratedFixture": "one door-open reading timestamped 3 minutes earlier; not a 3-minute wall-clock test",
+      "completedAt": "2026-11-14T17:59:10.776Z"
+    },
+    {
+      "name": "KB4-jam",
+      "startedAt": "2026-11-14T17:59:10.777Z",
+      "status": "BLOCKED",
+      "error": "500: Lỗi máy chủ: Column, parameter, or variable #3: Cannot find data type OrderItemType.",
+      "completedAt": "2026-11-14T17:59:11.123Z"
+    },
+    {
+      "name": "KB5-offline-reconnect",
+      "startedAt": "2026-11-14T17:59:11.123Z",
+      "status": "FAIL",
+      "passed": false,
+      "offline": [
+        {
+          "Status": "OFFLINE"
+        }
+      ],
+      "reconnect": [
+        {
+          "Status": "OFFLINE",
+          "LastHeartbeat": "2026-11-14T17:59:16.000Z"
+        }
+      ],
+      "acceleratedFixture": "heartbeat timestamp -6 minutes and manual heartbeat job; job scheduler and 5-minute wall clock not tested",
+      "completedAt": "2026-11-14T17:59:16.529Z"
+    }
+  ]
+}

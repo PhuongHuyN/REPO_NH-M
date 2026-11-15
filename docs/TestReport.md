@@ -1,127 +1,120 @@
-﻿> **LỊCH SỬ 04/11/2026 — schema cũ.** Không dùng số đo/21 ca dưới đây làm bằng chứng schema 09/11. Xem [Week1_Anh_Validation.md](Week1_Anh_Validation.md).
+﻿# FreshVend — Test Report (SCRUM-239 / FV-45)
 
-# TestReport — kết quả thực thi TV5
+Phiên bản 1.0, ngày tổng hợp **15/11/2026**, người thực hiện Nguyễn Phạm Xuân Anh. Bản này thay kết luận hiện hành; [báo cáo trước](archive/TestReport_PreSCRUM239.md) chỉ là lịch sử trên schema khác, không dùng để cộng số đạt.
 
-Ngày kiểm tra: 04/11/2026. Môi trường: Windows, SQL Server Express 2022 16.0.1000.6, compatibility 160, Vietnamese_CI_AS; CPU Intel Core i5-8250U 1.60 GHz, 8 logical processors. Chạy một client sqlcmd cục bộ, không có tải cạnh tranh chủ động. CSDL kiểm thử được giữ lại, không sửa CSDL ứng dụng.
+## 1. Môi trường và nguồn bằng chứng
 
-## Kết quả nghiệm thu SQL
+- Windows, SQL Server **2022 Express 16.0.1000.6**, compatibility **160**, collation **Vietnamese_CI_AS**. CSDL mới `FreshVend_QA239_20261115_005521`, tạo bằng 99_run_all.bat trước khi nạp fixture. [Môi trường SQL và số dòng](evidence/SCRUM-239/environment.json), [Node/npm/ngày giờ](evidence/SCRUM-239/npm-environment.json).
+- Nhánh xuất phát từ main `7f1d6cd`, cộng bản sửa FK SCRUM-201, SCRUM-217 và SCRUM-230; không phải nghiệm thu nguyên trạng main. [Hash nguồn và bằng chứng](evidence/SCRUM-239/manifest.json) khóa phiên bản đã chạy.
+- Log SQL ghi ISO-8601 +07:00; JSON Node ghi UTC (`Z`), ví dụ 14/11/2026 17:59Z = 15/11/2026 00:59 giờ Việt Nam. Không lấy ngày deadline làm ngày thực thi.
+- Fixture QA có bridge ID máy canonical/legacy dành riêng kiểm thử để chạy seed inventory hiện hữu. Đây **không** phải bản sửa QĐ-1 hoặc bằng chứng seed 80/81 đã chạy thành công. 08_seed_inventory và 10_procs_auth chạy lại sau fixture, log ở thư mục bằng chứng.
+- Trước đo hiệu năng: **54 đơn, 0 raw telemetry**; fixture report có một dòng hourly. Sau đó simulator mới sinh raw telemetry. Không gọi tập này là LARGE 5.000 đơn/200.000 telemetry; không dùng dữ liệu sau mô phỏng để thay số đo trước đó.
 
-Lệnh: `powershell -NoProfile -File tests/run-tv5.ps1`.
-CSDL: `FreshVendTV5_Test_20261104_194444`. Log gốc: `.local-test/tv5-small-to-large/` (không commit).
+## 2. Unit SQL và npm
 
-| Nhóm kiểm tra | Kết quả |
+| File | Tổng | PASS | FAIL | Bắt đầu chạy (+07:00) | Bằng chứng |
+|---|---:|---:|---:|---|---|
+| tests_auth.sql | 18 | 18 | 0 | 2026-11-15T00:55:43.9932945+07:00 | [JSON](evidence/SCRUM-239/tests_auth.sql.json) |
+| tests_inventory.sql | 54 | 53 | 1 | 2026-11-15T00:55:46.2797351+07:00 | [JSON](evidence/SCRUM-239/tests_inventory.sql.json) |
+| tests_sales.sql | 5 | 5 | 0 | 2026-11-15T00:55:49.5945962+07:00 | [JSON](evidence/SCRUM-239/tests_sales.sql.json) |
+| tests_iot.sql | 6 | 6 | 0 | 2026-11-15T00:55:54.3314276+07:00 | [JSON](evidence/SCRUM-239/tests_iot.sql.json) |
+| tests_report.sql | 6 | 6 | 0 | 2026-11-15T00:55:54.4599709+07:00 | [JSON](evidence/SCRUM-239/tests_report.sql.json) |
+| tests_audit.sql | 10 | 10 | 0 | 2026-11-15T00:55:51.1757271+07:00 | [JSON](evidence/SCRUM-239/tests_audit.sql.json) |
+| tests_security.sql | 11 | 11 | 0 | 2026-11-15T00:55:51.7151760+07:00 | [JSON](evidence/SCRUM-239/tests_security.sql.json) |
+
+Năm file chính auth/inventory/sales/iot/report: **88/89 PASS, 1 FAIL**. Audit và security là kiểm tra bổ sung, không cộng để làm đẹp tỷ lệ. Phạm vi tests_iot gồm sáu ca ingest (batch, UTC và năm lỗi/atomicity), chưa phải ba ca cho mọi procedure IoT. Sáu ca report lấy từ batch runner thật gần nhất, không phải sáu lần chạy độc lập bổ sung vào tổng runner.
+
+Inventory **T48 FAIL**: fn_PriceHistory cần hai mốc giá 42000→45000 nhưng trả một mốc khi sửa nhanh. Cần owner kiểm tra tính chính xác theo độ phân giải temporal/phiên bản có thời gian bằng nhau; chưa sửa hàm hay nới assertion để đổi thành PASS. Chi tiết Expected/Actual trong JSON.
+
+`npm test --prefix app/api`: **31/31 PASS, 0 skipped**, ngày giờ/Node/npm trong manifest; [log nguyên bản](evidence/SCRUM-239/npm-test.log). Các test API dùng fakeDb, test db.js dùng driver mssql giả. Chúng kiểm tra hợp đồng/API, không chứng minh stored procedure, RLS hay thiết bị chạy SQL thật.
+
+## 3. report.sp_RunAllTests
+
+Chạy thật lúc 15/11/2026 trên cùng QA DB, có [33 dòng kết quả](evidence/SCRUM-239/runner.json). Không nhân đôi các dòng report ở phần unit.
+
+| Module | PASS | FAIL | BLOCKED |
+|---|---:|---:|---:|
+| auth | 4 | 0 | 0 |
+| inventory | 7 | 0 | 1 |
+| sales | 6 | 0 | 0 |
+| iot | 8 | 0 | 1 |
+| report | 6 | 0 | 0 |
+| Tổng | **31** | **0** | **2** |
+
+Hai ca BLOCKED: INV-restock-empty chờ hợp nhất máy #20; IOT-partition-real thiếu iot.sp_MaintainPartitions. Passed=0 cho BLOCKED. Bộ điều phối không được coi toàn bộ đạt chỉ vì procedure chạy hết.
+
+## 4. Integration với SQL Server thật
+
+API cổng 32139, DB_MODE=sqlserver, trỏ đúng CSDL QA nêu trên; bốn login theo vai trò. [Smoke 26 ca](evidence/SCRUM-239/api-smoke.md), [output thực](evidence/SCRUM-239/api-smoke.log): **21/26 PASS, 5 FAIL**. Kiểm tra đăng nhập ba vai trò, quyền report của Operator và quyền quản lý sản phẩm của Kiosk có thực thi.
+
+Năm HTTP 500 do thiếu ba đối tượng IoT: iot.vw_MachineHealth (menu Kiosk, danh sách máy Admin và Operator), iot.vw_OpenAlerts, iot.fn_RecentTelemetry. Không coi HTTP 200 với dữ liệu trống là đã kiểm tra nghiệp vụ đầy đủ; smoke chủ yếu kiểm tra đăng nhập, quyền và khả năng gọi route.
+
+Luồng ghi end-to-end mười bước FV-32: **0 PASS / 10 BLOCKED**, [manifest preflight](evidence/SCRUM-239/integration-e2e.json). Thiếu hai view IoT và seed SMALL chưa hoàn tất. Preflight không chạy luồng nên không ghi kết quả mua/nhả hàng hay QR là PASS. Thử tạo đơn trong kịch bản JAM còn gặp HTTP 500: “Cannot find data type OrderItemType”; cần kiểm tra mapping TVP có schema trong db.js/driver, không nhầm với lỗi nghiệp vụ thiếu tiền/hết hàng.
+
+## 5. Hiệu năng
+
+Chạy lúc **00:56:30 ngày 15/11/2026 (+07:00)**. Một lượt đầu + năm lượt warm, một client, không tạo tải cạnh tranh. Có STATISTICS XML/TIME/IO và 60 plan, [samples](evidence/SCRUM-239/perf-control/samples.json), [TIME/IO](evidence/SCRUM-239/perf-control/statistics-time-io.txt), đủ 60 plan và snapshot index trong cùng thư mục. Manifest ghi tên và SHA-256 của cả 60 plan gốc; toàn bộ plan được bàn giao trong thư mục bằng chứng.
+
+**Đây là đo đối chứng trên tập nhỏ**, chưa là nghiệm thu SLA <500 ms hoặc so sánh trước/sau index. Ledger LARGE chưa có; lệnh strict chạy thật lúc 00:59:30 dừng **BLOCKED** trước khi đo, [lý do](evidence/SCRUM-239/perf-strict.json). AFTER chưa chạy vì chưa có index mới của owner. Các số dưới là elapsed phía SQL, không phải HTTP P95, cũng không tương đương cold buffer sau restart.
+
+| Truy vấn | Lượt đầu (ms) | Năm lượt warm (ms) | Max warm (ms) |
+|---|---:|---|---:|
+| PeakHours | 99.818 | 119.695 / 14.952 / 8.913 / 21.691 / 10.998 | 119.695 |
+| RevenueByLocation | 104.581 | 11.497 / 45.739 / 13.510 / 9.113 / 12.739 | 45.739 |
+| ProductRanking | 158.107 | 16.030 / 26.287 / 22.088 / 17.990 / 15.907 | 26.287 |
+| ColdChainCompliance | 57.517 | 5.237 / 9.843 / 32.722 / 11.196 / 10.957 | 32.722 |
+| ExportSales30Days | 110.116 | 77.574 / 62.059 / 50.982 / 58.110 / 52.477 | 77.574 |
+
+## 6. Chuỗi lạnh — dữ liệu mô phỏng
+
+Chạy **app/simulator/esp32.js thật** với API và SQL thật, dữ liệu cảm biến mô phỏng; **không thử phần cứng ESP32/DHT22**. Các ca chạy từ 00:59:00 đến 00:59:16 ngày 15/11/2026 (+07:00). [Kết quả từng ca](evidence/SCRUM-239/cold-chain/results.json) và log simulator cùng thư mục.
+
+| Ca | Kết quả | Quan sát thực |
+|---|---|---|
+| KB1 bình thường | PASS | Có raw telemetry mới, năm mẫu cuối trong 2–8°C, máy ACTIVE |
+| KB2 quá nhiệt | FAIL | Ba mẫu cuối >8°C, máy vẫn ACTIVE, không có alert nhiệt độ |
+| KB3 mở cửa | FAIL | Không có DOOR_OPEN alert sau fixture cửa mở từ ba phút trước và packet live |
+| KB4 kẹt ba lần | BLOCKED | Tạo đơn trả HTTP 500 vì kiểu TVP OrderItemType; chưa chạy được ba lần nhả cho đơn này |
+| KB5 mất mạng/kết nối lại | FAIL | Job thủ công chuyển OFFLINE; nhận telemetry trở lại vẫn OFFLINE |
+
+Tổng **1 PASS / 3 FAIL / 1 BLOCKED**. KB3 và KB5 dùng timestamp fixture tăng tốc; KB5 gọi job heartbeat thủ công. Không tuyên bố đã đợi đủ 2/5 phút, đã kiểm chứng scheduler tự chạy, hoặc đã kiểm tra trọn vẹn hàng đợi offline bền vững. Không có giao dịch ngân hàng thật. Do job heartbeat dùng thời gian local trong khi ingest ghi UTC, kết quả này cũng cần owner kiểm tra lệch múi giờ.
+
+## 7. Bảo mật và khôi phục (FV-36)
+
+Được chạy độc lập trên CSDL sạch, không dùng các ca npm giả: **18/18 PASS**, RLS ba máy, DENY report và cấm Kiosk thêm sản phẩm. Full/Diff/Log checksum và restore STOPAT thực: COUNT trước/sau=1, đúng tên/giá, marker 2 còn, marker sự cố 3 bị loại. [Runbook, video và log SCRUM-230](Security_Demo.md). Ngày giờ chính xác trong recording.json và clean-run-result.json; không suy rộng demo này thành SLA uptime hoặc RPO bằng 0.
+
+## 8. Lỗi đã sửa và việc còn lại
+
+| Nội dung | Trạng thái |
 |---|---|
-| Tạo cấu trúc từ schema repo và chạy lại toàn bộ object | PASS |
-| Small: 3 địa điểm, 5 máy, 10 sản phẩm, 50 đơn, 500 telemetry | PASS |
-| Small chạy hai lần | PASS, không trùng và không tăng revenue |
-| Small→large: tổng 20 máy, 15 sản phẩm, 5.000 đơn, 200.000 telemetry | PASS |
-| Large chạy hai lần | PASS, số lượng và tổng tiền giữ nguyên |
-| Chi tiết, slot, product, payment, thời gian 90 ngày và giờ cao điểm | PASS |
-| 7 procedure × 1 ca đúng + 2 ca sai | 21/21 PASS |
-| Revenue TVF đủ/rỗng/đảo khoảng | PASS |
-| Failure rate, máy lạ/không lần nhả, đúng 2% và dưới 2% | PASS |
-| Ranking giảm dần, tổng tỷ trọng và đồng hạng | PASS |
-| Cold chain 2°C, 8°C, 8.001°C, thời lượng không đều | PASS: 120/240 giây = 50% |
-| JSON lỗi, thiếu duration, không dữ liệu | PASS: không tạo coverage giả |
-| paid→refunded→refresh | PASS: xóa summary cũ |
-| SQL client đối chiếu KPI, tăng trưởng, DATEFIRST 1/7, xuất dòng và log JSON/PDF PENDING | PASS |
+| FK cũ chặn cài từ đầu (SCRUM-201) | Sửa trong nhánh phụ thuộc; PR #46 cần merge |
+| Auth chạy lại nhầm index thành constraint | Sửa trong SCRUM-217; cài lại PASS |
+| Parser/batch ingest IoT | Bản sửa trước đã có, sáu regression ingest hiện PASS |
+| Temporal history T48 | FAIL; cần xử lý trước khi công bố unit toàn hệ thống đạt |
+| QĐ-1 hai nguồn máy, RegisterMachine chưa tạo ngăn | Còn; seed SMALL/LARGE và một ca runner BLOCKED |
+| Ba đối tượng API IoT, partition maintenance, scheduler | Còn; smoke/integration chưa đạt đầy đủ |
+| TVP OrderItemType qua API | Còn; JAM và luồng mua thật bị chặn |
+| Trigger nhiệt/cửa và phục hồi sau offline | Còn; ca mô phỏng FAIL |
+| Đồng bộ UTC giữa SQL/API/simulator | Cần owner rà soát; không sửa dữ liệu để che sai giờ |
+| PDF ứng dụng, tải CSV mở bằng Excel, HTTP P95 với LARGE | NOT RUN trong phiên này; không ghi PASS |
+| Huy review, PR merge và chạy chéo máy khác | Chưa có bằng chứng hoàn tất |
 
-Các lỗi chạy thật phát hiện trong quá trình sửa đã được xử lý: RowCount là từ khóa cần bracket, dependency bảng/cột cũ, seed thiếu chi tiết, telemetry/summary nhân đôi khi chạy lại, tổng KPI bị nhân do cross join, thiếu index Payment.OrderId, phân tích lại JSON làm báo cáo chậm. Không sử dụng kết quả PASS seed hoặc số đo cũ để nghiệm thu.
+## 9. Chạy lại và điều kiện chốt
 
-## Hiệu năng thực tế (ms)
+```powershell
+powershell -NoProfile -File tests/run-acceptance.ps1 -Server .\SQLEXPRESS
+npm ci --prefix app/api
+npm test --prefix app/api
+# Khởi động API với DB_MODE=sqlserver, DB_NAME=CSDL_QA_vừa_tạo, PORT=32139.
+# Đặt DB_SERVER/DB_PORT và bốn login theo .env.example trong môi trường local.
+$env:SMOKE_URL='http://127.0.0.1:32139'
+node app/api/tools/smoke-sqlserver.js
+powershell -NoProfile -File tests/run-integration-preflight.ps1 -Database <CSDL_QA> -BaseUrl http://127.0.0.1:32139
+powershell -NoProfile -File tests/run-perf.ps1 -Database <CSDL_QA>
+# measure-cold-chain đọc DB_NAME/DB_SERVER/DB_PORT và API_URL từ môi trường.
+node tests/measure-cold-chain.mjs
+```
 
-Một lượt khởi động/đo đầu và năm lượt warm. Dataset large 5.000 đơn, 200.000 raw telemetry và toàn bộ hourly tương ứng. Tiêu chí nghiêm ngặt: mỗi lượt warm của yêu cầu nghiệp vụ <500 ms. `sp_RefreshTelemetryHourly` đo cập nhật một ngày UTC như job định kỳ; backfill 90 ngày nằm trong thời gian seed. `sp_RefreshDailySummary` đo 90 ngày. `sp_ExportSales` đo 30 ngày và trả dòng thật.
+run-acceptance tạo DB mới mặc định, chạy fixture có guard QA, ghi kết quả từng result set và thoát khác 0 khi có FAIL/BLOCKED. Không chạy suite ghi dữ liệu trên CSDL vận hành. Chạy simulator sau unit/performance vì có ghi dữ liệu và đổi trạng thái máy.
 
-| Đối tượng | Cold | Lượt 1 | Lượt 2 | Lượt 3 | Lượt 4 | Lượt 5 | Max warm |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| fn_DispenseFailureRate | 32 | 13 | 13 | 12 | 14 | 12 | 14 |
-| fn_RevenueByLocation | 84 | 82 | 75 | 67 | 63 | 63 | 82 |
-| sp_DashboardKpi | 220 | 94 | 83 | 238 | 148 | 79 | 238 |
-| sp_ExportSales | 89 | 79 | 74 | 85 | 101 | 82 | 101 |
-| sp_PeakHours | 273 | 297 | 376 | 210 | 232 | 243 | 376 |
-| sp_RefreshDailySummary | 91 | 72 | 76 | 87 | 100 | 126 | 126 |
-| sp_RefreshTelemetryHourly | 50 | 45 | 63 | 40 | 25 | 37 | 63 |
-| sp_RevenueGrowth | 8 | 6 | 8 | 6 | 8 | 10 | 10 |
-| sp_RunAllTests | 641 | 647 | 591 | 795 | 621 | 356 | 795 |
-| vw_ColdChainCompliance | 94 | 83 | 74 | 117 | 190 | 189 | 190 |
-| vw_ProductRanking | 66 | 31 | 36 | 33 | 30 | 34 | 36 |
-
-`sp_RunAllTests` là bộ điều phối chạy toàn suite, chỉ báo thời gian tham khảo; không áp ngân sách một truy vấn cho tổng suite. Các số trên là elapsed phía SQL, không bao gồm tải CSV/PDF qua HTTP. Không khẳng định SLA cho tải cạnh tranh hoặc máy khác.
-
-## Kiểm thử ứng dụng và tài liệu
-
-`npm test --prefix app`: 16/16 PASS; kiểm tra đồng bộ 56 route, 59 lời gọi và 30 biến môi trường PASS. Đây là test API với fake DB, được tách biệt với bằng chứng SQL thực ở trên.
-
-`python tools/build_testplan_docx.py`: tạo TestPlan.docx và xác thực cấu trúc ZIP/XML, chứa đầy đủ nội dung TestPlan.md. Chưa kiểm tra trình bày bằng Microsoft Word trên giao diện.
-
-## Phạm vi còn phụ thuộc nhóm
-
-- Các procedure nghiệp vụ auth/inventory/sales/iot chưa có định nghĩa trong repo: ma trận khung đã có, kiểm thử SQL nghiệp vụ các module này BLOCKED đến khi chủ module cung cấp.
-- Đăng nhập, phân quyền DB thực, luồng mua hàng thực xuyên TV1–TV4, tạo/mở file PDF và xác nhận export SUCCESS/FAILED: chưa nghiệm thu end-to-end trên DB thật; thuộc các ca INT-04–06 của TestPlan.
-- Cần owner IoT đưa `report.sp_RefreshTelemetryHourly` vào lịch sau ingest; seed tự refresh. View hiển thị toàn lịch sử hourly đã tổng hợp.
-- PR trên tv5-report cần ít nhất một bạn review; chưa có review của người khác trong phiên làm việc này.
-
-Không dùng các phụ thuộc này để đánh dấu PASS toàn hệ thống. SCRUM 34 là User Story và khung Test Plan, không phải triển khai tính năng PDF ứng dụng.
-
-## Seed lớn độc lập
-
-Lệnh: `powershell -NoProfile -File tests/run-tv5.ps1 -LargeOnly`.
-CSDL sạch: `FreshVendTV5_Test_20261104_194713`. Không chạy seed nhỏ trước. Tạo/rerun object, large/rerun seed, kiểm tra dữ liệu, 21 ca procedure, oracle client và hiệu năng đều PASS. Log gốc `.local-test/tv5/`.
-
-| Đối tượng | Cold | Lượt 1 | Lượt 2 | Lượt 3 | Lượt 4 | Lượt 5 | Max warm |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| fn_DispenseFailureRate | 34 | 16 | 13 | 12 | 14 | 13 | 16 |
-| fn_RevenueByLocation | 83 | 74 | 64 | 66 | 60 | 88 | 88 |
-| sp_DashboardKpi | 356 | 163 | 196 | 162 | 165 | 162 | 196 |
-| sp_ExportSales | 96 | 78 | 58 | 61 | 58 | 59 | 78 |
-| sp_PeakHours | 265 | 215 | 202 | 129 | 129 | 134 | 215 |
-| sp_RefreshDailySummary | 199 | 57 | 57 | 60 | 76 | 50 | 76 |
-| sp_RefreshTelemetryHourly | 107 | 47 | 51 | 77 | 50 | 49 | 77 |
-| sp_RevenueGrowth | 29 | 11 | 9 | 7 | 7 | 8 | 11 |
-| sp_RunAllTests | 492 | 625 | 417 | 359 | 369 | 444 | 625 |
-| vw_ColdChainCompliance | 108 | 102 | 88 | 109 | 167 | 93 | 167 |
-| vw_ProductRanking | 52 | 33 | 36 | 34 | 34 | 34 | 36 |
-
-## Integration — SCRUM-226 (10/11/2026)
-
-Đã chạy preflight trên CSDL SQL Server riêng `FreshVendTV5_Week2_20261110_170803`. **Chưa thực thi thành công E2E: 0/10 PASS, 10 BLOCKED.** Không lấy 31 test API/mock hoặc ảnh demo làm bằng chứng SQL E2E.
-
-| Bước | Kịch bản | Kết quả hiện tại | Bằng chứng |
-|---|---|---|---|
-| 1 | Operator login sees exactly three assigned machines | BLOCKED | Chưa có ảnh SQL thật |
-| 2 | Add batch and restock | BLOCKED | Chưa có ảnh SQL thật |
-| 3 | Kiosk buys two items and receives VietQR | BLOCKED | Chưa có ảnh SQL thật |
-| 4 | Payment callback sets PAID | BLOCKED | Chưa có ảnh SQL thật |
-| 5 | Simulator dispenses and order DISPENSED | BLOCKED | Chưa có ảnh SQL thật |
-| 6 | Stock decremented from FIFO lot | BLOCKED | Chưa có ảnh SQL thật |
-| 7 | Machine 3 overheat creates alert and pause | BLOCKED | Chưa có ảnh SQL thật |
-| 8 | Machine 1 jams and is REFUNDED | BLOCKED | Chưa có ảnh SQL thật |
-| 9 | Admin report contains new order | BLOCKED | Chưa có ảnh SQL thật |
-| 10 | Operator report request returns 403 | BLOCKED | Chưa có ảnh SQL thật |
-
-### Các điều kiện chưa đạt
-
-- auth.sp_Login
-- auth.sp_AssignMachine
-- inventory.sp_Restock
-- inventory.sp_RemoveExpired
-- iot.vw_MachineHealth
-- iot.vw_OpenAlerts
-- sales.vw_DispenseQueue
-- inventory.vw_StockStatus
-- Procedure-driven SMALL seed has not completed
-- RLS/security owner setup is not ready
-- API with SQL Server is not reachable
-
-Artifact thật: [226-preflight.json](evidence/week2/226-preflight.json). Lệnh tái lập: `powershell -NoProfile -File tests/run-integration-preflight.ps1 -Database <QA_DB> -BaseUrl <API_SQLSERVER>`.
-
-### Quy trình chạy lại khi owner bàn giao
-
-1. Huy xác nhận main đã đủ schema, auth/security/RLS, FIFO/restock, queue/IoT và 99_run_all.bat của Toàn. Chạy SMALL seed qua procedure thật hai lần, so row count/tổng tiền, kiểm operator01 được giao đúng 3 máy.
-2. API DB_MODE=sqlserver trỏ đúng QA_DB; kiểm /api/health mode/database; simulator dùng cùng API và cấu hình device key. Không chuyển tiền thật: chỉ dùng callback giả lập theo giao thức test đã được chủ sales duyệt; không bật demo DB để vượt bước payment.
-3. Chạy lần lượt 10 bước bảng trên bằng Web/kiosk/simulator. Trước mua ghi BatchId/ExpiryAt/Qty; sau nhả đối chiếu vw_OrderDetail và SlotStock để chứng minh FIFO. Ghi OrderId/PaymentId/DispenseEvents/RefundId trong log đã lọc.
-4. Quá nhiệt dùng máy 3, kẹt dùng máy 1 trên fixture riêng; chờ đủ lần đọc/nhả theo contract, kiểm trạng thái/cảnh báo và kiosk Tạm ngưng. Raw→hourly phải sửa #21/#26 trước khi đánh giá chuỗi lạnh.
-5. Mỗi bước lưu ảnh thật có thời gian và SHA vào thư mục evidence riêng; ghi Expected/Actual/Status. Bước 10 phải lưu response 403 thực với operator01, không chỉ nhìn menu bị ẩn. Thiếu ảnh hoặc chưa chạy giữ NOT RUN/BLOCKED, không tự điền PASS.
-6. Lỗi tạo Issue chủ module, retest sau fix; chỉ chốt 10/10 khi mọi bước có ảnh và SQL đối chiếu. PR cần Huy review/merge; Jira chưa được cập nhật từ phiên này.
-
-Owner blockers #19/#20/#21 và lỗi mới [#26](https://github.com/PhuongHuyN/REPO_NH-M/issues/26). Kết quả 04/11 phía trên là lịch sử schema cũ.
+**Kết luận hiện tại:** có báo cáo từ số liệu chạy thật, nhưng chưa nghiệm thu toàn bộ hệ thống. Chỉ chốt các chỉ tiêu tương ứng sau khi sửa lỗi, chạy lại đúng bộ dữ liệu, đính kèm log mới và được Huy review. Không mang số PASS cũ sang lần chạy mới.

@@ -1,0 +1,26 @@
+{
+  "startedAt": "2026-11-15T00:50:16.680698+07:00",
+  "completedAt": "2026-11-15T00:50:46.939585+07:00",
+  "server": ".\\SQLEXPRESS",
+  "database": "FreshVend_S217_Clean_20261115",
+  "capture": "Live automated SQL console, not SSMS screen recording",
+  "fps": 2,
+  "frames": 45,
+  "durationSeconds": 22.5,
+  "video": "security-demo.webm",
+  "videoSha256": "d997933cb2affb78994ad80c9dbc3585dd2cab657f8e58655be4e7ba8fa11557",
+  "runs": [
+    {
+      "script": "tests_auth.sql",
+      "exitCode": 0,
+      "log": "tests_auth.log",
+      "sha256": "a2640339eba4a920001b40f3a25ae0dc88001eba207ad41b2bb7a9182b21bcb2"
+    },
+    {
+      "script": "demo_security.sql",
+      "exitCode": 0,
+      "log": "demo_security.log",
+      "sha256": "c45bffc517b03aed8c5f9c6bb965cc55ba9e371ae8ac80c9d34d442a20a25445"
+    }
+  ]
+}

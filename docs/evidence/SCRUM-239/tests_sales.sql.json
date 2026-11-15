@@ -1,0 +1,180 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:51.1635637+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:49.5945962+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "OrderId":  1,
+                           "MachineId":  1,
+                           "Status":  "PENDING",
+                           "TotalAmount":  25000.00,
+                           "CreatedAt":  "2026-11-14T17:55:50.0000000",
+                           "ExpiresAt":  "2026-11-14T18:00:50.0000000"
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  2,
+                           "MachineId":  1,
+                           "Status":  "PENDING",
+                           "TotalAmount":  25000.00,
+                           "CreatedAt":  "2026-11-14T17:55:51.0000000",
+                           "ExpiresAt":  "2026-11-14T18:00:51.0000000"
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  3,
+                           "MachineId":  1,
+                           "Status":  "PENDING",
+                           "TotalAmount":  25000.00,
+                           "CreatedAt":  "2026-11-14T17:55:51.0000000",
+                           "ExpiresAt":  "2026-11-14T18:00:51.0000000"
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  3,
+                           "Status":  "PAID",
+                           "Amount":  25000.00,
+                           "PaidAt":  "2026-11-14T17:55:51.0000000",
+                           "IsDuplicate":  false
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  3,
+                           "OrderItemId":  3,
+                           "AttemptNo":  1,
+                           "Result":  "JAM",
+                           "OrderStatus":  "PAID"
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  3,
+                           "OrderItemId":  3,
+                           "AttemptNo":  2,
+                           "Result":  "JAM",
+                           "OrderStatus":  "PAID"
+                       }
+                   ],
+                   [
+                       {
+                           "RefundId":  1,
+                           "OrderId":  3,
+                           "Amount":  25000.00,
+                           "Status":  "REFUNDED"
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  3,
+                           "OrderItemId":  3,
+                           "AttemptNo":  3,
+                           "Result":  "JAM",
+                           "OrderStatus":  "REFUNDED"
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  4,
+                           "MachineId":  1,
+                           "Status":  "PENDING",
+                           "TotalAmount":  25000.00,
+                           "CreatedAt":  "2026-11-14T17:55:51.0000000",
+                           "ExpiresAt":  "2026-11-14T18:00:51.0000000"
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  4,
+                           "Status":  "PAID",
+                           "Amount":  25000.00,
+                           "PaidAt":  "2026-11-14T17:55:51.0000000",
+                           "IsDuplicate":  false
+                       }
+                   ],
+                   [
+                       {
+                           "OrderId":  4,
+                           "OrderItemId":  4,
+                           "AttemptNo":  1,
+                           "Result":  "SUCCESS",
+                           "OrderStatus":  "DISPENSED"
+                       }
+                   ],
+                   [
+                       {
+                           "TestCode":  "UT01",
+                           "TestName":  "Het hang - sp_CreateOrder vuot ton",
+                           "Passed":  true,
+                           "Detail":  "Err 50201: Sản phẩm đã hết hàng hoặc không đủ số lượng"
+                       },
+                       {
+                           "TestCode":  "UT02",
+                           "TestName":  "Thanh toan sai so tien",
+                           "Passed":  true,
+                           "Detail":  "Err 50208: Số tiền thanh toán không khớp với đơn hàng"
+                       },
+                       {
+                           "TestCode":  "UT03",
+                           "TestName":  "Callback gateway gui 2 lan - lan 2 IsDuplicate",
+                           "Passed":  true,
+                           "Detail":  "IsDuplicate=1"
+                       },
+                       {
+                           "TestCode":  "UT04",
+                           "TestName":  "Ket hang 3 lan - tu hoan tien (REFUNDED)",
+                           "Passed":  true,
+                           "Detail":  "Status=REFUNDED"
+                       },
+                       {
+                           "TestCode":  "UT05",
+                           "TestName":  "Mua thanh cong DISPENSED, ton giam 1",
+                           "Passed":  true,
+                           "Detail":  "Status=DISPENSED stock 10-\u003e9"
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027.",
+                     "[tests_sales] Index sales: xong.",
+                     "[tests_sales] Unit test TV3 — Pass: 5 | Fail: 0"
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+                  {
+                      "TestCode":  "UT01",
+                      "TestName":  "Het hang - sp_CreateOrder vuot ton",
+                      "Passed":  true,
+                      "Detail":  "Err 50201: Sản phẩm đã hết hàng hoặc không đủ số lượng"
+                  },
+                  {
+                      "TestCode":  "UT02",
+                      "TestName":  "Thanh toan sai so tien",
+                      "Passed":  true,
+                      "Detail":  "Err 50208: Số tiền thanh toán không khớp với đơn hàng"
+                  },
+                  {
+                      "TestCode":  "UT03",
+                      "TestName":  "Callback gateway gui 2 lan - lan 2 IsDuplicate",
+                      "Passed":  true,
+                      "Detail":  "IsDuplicate=1"
+                  },
+                  {
+                      "TestCode":  "UT04",
+                      "TestName":  "Ket hang 3 lan - tu hoan tien (REFUNDED)",
+                      "Passed":  true,
+                      "Detail":  "Status=REFUNDED"
+                  },
+                  {
+                      "TestCode":  "UT05",
+                      "TestName":  "Mua thanh cong DISPENSED, ton giam 1",
+                      "Passed":  true,
+                      "Detail":  "Status=DISPENSED stock 10-\u003e9"
+                  }
+              ],
+    "Name":  "tests_sales.sql"
+}

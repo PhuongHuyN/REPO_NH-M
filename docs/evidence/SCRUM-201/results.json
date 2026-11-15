@@ -1,0 +1,80 @@
+﻿{
+    "Database":  "FreshVend_FK201_Test_20261112_235546",
+    "Results":  [
+                    {
+                        "Status":  "PASS",
+                        "Check":  "clean install and rerun x2"
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Status":  "PASS",
+                        "Check":  "valid canonical rows and re-trust disabled FK"
+                    },
+                    {
+                        "Expected":  50090,
+                        "Status":  "PASS",
+                        "Actual":  50090
+                    },
+                    {
+                        "Status":  "PASS",
+                        "Check":  "conflicting legacy machine IDs rejected without remapping"
+                    },
+                    {
+                        "Expected":  547,
+                        "Status":  "PASS",
+                        "Actual":  547
+                    },
+                    {
+                        "Status":  "PASS",
+                        "Check":  "orphan historical data blocks trust validation; clean retry succeeds"
+                    },
+                    {
+                        "Expected":  50090,
+                        "Status":  "PASS",
+                        "Actual":  50090
+                    },
+                    {
+                        "Status":  "PASS",
+                        "Check":  "missing prerequisite rejected; recovery rerun succeeds"
+                    }
+                ]
+}

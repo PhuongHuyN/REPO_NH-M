@@ -1,0 +1,452 @@
+﻿[
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "PeakHours",
+        "Iteration":  0,
+        "ElapsedMs":  99.818,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-PeakHours-0-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "PeakHours",
+        "Iteration":  1,
+        "ElapsedMs":  119.695,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-PeakHours-1-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "PeakHours",
+        "Iteration":  2,
+        "ElapsedMs":  14.952,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-PeakHours-2-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "PeakHours",
+        "Iteration":  3,
+        "ElapsedMs":  8.913,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-PeakHours-3-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "PeakHours",
+        "Iteration":  4,
+        "ElapsedMs":  21.691,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-PeakHours-4-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "PeakHours",
+        "Iteration":  5,
+        "ElapsedMs":  10.998,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-PeakHours-5-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "RevenueByLocation",
+        "Iteration":  0,
+        "ElapsedMs":  104.581,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-RevenueByLocation-0-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "RevenueByLocation",
+        "Iteration":  1,
+        "ElapsedMs":  11.497,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-RevenueByLocation-1-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "RevenueByLocation",
+        "Iteration":  2,
+        "ElapsedMs":  45.739,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-RevenueByLocation-2-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "RevenueByLocation",
+        "Iteration":  3,
+        "ElapsedMs":  13.510,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-RevenueByLocation-3-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "RevenueByLocation",
+        "Iteration":  4,
+        "ElapsedMs":  9.113,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-RevenueByLocation-4-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "RevenueByLocation",
+        "Iteration":  5,
+        "ElapsedMs":  12.739,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-RevenueByLocation-5-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ProductRanking",
+        "Iteration":  0,
+        "ElapsedMs":  158.107,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ProductRanking-0-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ProductRanking",
+        "Iteration":  1,
+        "ElapsedMs":  16.030,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ProductRanking-1-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ProductRanking",
+        "Iteration":  2,
+        "ElapsedMs":  26.287,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ProductRanking-2-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ProductRanking",
+        "Iteration":  3,
+        "ElapsedMs":  22.088,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ProductRanking-3-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ProductRanking",
+        "Iteration":  4,
+        "ElapsedMs":  17.990,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ProductRanking-4-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ProductRanking",
+        "Iteration":  5,
+        "ElapsedMs":  15.907,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ProductRanking-5-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ColdChainCompliance",
+        "Iteration":  0,
+        "ElapsedMs":  57.517,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ColdChainCompliance-0-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ColdChainCompliance",
+        "Iteration":  1,
+        "ElapsedMs":  5.237,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ColdChainCompliance-1-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ColdChainCompliance",
+        "Iteration":  2,
+        "ElapsedMs":  9.843,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ColdChainCompliance-2-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ColdChainCompliance",
+        "Iteration":  3,
+        "ElapsedMs":  32.722,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ColdChainCompliance-3-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ColdChainCompliance",
+        "Iteration":  4,
+        "ElapsedMs":  11.196,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ColdChainCompliance-4-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ColdChainCompliance",
+        "Iteration":  5,
+        "ElapsedMs":  10.957,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ColdChainCompliance-5-0.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ExportSales30Days",
+        "Iteration":  0,
+        "ElapsedMs":  110.116,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ExportSales30Days-0-0.sqlplan",
+                      "BEFORE-ExportSales30Days-0-1.sqlplan",
+                      "BEFORE-ExportSales30Days-0-2.sqlplan",
+                      "BEFORE-ExportSales30Days-0-3.sqlplan",
+                      "BEFORE-ExportSales30Days-0-4.sqlplan",
+                      "BEFORE-ExportSales30Days-0-5.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ExportSales30Days",
+        "Iteration":  1,
+        "ElapsedMs":  77.574,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ExportSales30Days-1-0.sqlplan",
+                      "BEFORE-ExportSales30Days-1-1.sqlplan",
+                      "BEFORE-ExportSales30Days-1-2.sqlplan",
+                      "BEFORE-ExportSales30Days-1-3.sqlplan",
+                      "BEFORE-ExportSales30Days-1-4.sqlplan",
+                      "BEFORE-ExportSales30Days-1-5.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ExportSales30Days",
+        "Iteration":  2,
+        "ElapsedMs":  62.059,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ExportSales30Days-2-0.sqlplan",
+                      "BEFORE-ExportSales30Days-2-1.sqlplan",
+                      "BEFORE-ExportSales30Days-2-2.sqlplan",
+                      "BEFORE-ExportSales30Days-2-3.sqlplan",
+                      "BEFORE-ExportSales30Days-2-4.sqlplan",
+                      "BEFORE-ExportSales30Days-2-5.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ExportSales30Days",
+        "Iteration":  3,
+        "ElapsedMs":  50.982,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ExportSales30Days-3-0.sqlplan",
+                      "BEFORE-ExportSales30Days-3-1.sqlplan",
+                      "BEFORE-ExportSales30Days-3-2.sqlplan",
+                      "BEFORE-ExportSales30Days-3-3.sqlplan",
+                      "BEFORE-ExportSales30Days-3-4.sqlplan",
+                      "BEFORE-ExportSales30Days-3-5.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ExportSales30Days",
+        "Iteration":  4,
+        "ElapsedMs":  58.110,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ExportSales30Days-4-0.sqlplan",
+                      "BEFORE-ExportSales30Days-4-1.sqlplan",
+                      "BEFORE-ExportSales30Days-4-2.sqlplan",
+                      "BEFORE-ExportSales30Days-4-3.sqlplan",
+                      "BEFORE-ExportSales30Days-4-4.sqlplan",
+                      "BEFORE-ExportSales30Days-4-5.sqlplan"
+                  ]
+    },
+    {
+        "RecordType":  "TIMING",
+        "Phase":  "BEFORE",
+        "QueryName":  "ExportSales30Days",
+        "Iteration":  5,
+        "ElapsedMs":  52.477,
+        "ControlOnly":  true,
+        "FixtureOrders":  0,
+        "FixtureTelemetry":  0,
+        "Database":  "FreshVend_QA239_20261115_005521",
+        "Plans":  [
+                      "BEFORE-ExportSales30Days-5-0.sqlplan",
+                      "BEFORE-ExportSales30Days-5-1.sqlplan",
+                      "BEFORE-ExportSales30Days-5-2.sqlplan",
+                      "BEFORE-ExportSales30Days-5-3.sqlplan",
+                      "BEFORE-ExportSales30Days-5-4.sqlplan",
+                      "BEFORE-ExportSales30Days-5-5.sqlplan"
+                  ]
+    }
+]

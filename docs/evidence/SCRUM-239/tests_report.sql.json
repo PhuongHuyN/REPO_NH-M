@@ -1,0 +1,124 @@
+﻿{
+    "CompletedAt":  "2026-11-15T00:55:54.5226599+07:00",
+    "Error":  null,
+    "StartedAt":  "2026-11-15T00:55:54.4599709+07:00",
+    "Tables":  [
+                   [
+                       {
+                           "TestCase":  "REPORT-growth-12-months",
+                           "Expected":  "0",
+                           "Actual":  "0",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "ErrorDetail":  null,
+                           "RunAt":  "2026-11-14T17:55:54.2720000"
+                       },
+                       {
+                           "TestCase":  "REPORT-invalid-year",
+                           "Expected":  "50401",
+                           "Actual":  "50401",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "ErrorDetail":  "Năm báo cáo phải từ 2000 đến 9998.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000"
+                       },
+                       {
+                           "TestCase":  "REPORT-reversed-peak",
+                           "Expected":  "50401",
+                           "Actual":  "50401",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "ErrorDetail":  "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000"
+                       },
+                       {
+                           "TestCase":  "REPORT-invalid-export",
+                           "Expected":  "50402",
+                           "Actual":  "50402",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "ErrorDetail":  "Khoảng thời gian xuất báo cáo không hợp lệ",
+                           "RunAt":  "2026-11-14T17:55:54.2720000"
+                       },
+                       {
+                           "TestCase":  "REPORT-reversed-summary",
+                           "Expected":  "50403",
+                           "Actual":  "50403",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "ErrorDetail":  "Khoảng ngày tổng hợp không hợp lệ.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000"
+                       },
+                       {
+                           "TestCase":  "REPORT-empty-runby",
+                           "Expected":  "50404",
+                           "Actual":  "50404",
+                           "Passed":  true,
+                           "Status":  "PASS",
+                           "ErrorDetail":  "Tên người chạy cần 1..100 ký tự.",
+                           "RunAt":  "2026-11-14T17:55:54.2720000"
+                       }
+                   ]
+               ],
+    "Messages":  [
+                     "Changed database context to \u0027FreshVend_QA239_20261115_005521\u0027."
+                 ],
+    "Status":  "PASS",
+    "Cases":  [
+                  {
+                      "TestCase":  "REPORT-growth-12-months",
+                      "Expected":  "0",
+                      "Actual":  "0",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "ErrorDetail":  null,
+                      "RunAt":  "2026-11-14T17:55:54.2720000"
+                  },
+                  {
+                      "TestCase":  "REPORT-invalid-year",
+                      "Expected":  "50401",
+                      "Actual":  "50401",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "ErrorDetail":  "Năm báo cáo phải từ 2000 đến 9998.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000"
+                  },
+                  {
+                      "TestCase":  "REPORT-reversed-peak",
+                      "Expected":  "50401",
+                      "Actual":  "50401",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "ErrorDetail":  "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000"
+                  },
+                  {
+                      "TestCase":  "REPORT-invalid-export",
+                      "Expected":  "50402",
+                      "Actual":  "50402",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "ErrorDetail":  "Khoảng thời gian xuất báo cáo không hợp lệ",
+                      "RunAt":  "2026-11-14T17:55:54.2720000"
+                  },
+                  {
+                      "TestCase":  "REPORT-reversed-summary",
+                      "Expected":  "50403",
+                      "Actual":  "50403",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "ErrorDetail":  "Khoảng ngày tổng hợp không hợp lệ.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000"
+                  },
+                  {
+                      "TestCase":  "REPORT-empty-runby",
+                      "Expected":  "50404",
+                      "Actual":  "50404",
+                      "Passed":  true,
+                      "Status":  "PASS",
+                      "ErrorDetail":  "Tên người chạy cần 1..100 ký tự.",
+                      "RunAt":  "2026-11-14T17:55:54.2720000"
+                  }
+              ],
+    "Name":  "tests_report.sql"
+}
