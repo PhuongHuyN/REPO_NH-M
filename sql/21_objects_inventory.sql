@@ -259,7 +259,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     IF NOT UPDATE(CurrentStock) RETURN;
-    IF OBJECT_ID(N'iot.Alerts', N'U') IS NULL OR OBJECT_ID(N'iot.Machines', N'U') IS NULL RETURN;
+    IF OBJECT_ID(N'iot.Alerts') IS NULL OR OBJECT_ID(N'iot.Machines', N'U') IS NULL RETURN;
 
     DECLARE @Now DATETIME2(0) = SYSUTCDATETIME();
 
