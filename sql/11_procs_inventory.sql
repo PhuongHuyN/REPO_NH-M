@@ -488,7 +488,7 @@ BEGIN
         JOIN  (SELECT SlotId, SUM(Qty) AS AddQty FROM @L GROUP BY SlotId) x ON x.SlotId = s.SlotId;
 
         -- 6. Đóng cảnh báo "sắp hết hàng" của cột đã có trên 20 % sức chứa (hàng còn hạn)
-        IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL
+        IF OBJECT_ID(N'iot.Alerts') IS NOT NULL
             UPDATE a
             SET    ResolvedAt = @Now
             FROM   iot.Alerts a
@@ -576,7 +576,7 @@ BEGIN
             JOIN   inventory.StockBatch b ON b.BatchId = r.BatchId;
 
             -- 4. Cảnh báo cho nhân viên vận hành: mỗi cột bị rút 1 cảnh báo
-            IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL AND OBJECT_ID(N'iot.Machines', N'U') IS NOT NULL
+            IF OBJECT_ID(N'iot.Alerts') IS NOT NULL AND OBJECT_ID(N'iot.Machines', N'U') IS NOT NULL
                 INSERT iot.Alerts (MachineId, AlertType, Severity, Message, RefKey, CreatedAt)
                 SELECT im.MachineId, N'EXPIRY', N'HIGH',
                        N'Đã rút ' + CAST(x.Qty AS NVARCHAR(10)) + N' hộp hết hạn ở cột '

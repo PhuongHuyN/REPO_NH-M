@@ -10,6 +10,11 @@
           node simulator/esp32.js --door 2             (máy 2 mở cửa liên tục -> cảnh báo DOOR_OPEN)
           node simulator/esp32.js --jam 1              (máy 1 kẹt mọi lần nhả -> hoàn tiền tự động)
           node simulator/esp32.js --offline 4          (máy 4 im lặng -> job đánh dấu OFFLINE sau 5 phút)
+          node simulator/esp32.js --scenario normal
+          node simulator/esp32.js --scenario overheat --machines 3
+          node simulator/esp32.js --scenario door-open --machines 2
+          node simulator/esp32.js --scenario vending-jam --machines 1
+          node simulator/esp32.js --scenario network --machines 4 --disconnect-seconds 15
    Biến môi trường: API_URL (mặc định http://localhost:3000), DEVICE_API_KEY
    Yêu cầu Node.js >= 18 (có sẵn fetch). Không cần cài thêm thư viện.
    ===================================================================== */
@@ -39,9 +44,26 @@ const overheat = new Set(list(opt('overheat')));
 const door = new Set(list(opt('door')));
 const jam = new Set(list(opt('jam')));
 const offline = new Set(list(opt('offline')));
+const scenario = String(opt('scenario', '')).toLowerCase();
+const scenarioMachineIds = machines;
+const disconnectSeconds = Math.max(1, Number(opt('disconnect-seconds', 15)) || 15);
+if (scenario && !['normal', 'overheat', 'door-open', 'vending-jam', 'network'].includes(scenario)) {
+  console.error('Scenario không hợp lệ. Dùng: normal, overheat, door-open, vending-jam, network.');
+  process.exit(1);
+}
+if (scenario === 'overheat') scenarioMachineIds.forEach((m) => overheat.add(m));
+if (scenario === 'door-open') scenarioMachineIds.forEach((m) => door.add(m));
+if (scenario === 'vending-jam') scenarioMachineIds.forEach((m) => jam.add(m));
+if (scenario === 'network') scenarioMachineIds.forEach((m) => offline.delete(m));
 const BATCH = Number(opt('batch', 1));     // số lần đo gom trong 1 gói (mô phỏng gửi lại khi có mạng)
 
-const state = Object.fromEntries(machines.map((m) => [m, { temp: 3.5 + Math.random() * 2, buffer: [], tick: 0 }]));
+const state = Object.fromEntries(machines.map((m) => [m, {
+  temp: 3.5 + Math.random() * 2,
+  buffer: [],
+  tick: 0,
+  disconnectedUntil: scenario === 'network' ? Date.now() + disconnectSeconds * 1000 : 0,
+  networkWasDisconnected: scenario === 'network',
+}]));
 const ts = () => {
   const d = new Date(Date.now() + 7 * 3600e3);          // giờ Việt Nam, khớp SYSDATETIME() của SQL Server
   return d.toISOString().slice(0, 19);
@@ -73,9 +95,21 @@ function readSensor(m) {
 }
 
 async function telemetry(m) {
-  if (offline.has(m)) return;                     // máy mất mạng: không gửi gì
+  if (offline.has(m)) return;                     // máy tắt hẳn: không đọc/gửi dữ liệu
   const s = state[m];
   s.buffer.push(readSensor(m));
+  if (s.disconnectedUntil && Date.now() < s.disconnectedUntil) {
+    if (s.buffer.length > 500) s.buffer.splice(0, s.buffer.length - 500);
+    if (s.networkWasDisconnected) {
+      log(m, `🌐 mất mạng giả lập trong ${disconnectSeconds}s; lưu đệm ${s.buffer.length} bản ghi`);
+      s.networkWasDisconnected = false;
+    }
+    return;
+  }
+  if (s.disconnectedUntil) {
+    s.disconnectedUntil = 0;
+    log(m, `🌐 đã kết nối lại; thử gửi bù ${s.buffer.length} bản ghi đã lưu`);
+  }
   if (s.buffer.length < BATCH) return;
   const readings = s.buffer.splice(0);
   try {
@@ -106,10 +140,12 @@ async function dispense(m) {
 }
 
 console.log(`FreshVend ESP32 simulator -> ${API} | máy: ${machines.join(',')} | chu kỳ ${INTERVAL / 1000}s`);
+if (scenario) console.log(`  kịch bản: ${scenario}`);
 if (overheat.size) console.log('  quá nhiệt:', [...overheat].join(','));
 if (door.size) console.log('  mở cửa:', [...door].join(','));
 if (jam.size) console.log('  kẹt hàng:', [...jam].join(','));
 if (offline.size) console.log('  mất mạng:', [...offline].join(','));
+if (scenario === 'network') console.log(`  ngắt mạng: ${disconnectSeconds}s, sau đó tự kết nối lại và gửi buffer`);
 
 // Cảm biến gửi theo chu kỳ INTERVAL; hàng chờ nhả hỏi nhanh hơn để khách nhận hàng ngay sau khi trả tiền
 const DISPENSE_POLL = 1500;
