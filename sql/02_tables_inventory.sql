@@ -113,36 +113,7 @@ ELSE
     PRINT N'[02-inv] Bảng inventory.Product đã tồn tại — bỏ qua.';
 GO
 
--- =============================================================================
--- 4. inventory.Machine  — Máy bán hàng tự động
--- =============================================================================
-
-IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE object_id = OBJECT_ID(N'inventory.Machine'))
-BEGIN
-    CREATE TABLE inventory.Machine (
-        MachineId       INT             NOT NULL IDENTITY(1,1),
-        MachineCode     NVARCHAR(20)    NOT NULL,
-        MachineName     NVARCHAR(100)   NOT NULL,
-        Location        NVARCHAR(200)       NULL,
-        Latitude        DECIMAL(10,7)       NULL,
-        Longitude       DECIMAL(10,7)       NULL,
-        Status          NVARCHAR(20)    NOT NULL CONSTRAINT DF_inventory_Machine_Status  DEFAULT (N'offline'),
-                                                            -- 'online','offline','maintenance','error'
-        InstallDate     DATE                NULL,
-        LastServiceDate DATE                NULL,
-        IsActive        BIT             NOT NULL CONSTRAINT DF_inventory_Machine_IsActive  DEFAULT (1),
-        CreatedAt       DATETIME2(0)    NOT NULL CONSTRAINT DF_inventory_Machine_CreatedAt DEFAULT SYSUTCDATETIME(),
-        UpdatedAt       DATETIME2(0)        NULL,
-
-        CONSTRAINT PK_inventory_Machine         PRIMARY KEY (MachineId),
-        CONSTRAINT UQ_inventory_Machine_Code    UNIQUE (MachineCode),
-        CONSTRAINT CK_inventory_Machine_Status  CHECK (Status IN (N'online', N'offline', N'maintenance', N'error'))
-    );
-
-    PRINT N'[02-inv] Bảng inventory.Machine đã được tạo.';
-END
-ELSE
-    PRINT N'[02-inv] Bảng inventory.Machine đã tồn tại — bỏ qua.';
+-- inventory.Machine là view tương thích do 02_tables_iot.sql tạo từ iot.Machines.
 GO
 
 -- =============================================================================
@@ -163,7 +134,6 @@ BEGIN
 
         CONSTRAINT PK_inventory_Slot            PRIMARY KEY (SlotId),
         CONSTRAINT UQ_inventory_Slot_Code       UNIQUE (MachineId, SlotCode),
-        CONSTRAINT FK_inventory_Slot_Machine    FOREIGN KEY (MachineId)  REFERENCES inventory.Machine(MachineId),
         CONSTRAINT FK_inventory_Slot_Product    FOREIGN KEY (ProductId)  REFERENCES inventory.Product(ProductId),
         CONSTRAINT CK_inventory_Slot_Stock      CHECK (CurrentStock >= 0 AND CurrentStock <= Capacity)
     );
