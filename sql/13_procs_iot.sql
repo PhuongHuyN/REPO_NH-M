@@ -11,7 +11,7 @@ USE FreshVendDB;
 GO
 -- 1. Đăng ký máy mới (sp_RegisterMachine)
 CREATE OR ALTER PROCEDURE iot.sp_RegisterMachine
-@Serial NVARCHAR (50), @MachineName NVARCHAR (100), @LocationId INT, @FirmwareVersion NVARCHAR (20)='1.0.0', @ColumnCount INT=6, @Capacity INT=10
+@Serial NVARCHAR (50), @MachineName NVARCHAR (100), @LocationId INT, @FirmwareVersion NVARCHAR (20)='1.0.0', @ColumnCount INT=4, @Capacity INT=10
 AS
 BEGIN
   SET NOCOUNT ON;
@@ -19,8 +19,12 @@ BEGIN
   BEGIN TRY
     BEGIN TRANSACTION;
     -- Kiểm tra dữ liệu đầu vào
-    IF LTRIM(RTRIM(@Serial)) = ''
+    IF @Serial IS NULL OR LTRIM(RTRIM(@Serial)) = ''
       THROW 50300, N'Mã Serial của máy không được để trống.', 1;
+    IF @ColumnCount IS NULL OR @ColumnCount <> 4
+      THROW 50303, N'Sơ đồ slot chuẩn yêu cầu @ColumnCount = 4 để tạo đủ A1 đến C4.', 1;
+    IF @Capacity IS NULL OR @Capacity < 1 OR @Capacity > 32767
+      THROW 50304, N'Sức chứa mỗi slot phải nằm trong khoảng 1 đến 32767.', 1;
     IF EXISTS (SELECT 1
                FROM   iot.Machines
                WHERE  Serial = @Serial)
@@ -50,6 +54,10 @@ BEGIN
       DegradedMessage
     )
     VALUES                             (@NewMachineId, 2.00, 8.00, 2, 3, N'Nhiệt độ tủ lạnh vượt ngưỡng an toàn, vui lòng kiểm tra.');
+    INSERT INTO inventory.Slot (MachineId, SlotCode, Capacity, CurrentStock, IsActive)
+    SELECT @NewMachineId, CONCAT(r.RowCode, n.SlotNumber), @Capacity, 0, 1
+    FROM (VALUES (N'A'), (N'B'), (N'C')) AS r(RowCode)
+    CROSS JOIN (VALUES (1), (2), (3), (4)) AS n(SlotNumber);
     COMMIT TRANSACTION;
     -- Trả về thông tin máy vừa tạo
     SELECT MachineId,
@@ -83,17 +91,15 @@ AS
 BEGIN
  SET NOCOUNT ON;
  SET XACT_ABORT ON;
- -- Every parser receives a valid JSON expression, even during eager evaluation.
- DECLARE @Safe NVARCHAR(MAX)=CASE WHEN ISJSON(@Payload)=1 THEN @Payload ELSE N'{}' END;
  BEGIN TRY
   IF @Payload IS NULL OR ISJSON(@Payload)<>1
    THROW 50310,N'Dữ liệu payload truyền lên không phải định dạng JSON hợp lệ.',1;
-  DECLARE @MachineId INT=TRY_CONVERT(INT,JSON_VALUE(@Safe,'$.machineId'));
-  IF @MachineId IS NULL SELECT @MachineId=MachineId FROM iot.Machines WHERE Serial=JSON_VALUE(@Safe,'$.serial');
+  DECLARE @MachineId INT=TRY_CAST(JSON_VALUE(@Payload, '$.machineId') AS INT);
+  IF @MachineId IS NULL SELECT @MachineId=MachineId FROM iot.Machines WHERE Serial=JSON_VALUE(@Payload, '$.serial');
   IF @MachineId IS NULL OR NOT EXISTS(SELECT 1 FROM iot.Machines WHERE MachineId=@MachineId)
    THROW 50311,N'Không tìm thấy máy tương ứng với thiết bị gửi dữ liệu.',1;
-  DECLARE @Array NVARCHAR(MAX)=JSON_QUERY(@Safe,'$.readings'),@Now DATETIME2(0)=SYSUTCDATETIME();
-  IF @Array IS NULL OR ISJSON(@Array,ARRAY)<>1
+  DECLARE @Array NVARCHAR(MAX)=JSON_QUERY(@Payload,'$.readings'),@Now DATETIME2(0)=SYSUTCDATETIME();
+  IF @Array IS NULL OR ISJSON(@Array)<>1 OR LEFT(LTRIM(@Array),1)<>N'['
    THROW 50312,N'readings phải là mảng có ít nhất một bản đọc hợp lệ.',1;
   DECLARE @Readings TABLE(Ordinal INT PRIMARY KEY,Temperature DECIMAL(5,2),Humidity DECIMAL(5,2),DoorOpen BIT,RecordedAt DATETIME2(0),Valid BIT);
   INSERT @Readings
@@ -114,8 +120,9 @@ BEGIN
   SELECT @MachineId,Temperature,Humidity,DoorOpen,RecordedAt FROM @Readings;
   UPDATE iot.Machines SET LastHeartbeat=@Now WHERE MachineId=@MachineId;
   COMMIT;
-  SELECT m.MachineId,m.Status,(SELECT TOP(1) Temperature FROM @Readings ORDER BY Ordinal DESC) LastTemp
-  FROM iot.Machines m WHERE m.MachineId=@MachineId;
+  SELECT m.MachineId, m.Serial AS MachineCode, m.Status
+  FROM iot.Machines AS m
+  WHERE m.MachineId = @MachineId;
  END TRY
  BEGIN CATCH
   IF XACT_STATE()<>0 ROLLBACK;
@@ -131,15 +138,15 @@ BEGIN
   SET NOCOUNT ON;
   BEGIN TRY
     IF NOT EXISTS (SELECT 1
-                   FROM   iot.Alerts
+                   FROM   iot.Alert
                    WHERE  AlertId = @AlertId)
       THROW 50320, N'Mã cảnh báo (AlertId) không tồn tại trong hệ thống.', 1;
     IF EXISTS (SELECT 1
-               FROM   iot.Alerts
+               FROM   iot.Alert
                WHERE  AlertId = @AlertId
                       AND ResolvedAt IS NOT NULL)
       THROW 50321, N'Cảnh báo này đã được xử lý trước đó rồi.', 1;
-    UPDATE iot.Alerts
+    UPDATE iot.Alert
     SET    AckBy      = @UserId,
            AckAt      = SYSDATETIME(),
            ResolvedAt = CASE WHEN @Resolve = 1 THEN SYSDATETIME() ELSE ResolvedAt END
@@ -149,7 +156,7 @@ BEGIN
            AckBy,
            AckAt,
            ResolvedAt
-    FROM   iot.Alerts
+    FROM   iot.Alert
     WHERE  AlertId = @AlertId;
   END TRY
   BEGIN CATCH
@@ -179,7 +186,7 @@ BEGIN
     UPDATE iot.Machines
     SET    Status = 'ACTIVE'
     WHERE  MachineId = @MachineId;
-    UPDATE iot.Alerts
+    UPDATE iot.Alert
     SET    ResolvedAt = SYSDATETIME(),
            AckBy      = @UserId,
            AckAt      = SYSDATETIME()
@@ -244,7 +251,7 @@ BEGIN
            AND (LastHeartbeat IS NULL
                 OR DATEDIFF(MINUTE, LastHeartbeat, SYSDATETIME()) >= @Minutes);
     -- Tự động sinh cảnh báo OFFLINE cho các máy vừa mất kết nối (nếu chưa có cảnh báo mở)
-    INSERT INTO iot.Alerts (
+    INSERT INTO iot.Alert (
       MachineId,
       AlertType,
       Severity,
@@ -259,7 +266,7 @@ BEGIN
     FROM   iot.Machines AS m
     WHERE  m.Status = 'OFFLINE'
            AND NOT EXISTS (SELECT 1
-                           FROM   iot.Alerts AS a
+                           FROM   iot.Alert AS a
                            WHERE  a.MachineId = m.MachineId
                                   AND a.AlertType = 'OFFLINE'
                                   AND a.ResolvedAt IS NULL);
@@ -319,3 +326,92 @@ END
 
 GO
 PRINT N'[13-iot] Các Stored Procedures của module IoT đã được tạo thành công.';
+
+GO
+-- Bảo trì biên phân đoạn tháng: giữ boundary 12 tháng gần nhất và 3 tháng tới.
+CREATE OR ALTER PROCEDURE iot.sp_MaintainPartitions
+    @AsOfDate DATE = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    DECLARE @CurrentMonth DATE,
+            @RetentionBoundary DATE,
+            @TargetBoundary DATE,
+            @MaxBoundary DATE,
+            @NextBoundary DATE,
+            @OldBoundary DATE,
+            @Ddl NVARCHAR(300),
+            @LockResult INT,
+            @SplitCount INT = 0,
+            @MergeCount INT = 0;
+
+    SET @AsOfDate = ISNULL(@AsOfDate, CONVERT(DATE, SYSUTCDATETIME()));
+    SET @CurrentMonth = DATEFROMPARTS(YEAR(@AsOfDate), MONTH(@AsOfDate), 1);
+    SET @RetentionBoundary = DATEADD(MONTH, -12, @CurrentMonth);
+    SET @TargetBoundary = DATEADD(MONTH, 3, @CurrentMonth);
+
+    IF NOT EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N'PF_iot_Telemetry_Month')
+       OR NOT EXISTS (SELECT 1 FROM sys.partition_schemes WHERE name = N'PS_iot_Telemetry_Month')
+        THROW 50385, N'Chưa tạo partition function/scheme cho iot.Telemetry.', 1;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        EXEC @LockResult = sys.sp_getapplock
+            @Resource = N'iot.sp_MaintainPartitions',
+            @LockMode = N'Exclusive',
+            @LockOwner = N'Transaction',
+            @LockTimeout = 10000;
+        IF @LockResult < 0
+            THROW 50386, N'Không lấy được khóa bảo trì phân đoạn telemetry.', 1;
+
+        SELECT @MaxBoundary = MAX(CONVERT(DATE, prv.value))
+        FROM sys.partition_range_values AS prv
+        WHERE prv.function_id = PARTITION_FUNCTION_ID(N'PF_iot_Telemetry_Month');
+
+        -- Split từng tháng để luôn có boundary đến đầu tháng thứ ba phía trước.
+        WHILE @MaxBoundary < @TargetBoundary
+        BEGIN
+            SET @NextBoundary = DATEADD(MONTH, 1, @MaxBoundary);
+            ALTER PARTITION SCHEME PS_iot_Telemetry_Month NEXT USED [PRIMARY];
+            SET @Ddl = N'ALTER PARTITION FUNCTION PF_iot_Telemetry_Month() SPLIT RANGE ('''
+                     + CONVERT(CHAR(8), @NextBoundary, 112) + N''');';
+            EXEC sys.sp_executesql @Ddl;
+            SET @MaxBoundary = @NextBoundary;
+            SET @SplitCount += 1;
+        END;
+
+        -- Mỗi boundary cũ hơn cutoff gộp hai partition kề nhau; dữ liệu vẫn được giữ.
+        SET @OldBoundary = NULL;
+        SELECT @OldBoundary = MIN(CONVERT(DATE, prv.value))
+        FROM sys.partition_range_values AS prv
+        WHERE prv.function_id = PARTITION_FUNCTION_ID(N'PF_iot_Telemetry_Month')
+          AND CONVERT(DATE, prv.value) < @RetentionBoundary;
+
+        WHILE @OldBoundary IS NOT NULL
+        BEGIN
+            SET @Ddl = N'ALTER PARTITION FUNCTION PF_iot_Telemetry_Month() MERGE RANGE ('''
+                     + CONVERT(CHAR(8), @OldBoundary, 112) + N''');';
+            EXEC sys.sp_executesql @Ddl;
+            SET @MergeCount += 1;
+
+            SET @OldBoundary = NULL;
+            SELECT @OldBoundary = MIN(CONVERT(DATE, prv.value))
+            FROM sys.partition_range_values AS prv
+            WHERE prv.function_id = PARTITION_FUNCTION_ID(N'PF_iot_Telemetry_Month')
+              AND CONVERT(DATE, prv.value) < @RetentionBoundary;
+        END;
+
+        COMMIT TRANSACTION;
+        SELECT @SplitCount AS BoundariesAdded,
+               @MergeCount AS OldBoundariesMerged,
+               @RetentionBoundary AS RetentionBoundary,
+               @TargetBoundary AS FutureBoundary;
+    END TRY
+    BEGIN CATCH
+        IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO

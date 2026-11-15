@@ -428,7 +428,7 @@ BEGIN
             UPDATE sales.[Order] SET Status = N'DISPENSE_FAILED', UpdatedAt = @Now WHERE OrderId = @OrderId;
             EXEC sales.sp_Refund @OrderId = @OrderId, @Reason = N'Tự động hoàn tiền do kẹt hàng 3 lần';
 
-            IF OBJECT_ID(N'iot.Alerts', N'U') IS NOT NULL
+            IF OBJECT_ID(N'iot.Alerts') IS NOT NULL
                AND OBJECT_ID(N'iot.Machines', N'U') IS NOT NULL
                AND EXISTS (SELECT 1 FROM iot.Machines WHERE MachineId = @MachineId)
                 INSERT iot.Alerts (MachineId, AlertType, Severity, Message, RefKey, CreatedAt)
