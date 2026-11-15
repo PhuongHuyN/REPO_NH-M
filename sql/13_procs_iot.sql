@@ -326,3 +326,92 @@ END
 
 GO
 PRINT N'[13-iot] Các Stored Procedures của module IoT đã được tạo thành công.';
+
+GO
+-- Bảo trì biên phân đoạn tháng: giữ boundary 12 tháng gần nhất và 3 tháng tới.
+CREATE OR ALTER PROCEDURE iot.sp_MaintainPartitions
+    @AsOfDate DATE = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    DECLARE @CurrentMonth DATE,
+            @RetentionBoundary DATE,
+            @TargetBoundary DATE,
+            @MaxBoundary DATE,
+            @NextBoundary DATE,
+            @OldBoundary DATE,
+            @Ddl NVARCHAR(300),
+            @LockResult INT,
+            @SplitCount INT = 0,
+            @MergeCount INT = 0;
+
+    SET @AsOfDate = ISNULL(@AsOfDate, CONVERT(DATE, SYSUTCDATETIME()));
+    SET @CurrentMonth = DATEFROMPARTS(YEAR(@AsOfDate), MONTH(@AsOfDate), 1);
+    SET @RetentionBoundary = DATEADD(MONTH, -12, @CurrentMonth);
+    SET @TargetBoundary = DATEADD(MONTH, 3, @CurrentMonth);
+
+    IF NOT EXISTS (SELECT 1 FROM sys.partition_functions WHERE name = N'PF_iot_Telemetry_Month')
+       OR NOT EXISTS (SELECT 1 FROM sys.partition_schemes WHERE name = N'PS_iot_Telemetry_Month')
+        THROW 50385, N'Chưa tạo partition function/scheme cho iot.Telemetry.', 1;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+        EXEC @LockResult = sys.sp_getapplock
+            @Resource = N'iot.sp_MaintainPartitions',
+            @LockMode = N'Exclusive',
+            @LockOwner = N'Transaction',
+            @LockTimeout = 10000;
+        IF @LockResult < 0
+            THROW 50386, N'Không lấy được khóa bảo trì phân đoạn telemetry.', 1;
+
+        SELECT @MaxBoundary = MAX(CONVERT(DATE, prv.value))
+        FROM sys.partition_range_values AS prv
+        WHERE prv.function_id = PARTITION_FUNCTION_ID(N'PF_iot_Telemetry_Month');
+
+        -- Split từng tháng để luôn có boundary đến đầu tháng thứ ba phía trước.
+        WHILE @MaxBoundary < @TargetBoundary
+        BEGIN
+            SET @NextBoundary = DATEADD(MONTH, 1, @MaxBoundary);
+            ALTER PARTITION SCHEME PS_iot_Telemetry_Month NEXT USED [PRIMARY];
+            SET @Ddl = N'ALTER PARTITION FUNCTION PF_iot_Telemetry_Month() SPLIT RANGE ('''
+                     + CONVERT(CHAR(8), @NextBoundary, 112) + N''');';
+            EXEC sys.sp_executesql @Ddl;
+            SET @MaxBoundary = @NextBoundary;
+            SET @SplitCount += 1;
+        END;
+
+        -- Mỗi boundary cũ hơn cutoff gộp hai partition kề nhau; dữ liệu vẫn được giữ.
+        SET @OldBoundary = NULL;
+        SELECT @OldBoundary = MIN(CONVERT(DATE, prv.value))
+        FROM sys.partition_range_values AS prv
+        WHERE prv.function_id = PARTITION_FUNCTION_ID(N'PF_iot_Telemetry_Month')
+          AND CONVERT(DATE, prv.value) < @RetentionBoundary;
+
+        WHILE @OldBoundary IS NOT NULL
+        BEGIN
+            SET @Ddl = N'ALTER PARTITION FUNCTION PF_iot_Telemetry_Month() MERGE RANGE ('''
+                     + CONVERT(CHAR(8), @OldBoundary, 112) + N''');';
+            EXEC sys.sp_executesql @Ddl;
+            SET @MergeCount += 1;
+
+            SET @OldBoundary = NULL;
+            SELECT @OldBoundary = MIN(CONVERT(DATE, prv.value))
+            FROM sys.partition_range_values AS prv
+            WHERE prv.function_id = PARTITION_FUNCTION_ID(N'PF_iot_Telemetry_Month')
+              AND CONVERT(DATE, prv.value) < @RetentionBoundary;
+        END;
+
+        COMMIT TRANSACTION;
+        SELECT @SplitCount AS BoundariesAdded,
+               @MergeCount AS OldBoundariesMerged,
+               @RetentionBoundary AS RetentionBoundary,
+               @TargetBoundary AS FutureBoundary;
+    END TRY
+    BEGIN CATCH
+        IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
