@@ -187,7 +187,10 @@ function showPayment(order, qr) {
   $('#payContent').textContent = qr.content;
   $('#qr').innerHTML = qr.qrSvg; // SVG do máy chủ vẽ, không cần thư viện ngoài
 
-  const expires = new Date(order.ExpiresAt).getTime() || Date.now() + qr.expiresInSeconds * 1000;
+  // ExpiresAt trong SQL là UTC, driver đọc thành giờ máy. Đơn vừa tạo bị thành giờ trong quá khứ
+  // và màn hình hủy ngay. Khi mốc đó đã qua, đếm 5 phút từ lúc bấm thanh toán.
+  const parsed = new Date(order.ExpiresAt).getTime();
+  const expires = parsed > Date.now() ? parsed : Date.now() + (qr.expiresInSeconds || 300) * 1000;
   clearTimers('count', 'poll');
   const tickCount = () => {
     const s = Math.max(0, Math.round((expires - Date.now()) / 1000));
