@@ -213,6 +213,8 @@ Luồng bắt buộc (chi tiết trong `docs/State.drawio`):
 
 Trình duyệt Admin/Operator và kiosk gọi REST API Node.js. API kiểm tra JWT/vai trò, bind tham số rồi EXEC stored procedure hoặc SELECT view/TVF qua bốn login SQL. RLS lọc máy theo SESSION_CONTEXT. Simulator gửi telemetry và kết quả nhả bằng khóa thiết bị. SSE cập nhật đội máy/cảnh báo trên UI. DB_MODE=demo dùng fakeDb; DB_MODE=sqlserver dùng SQL Server thật. Mô tả đối chiếu app/api/src/db.js, app/api/src/routes, app/web/js/admin.js và app/simulator/esp32.js, không thay tài liệu kiến trúc chính thức của Dũng.
 
+Chương [Module IoT & Bảo mật](Module_IoT_and_Security.md) ghi chi tiết luồng telemetry, giới hạn dữ liệu mô phỏng, xác thực thiết bị/người dùng, RBAC, phạm vi RLS và các điểm chưa tương đương giữa demo với SQL.
+
 ```mermaid
 flowchart LR
     Console[Admin / Operator browser] -->|JWT / REST| API[Node.js API]
