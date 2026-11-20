@@ -13,7 +13,21 @@ let demo = null;         // CSDL giả lập trong bộ nhớ – dùng cho ki�
 const pools = new Map();
 
 function sqlLib() {
-  if (!driver) driver = require('mssql');
+  if (!driver) {
+    driver = require('mssql');
+    // req.query đi qua sp_executesql. Tedious ghi "OrderItemType" bỏ schema,
+    // SQL Server không tìm thấy sales.OrderItemType.
+    const tvp = require('tedious').TYPES.TVP;
+    if (!tvp.__fvSchema) {
+      const orig = tvp.declaration.bind(tvp);
+      tvp.declaration = function (parameter) {
+        const value = parameter && parameter.value;
+        if (value && value.schema && value.name) return `${value.schema}.${value.name} readonly`;
+        return orig(parameter);
+      };
+      tvp.__fvSchema = true;
+    }
+  }
   return driver;
 }
 function useDriver(d) { driver = d; pools.clear(); }
