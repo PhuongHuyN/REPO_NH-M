@@ -16,10 +16,11 @@ Các test API hiện dùng `fakeDb.js` và driver SQL giả cho một số kiể
 
 ### SQL structure and T-SQL parse
 
-1. `tools/check-sql.js --require-parser` kiểm tra 26 file `.sql` trong `sql/` không rỗng, string/identifier/comment được đóng và ngoặc cân bằng.
-2. GitHub Actions cài SQLFluff theo phiên bản ghim trong `tools/requirements-sql-check.txt`, rồi script gọi parser `tsql` cho từng file.
+1. `tools/check-sql.js --require-parser` kiểm tra mọi file `.sql` trong `sql/` không rỗng, string/identifier/comment được đóng và ngoặc cân bằng.
+2. GitHub Actions cài SQLFluff theo phiên bản ghim trong `tools/requirements-sql-check.txt`, rồi script gọi SQLFluff với dialect `tsql` và rule `PRS` cho từng file gốc. Các file nghiệp vụ không bị biến đổi hay loại khỏi lượt parse.
+3. SQLFluff trả chẩn đoán dạng JSON. Lỗi parse (`PRS`) chỉ được hạ thành cảnh báo khi vị trí/đoạn nguồn khớp một giới hạn grammar T-SQL đã biết, được allowlist theo đúng file trong `tools/check-sql.js` (ví dụ `CREATE OR ALTER PROCEDURE`, một số khối `IF ... EXISTS`, `IS_ROLEMEMBER`, RLS policy và lệnh backup/restore). Các `PRS` ngoài danh sách này, lỗi không nhận diện được JSON, hoặc lỗi khác đều làm CI thất bại. Cảnh báo chỉ ra file, dòng và giới hạn parser tương ứng.
 
-Đây là kiểm tra cấu trúc và parse cú pháp cơ bản. Nó không chạy các batch trên SQL Server, không phát hiện mọi lỗi phụ thuộc schema/quyền/phiên bản, không chứng minh file có thể cài theo thứ tự, và không thay thế `tests/run-acceptance.ps1` hoặc kiểm thử tích hợp SQL Server. SQL Server-specific runtime tests cần môi trường SQL Server/`sqlcmd` riêng.
+SQLFluff là parser độc lập, không phải SQL Server engine; grammar T-SQL của nó chưa bao phủ hoàn toàn một số cú pháp SQL Server. Allowlist xử lý có giới hạn các `PRS` đã xác định thay vì bỏ qua toàn bộ lỗi parser. Phần kiểm tra cấu trúc luôn chạy trên nội dung SQL gốc. Các bước này không chạy batch trên SQL Server, không phát hiện mọi lỗi phụ thuộc schema/quyền/phiên bản, không chứng minh file cài được theo thứ tự, và không thay thế `tests/run-acceptance.ps1` hoặc kiểm thử tích hợp SQL Server. SQL Server-specific runtime tests cần môi trường SQL Server/`sqlcmd` riêng.
 
 ## Chạy cục bộ
 
