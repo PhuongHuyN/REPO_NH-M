@@ -1,26 +1,49 @@
-# Mỗi lần push / Pull Request: kiểm tra đồng bộ FE ⇄ BE + kiểm thử API của ứng dụng trong thư mục app/.
-# Không cần SQL Server: bộ test dùng CSDL mô phỏng trong bộ nhớ (app/api/test/fakeDb.js). Đỏ = không được merge.
 name: CI
+
 on:
   push:
+    branches: [main]
   pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   app-check-and-test:
+    name: App contract and tests
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: app/.nvmrc
-      - name: Cài thư viện
-        working-directory: app/api
-        run: if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm install --no-audit --no-fund; fi
-      - name: Kiểm tra đồng bộ FE ⇄ BE (route, vai trò, .env.example)
-        run: node tools/check-sync.js
-      - name: Kiểm thử API
-        working-directory: app/api
-        run: npm test
+          cache: npm
+          cache-dependency-path: app/api/package-lock.json
+      - name: Install API dependencies
+        run: npm ci --prefix app/api --no-audit --no-fund
+      - name: Check FE/API synchronization
+        run: npm run check --prefix app
+      - name: Run API test suite
+        run: npm test --prefix app/api
+
+  sql-parse:
+    name: SQL structure and T-SQL parse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: app/.nvmrc
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install SQLFluff parser
+        run: python -m pip install --disable-pip-version-check -r tools/requirements-sql-check.txt
+      - name: Check SQL batches and parse T-SQL
+        run: node tools/check-sql.js --require-parser

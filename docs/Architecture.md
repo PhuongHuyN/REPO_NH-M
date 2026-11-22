@@ -72,3 +72,5 @@ Chương đối chiếu chi tiết về luồng IoT, RBAC/RLS và trạng thái 
 ## Đối chiếu trước phát hành
 
 Đối chiếu route/payload với `app/api/src/routes/iot.js`, `app/api/src/routes/sales.js`; cách mô phỏng với `app/simulator/esp32.js`; schema, view và ngưỡng với `sql/02_tables_iot.sql`, `sql/13_procs_iot.sql`, `sql/23_objects_iot.sql`; quyền với `sql/40_security.sql`; và cấu hình chạy với `docker-compose.yml`, `app/api/src/config.js`. Đặc biệt xác nhận các trigger/job tạo DEGRADED/alerts, timeout và mapping bốn tài khoản sau khi dựng CSDL mới, vì tài liệu không thay thế xác minh runtime.
+
+Quy trình CI của repository, các job tự động và lệnh chạy cục bộ được mô tả tại [CI/CD FreshVend](CICD.md).
