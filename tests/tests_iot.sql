@@ -47,3 +47,87 @@ GO
 
 SELECT TestCase,CONVERT(BIT,1) Passed,SYSDATETIMEOFFSET() RunAt FROM (VALUES(N'ordered batch and UTC timestamps'),(N'invalid JSON 50310'),(N'unknown machine 50311'),(N'empty readings 50312'),(N'atomic invalid reading 50312'),(N'non-object reading 50312')) c(TestCase);
 GO
+
+USE FreshVendDB;
+GO
+SET NOCOUNT ON;
+
+-- Contract checks for the three IoT read objects consumed by API/web.
+IF OBJECT_ID(N'iot.vw_MachineHealth', N'V') IS NULL
+   OR OBJECT_ID(N'iot.vw_OpenAlerts', N'V') IS NULL
+   OR OBJECT_ID(N'iot.fn_RecentTelemetry', N'IF') IS NULL
+  THROW 50492,N'Missing IoT API view/function.',1;
+
+DECLARE @ExpectedColumns TABLE(ObjectName SYSNAME,ColumnName SYSNAME,PRIMARY KEY(ObjectName,ColumnName));
+INSERT @ExpectedColumns VALUES
+(N'vw_MachineHealth',N'MachineId'),(N'vw_MachineHealth',N'Serial'),(N'vw_MachineHealth',N'MachineName'),
+(N'vw_MachineHealth',N'Status'),(N'vw_MachineHealth',N'FirmwareVersion'),(N'vw_MachineHealth',N'LocationId'),
+(N'vw_MachineHealth',N'LocationName'),(N'vw_MachineHealth',N'LocationType'),(N'vw_MachineHealth',N'District'),
+(N'vw_MachineHealth',N'LastHeartbeat'),(N'vw_MachineHealth',N'SecondsSinceHeartbeat'),(N'vw_MachineHealth',N'LastTemp'),
+(N'vw_MachineHealth',N'LastHumidity'),(N'vw_MachineHealth',N'DoorOpen'),(N'vw_MachineHealth',N'LastReadingAt'),
+(N'vw_MachineHealth',N'MinTemp'),(N'vw_MachineHealth',N'MaxTemp'),(N'vw_MachineHealth',N'DoorOpenMaxMinutes'),
+(N'vw_MachineHealth',N'ConsecutiveBreaches'),(N'vw_MachineHealth',N'DegradedMessage'),(N'vw_MachineHealth',N'OpenAlerts'),
+(N'vw_MachineHealth',N'IsServing'),
+(N'vw_OpenAlerts',N'AlertId'),(N'vw_OpenAlerts',N'MachineId'),(N'vw_OpenAlerts',N'AlertType'),
+(N'vw_OpenAlerts',N'Severity'),(N'vw_OpenAlerts',N'Message'),(N'vw_OpenAlerts',N'RefKey'),
+(N'vw_OpenAlerts',N'CreatedAt'),(N'vw_OpenAlerts',N'AckBy'),(N'vw_OpenAlerts',N'AckAt'),
+(N'vw_OpenAlerts',N'ResolvedAt'),(N'vw_OpenAlerts',N'Serial'),(N'vw_OpenAlerts',N'MachineName'),
+(N'vw_OpenAlerts',N'LocationName'),(N'vw_OpenAlerts',N'AckByName'),(N'vw_OpenAlerts',N'AgeMinutes'),
+(N'fn_RecentTelemetry',N'MachineId'),(N'fn_RecentTelemetry',N'RecordedAt'),
+(N'fn_RecentTelemetry',N'Temperature'),(N'fn_RecentTelemetry',N'Humidity'),(N'fn_RecentTelemetry',N'DoorOpen');
+
+DECLARE @ActualColumns TABLE(ObjectName SYSNAME,ColumnName SYSNAME,PRIMARY KEY(ObjectName,ColumnName));
+INSERT @ActualColumns
+SELECT CASE o.name WHEN N'vw_MachineHealth' THEN N'vw_MachineHealth'
+                   WHEN N'vw_OpenAlerts' THEN N'vw_OpenAlerts'
+                   ELSE N'fn_RecentTelemetry' END,c.name
+FROM sys.objects AS o
+JOIN sys.schemas AS s ON s.schema_id=o.schema_id
+JOIN sys.columns AS c ON c.object_id=o.object_id
+WHERE s.name=N'iot' AND o.name IN(N'vw_MachineHealth',N'vw_OpenAlerts',N'fn_RecentTelemetry');
+
+DECLARE @columnContract BIT=CASE WHEN NOT EXISTS(SELECT ObjectName,ColumnName FROM @ExpectedColumns EXCEPT SELECT ObjectName,ColumnName FROM @ActualColumns)
+                                    AND NOT EXISTS(SELECT ObjectName,ColumnName FROM @ActualColumns EXCEPT SELECT ObjectName,ColumnName FROM @ExpectedColumns)
+                                 THEN 1 ELSE 0 END;
+DECLARE @parameterContract BIT=CASE WHEN (SELECT COUNT(*) FROM sys.parameters WHERE object_id=OBJECT_ID(N'iot.fn_RecentTelemetry') AND parameter_id>0)=2
+                                      AND NOT EXISTS(SELECT Name,SqlType FROM (VALUES(N'MachineId',N'int'),(N'Hours',N'int')) e(Name,SqlType)
+                                        EXCEPT SELECT REPLACE(p.name,N'@',N''),TYPE_NAME(p.user_type_id)
+                                        FROM sys.parameters p WHERE p.object_id=OBJECT_ID(N'iot.fn_RecentTelemetry') AND p.parameter_id>0)
+                                      AND NOT EXISTS(SELECT REPLACE(p.name,N'@',N''),TYPE_NAME(p.user_type_id)
+                                        FROM sys.parameters p WHERE p.object_id=OBJECT_ID(N'iot.fn_RecentTelemetry') AND p.parameter_id>0
+                                        EXCEPT SELECT Name,SqlType FROM (VALUES(N'MachineId',N'int'),(N'Hours',N'int')) e(Name,SqlType))
+                                   THEN 1 ELSE 0 END;
+DECLARE @types BIT=CASE WHEN EXISTS(SELECT 1 FROM sys.columns WHERE object_id=OBJECT_ID(N'iot.vw_MachineHealth') AND name=N'MachineId' AND TYPE_NAME(user_type_id)=N'int')
+                         AND EXISTS(SELECT 1 FROM sys.columns WHERE object_id=OBJECT_ID(N'iot.vw_MachineHealth') AND name=N'LastTemp' AND TYPE_NAME(user_type_id)=N'decimal' AND precision=5 AND scale=2)
+                         AND EXISTS(SELECT 1 FROM sys.columns WHERE object_id=OBJECT_ID(N'iot.vw_MachineHealth') AND name=N'DoorOpen' AND TYPE_NAME(user_type_id)=N'bit')
+                         AND EXISTS(SELECT 1 FROM sys.columns WHERE object_id=OBJECT_ID(N'iot.vw_OpenAlerts') AND name=N'AlertId' AND TYPE_NAME(user_type_id)=N'int')
+                         AND EXISTS(SELECT 1 FROM sys.columns WHERE object_id=OBJECT_ID(N'iot.vw_OpenAlerts') AND name=N'CreatedAt' AND TYPE_NAME(user_type_id)=N'datetime2')
+                         AND EXISTS(SELECT 1 FROM sys.columns WHERE object_id=OBJECT_ID(N'iot.fn_RecentTelemetry') AND name=N'Temperature' AND TYPE_NAME(user_type_id)=N'decimal')
+                      THEN 1 ELSE 0 END;
+DECLARE @m INT=(SELECT TOP(1) MachineId FROM iot.Machines ORDER BY MachineId);
+DECLARE @healthValues BIT=CASE WHEN @m IS NOT NULL AND EXISTS
+  (SELECT 1 FROM iot.vw_MachineHealth h WHERE h.MachineId=@m
+    AND h.OpenAlerts=(SELECT COUNT(*) FROM iot.Alerts a WHERE a.MachineId=@m AND a.ResolvedAt IS NULL)
+    AND h.IsServing=CASE WHEN h.Status=N'ACTIVE' THEN 1 ELSE 0 END)
+  THEN 1 ELSE 0 END;
+DECLARE @alertValues BIT=CASE WHEN NOT EXISTS
+  (SELECT 1 FROM iot.vw_OpenAlerts a WHERE a.ResolvedAt IS NOT NULL OR a.Serial IS NULL OR a.MachineName IS NULL)
+  THEN 1 ELSE 0 END;
+DECLARE @windowValues BIT=CASE WHEN @m IS NOT NULL
+  AND NOT EXISTS(SELECT 1 FROM iot.fn_RecentTelemetry(@m,6) WHERE MachineId<>@m OR RecordedAt<DATEADD(HOUR,-6,SYSUTCDATETIME()))
+  AND NOT EXISTS(SELECT 1 FROM iot.fn_RecentTelemetry(@m,0))
+  THEN 1 ELSE 0 END;
+
+SELECT TestCase,Passed,SYSDATETIMEOFFSET() RunAt
+FROM (VALUES
+ (N'IoT read object column contract',@columnContract),
+ (N'RecentTelemetry parameter contract',@parameterContract),
+ (N'IoT read object SQL types',@types),
+ (N'MachineHealth health/count/serving values',@healthValues),
+ (N'OpenAlerts unresolved rows and machine enrichment',@alertValues),
+ (N'RecentTelemetry machine and hour window',@windowValues)
+) checks(TestCase,Passed);
+
+IF @columnContract=0 OR @parameterContract=0 OR @types=0 OR @healthValues=0 OR @alertValues=0 OR @windowValues=0
+  THROW 50492,N'IoT read object contract/behavior check failed.',1;
+GO
