@@ -552,6 +552,8 @@ Mỗi file SQL giữ riêng, không tạo FULL.sql. DDL dùng CREATE OR ALTER / 
 
 Quy tắc repository: mỗi task nhánh riêng, không push main, Huy review trước merge. Test CI ứng dụng dùng fakeDb, không thay SQL acceptance. Bộ seed 80/81 còn chờ QĐ-1/RegisterMachine; không báo đã có dữ liệu LARGE hoặc uptime khi chưa đo.
 
+Chi tiết workflow, job `check-sync`/`npm test`, parse T-SQL và cách chạy cục bộ xem [CI/CD FreshVend](CICD.md). Phần telemetry/thiết bị trong CI vẫn là dữ liệu mô phỏng bằng `app/simulator/esp32.js`; không có thiết bị vật lý trong runner.
+
 <a id="kiem-thu"></a>
 
 ## 6. Kiểm thử
